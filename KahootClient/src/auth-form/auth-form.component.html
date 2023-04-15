@@ -19,8 +19,8 @@
         </div>
         <div class="form-group">
           <label class="form-remember">
-            <input type="checkbox"/>Remember Me
-          </label><a class="form-recovery" href="#">Forgot Password?</a>
+            <input type="checkbox" (change)="RememberMe(Login.value)"/>Remember Me</label>
+          <a class="form-recovery" (click)="ToForgotPassword()">Forgot Password?</a>
         </div>
         <div class="form-group">
           <button type="submit" (click)="LogIn(Login.value, Password.value)">Log In</button>

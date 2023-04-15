@@ -90,7 +90,7 @@ body {
 #left {
   height:100px;
   width:600px;
-  background-color: #65CC58;
+  background-color: #b8c6db;
   position:absolute;
   z-index:6;
   -webkit-transform:rotate(45deg);
@@ -103,7 +103,7 @@ body {
 #right {
   height:100px;
   width:600px;
-  background-color: #65CC58;
+  background-color: #b8c6db;
   position:absolute;
   top:-229px;
   -webkit-transform:rotate(-45deg);

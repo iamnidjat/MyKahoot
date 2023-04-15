@@ -1,5 +1,6 @@
 import { Component, ElementRef } from '@angular/core';
 import {Router} from '@angular/router'; // for navigation
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-auth-form',
@@ -8,6 +9,7 @@ import {Router} from '@angular/router'; // for navigation
 })
 
 export class AuthFormComponent {
+  //isChecked: boolean = false;
   constructor(private el: ElementRef, private router: Router) {
   }
 
@@ -15,6 +17,10 @@ export class AuthFormComponent {
     if (login === "admin" && password === "admin"){
       this.router.navigate(['/app/player-options-form']); // навигация (~ RedirectToAction() in asp)
     }
+  }
+
+  public Register(login: string, password: string, cPassword: string, mail: string): void{
+
   }
   public showRegister(e: any): void{
     e.preventDefault();
@@ -40,9 +46,9 @@ export class AuthFormComponent {
       formPanelTwo.classList.add('active');
     }
 
-    form.animate({
-      'height': panelTwo
-    }, 200);
+    // form.animate({
+    //   'height': panelTwo
+    // }, 200);
   }
 
   public showLogin(e: any): void{
@@ -69,8 +75,16 @@ export class AuthFormComponent {
       formPanelTwo.classList.remove('active');
     }
 
-    form.animate({
-      'height': panelOne
-    }, 200);
+    // form.animate({
+    //   'height': panelOne
+    // }, 200);
+  }
+
+  public ToForgotPassword(): void{
+    this.router.navigate(['/app/forgot-password-form']);
+  }
+
+  public RememberMe(username: string): void{
+    alert(username);
   }
 }
