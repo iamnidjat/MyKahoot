@@ -1,5 +1,5 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <div class="container mt-5">
   <div class="card">
@@ -8,7 +8,7 @@
         <img src="https://img.icons8.com/color/96/000000/angularjs.png" width="90" alt="logo">
       </div>
       <div class="quiz-header">
-        <h4 style="font-family: cursive;">Programming Quiz!</h4>
+        <h4 style="font-family: cursive;">{{testType}} Quiz!</h4>
         <span style="font-style: italic;">Welcome {{name}}</span>
       </div>
     </div>
@@ -33,10 +33,10 @@
           <h3>{{questionList[currentQuestion]?.questionText}}</h3>
         </div>
       </div>
-      <div class="options">
+      <div class="options" style="">
         <ol *ngFor="let option of questionList[currentQuestion]?.options" style="list-style: none">
           <li (click)="answer(currentQuestion+1,option)">
-            <div appChangeBg [isCorrect]="option.correct" class="card">
+            <div appChangeBg [isCorrect]="option.correct" class="card" style="cursor: pointer;">
               {{option.text}}
             </div>
           </li>
@@ -58,6 +58,10 @@
           <p>Total correct answered: {{correctAnswer}} </p>
           <p>Total wrong answered: {{inCorrectAnswer}} </p>
           <p>Your score: {{points}} Points </p>
+          <div class="buttons">
+            <input type="button" id="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu()"/>
+            <input type="button" id="showStatsButton" name="showStatsButton" value="Stats" (click)="ToStats()"/>
+          </div>
         </div>
       </div>
     </ng-container>

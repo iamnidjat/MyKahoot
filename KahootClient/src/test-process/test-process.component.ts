@@ -10,38 +10,39 @@ import {interval} from "rxjs";
 })
 export class TestProcessComponent implements OnInit{
   public name: string = "";
+
+  public testType: string = "";
   public questionList: any = [];
   public currentQuestion: number = 0;
   public points: number = 0;
-  counter = 60;
-  correctAnswer: number = 0;
-  inCorrectAnswer: number = 0;
-  interval$: any;
-  progress: string = "0";
-  isQuizCompleted: boolean = false;
+  public counter = 60;
+  public correctAnswer: number = 0;
+  public inCorrectAnswer: number = 0;
+  public interval$: any;
+  public progress: string = "0";
+  public isQuizCompleted: boolean = false;
 
   //isCorrect: boolean = false;
-  constructor(private questionService: ServiceComponent) { }
+  constructor(private questionService: ServiceComponent, private router: Router) { }
 
-  ngOnInit(): void {
-    //this.name = localStorage.getItem("name")!;
+  public ngOnInit(): void {
+    this.name = localStorage.getItem("Login")!;
     this.getAllQuestions();
     this.startCounter();
   }
-  getAllQuestions() {
+  public getAllQuestions() {
     this.questionService.getQuestionJson()
       .subscribe(res => {
         this.questionList = res.questions;
       })
   }
-  nextQuestion() {
+  public nextQuestion(): void {
     this.currentQuestion++;
   }
-  previousQuestion() {
+  public previousQuestion(): void {
     this.currentQuestion--;
   }
-  answer(currentQno: number, option: any) {
-
+  public answer(currentQno: number, option: any): void {
     if(currentQno === this.questionList.length){
       this.isQuizCompleted = true;
       this.stopCounter();
@@ -66,7 +67,7 @@ export class TestProcessComponent implements OnInit{
       this.points -= 10;
     }
   }
-  startCounter() {
+  public startCounter(): void {
     this.interval$ = interval(1000)
       .subscribe(val => {
         this.counter--;
@@ -80,16 +81,16 @@ export class TestProcessComponent implements OnInit{
       this.interval$.unsubscribe();
     }, 600000);
   }
-  stopCounter() {
+  public stopCounter(): void {
     this.interval$.unsubscribe();
     this.counter = 0;
   }
-  resetCounter() {
+  public resetCounter(): void {
     this.stopCounter();
     this.counter = 60;
     this.startCounter();
   }
-  resetQuiz() {
+  public resetQuiz(): void {
     this.resetCounter();
     this.getAllQuestions();
     this.points = 0;
@@ -97,8 +98,16 @@ export class TestProcessComponent implements OnInit{
     this.currentQuestion = 0;
     this.progress = "0";
   }
-  getProgressPercent() {
+  public getProgressPercent(): string {
     this.progress = ((this.currentQuestion / this.questionList.length) * 100).toString();
     return this.progress;
+  }
+
+  public ToMenu(): void{
+    this.router.navigate(['/app/player-options-form']);
+  }
+
+  public ToStats(): void{
+    this.router.navigate(['/app/stats-and-top10-results-form']);
   }
 }

@@ -14,8 +14,8 @@ export class PlayerSurveyChoosingFormComponent {
     this.router.navigate(['/app/player-options-form']);
   }
 
-  public ProgrammingTest(): void{
-    this.router.navigate(['/app/rules-form']);
+  public ToRulesForm(): void{
+    this.router.navigate([`/app/rules-form`]);
   }
 
 }

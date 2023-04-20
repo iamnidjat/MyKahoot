@@ -13,7 +13,7 @@ import {HttpClient} from "@angular/common/http";
 })
 
 export class ServiceComponent {
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   getQuestionJson(){
     return this.http.get<any>("assets/questions/programming1questions.json");

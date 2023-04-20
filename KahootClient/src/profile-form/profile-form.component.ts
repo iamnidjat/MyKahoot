@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profile-form',
@@ -6,5 +7,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile-form.component.css']
 })
 export class ProfileFormComponent {
+    constructor(private router: Router) {
+    }
+
+  public ToSettings(): void{
+      this.router.navigate(['/app/settings-choice-form']);
+  }
+
+  public ToStats(): void{
+    this.router.navigate(['/app/stats-and-top10-results-form']);
+  }
+
+  public ToTopResults(): void{
+    this.router.navigate(['/app/stats-and-top10-results-form']);
+  }
+
+  public BackOptions(): void{
+    this.router.navigate(['/app/player-options-form']);
+  }
 
 }

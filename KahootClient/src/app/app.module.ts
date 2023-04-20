@@ -14,6 +14,12 @@ import { ServiceComponent } from "../service/service.component";
 import { HttpClientModule } from '@angular/common/http';
 import {changeBG} from "../changeBG";
 import {ForgotPasswordFormComponent} from "../forgot-password-form/forgot-password-form.component";
+import {ChoiceForCreatingFormComponent} from "../choice-for-creating-form/choice-for-creating-form.component";
+import {SettingsChoiceFormComponent} from "../settings-choice-form/settings-choice-form.component";
+import {SettingsFormComponent} from "../settings-form/settings-form.component";
+import {
+  StatsAndTop10ResultsFormComponent
+} from "../stats-and-top10-results-form/stats-and-top10-results-form.component";
 
 let routes: Route[] = [
   {
@@ -53,6 +59,18 @@ let routes: Route[] = [
         component: ForgotPasswordFormComponent
       },
       {
+        path: 'app/stats-and-top10-results-form',
+        component: StatsAndTop10ResultsFormComponent
+      },
+      {
+        path: 'app/settings-choice-form',
+        component: SettingsChoiceFormComponent
+      },
+      {
+        path: 'app/settings-form',
+        component: SettingsFormComponent
+      },
+      {
         path: '',
         redirectTo: 'app/auth-form',
         pathMatch: 'full',
@@ -73,7 +91,11 @@ let routes: Route[] = [
     RulesFormComponent,
     ServiceComponent,
     changeBG,
-    ForgotPasswordFormComponent
+    ForgotPasswordFormComponent,
+    ChoiceForCreatingFormComponent,
+    SettingsChoiceFormComponent,
+    SettingsFormComponent,
+    StatsAndTop10ResultsFormComponent
   ],
   imports: [
     BrowserModule,

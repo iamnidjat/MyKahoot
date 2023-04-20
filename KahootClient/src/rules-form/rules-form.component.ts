@@ -7,9 +7,12 @@ import {Router} from "@angular/router";
   styleUrls: ['./rules-form.component.css']
 })
 export class RulesFormComponent{
-  // //@ViewChild('name') nameKey!: ElementRef;
   constructor(private router: Router) { }
   ToTheQuiz(): void{
     this.router.navigate(['/app/test-process-form']);
+  }
+
+  ToChoosing(): void{
+    this.router.navigate(['/app/player-survey-choosing-form']);
   }
 }

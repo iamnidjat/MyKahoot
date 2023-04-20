@@ -1,20 +1,39 @@
-import { Component, ElementRef } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from '@angular/router'; // for navigation
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
+const animateOnDivHeight = trigger('animateOnDivHeight', [
+  state('firstHeight', style(
+    {
+      height: '450px'
+    }
+  )),
+  state('lastHeight', style(
+    {
+      height: '650px'
+    }
+  )),
+  transition('firstHeight => lastHeight', [animate('.5s ease')]),
+  transition('lastHeight => firstHeight', [animate('.5s ease')])
+]);
 @Component({
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html',
-  styleUrls: ['./auth-form.component.css']
+  styleUrls: ['./auth-form.component.css'],
+  animations: [animateOnDivHeight]
 })
 
 export class AuthFormComponent {
   //isChecked: boolean = false;
+  public flag: boolean = true;
+  @ViewChild('Login') nameKey!: ElementRef;
   constructor(private el: ElementRef, private router: Router) {
   }
 
+
   public LogIn(login: string, password: string): void{
     if (login === "admin" && password === "admin"){
+      localStorage.setItem("Login",this.nameKey.nativeElement.value)
       this.router.navigate(['/app/player-options-form']); // навигация (~ RedirectToAction() in asp)
     }
   }
@@ -25,11 +44,11 @@ export class AuthFormComponent {
   public showRegister(e: any): void{
     e.preventDefault();
 
-    let panelTwo: any = this.el.nativeElement.querySelector(".form-panel.two").scrollHeight;
+    this.flag = !this.flag;
+
     let formToggle = this.el.nativeElement.querySelector(".form-toggle");
     let formPanelOne = this.el.nativeElement.querySelector(".form-panel.one");
     let formPanelTwo = this.el.nativeElement.querySelector(".form-panel.two");
-    let form = this.el.nativeElement.querySelector(".form");
 
     if (!formToggle.classList.contains('visible'))
     {
@@ -45,20 +64,16 @@ export class AuthFormComponent {
     {
       formPanelTwo.classList.add('active');
     }
-
-    // form.animate({
-    //   'height': panelTwo
-    // }, 200);
   }
 
   public showLogin(e: any): void{
     e.preventDefault();
 
-    let panelOne: any = this.el.nativeElement.querySelector(".form-panel.two").offsetHeight;
+    this.flag = !this.flag;
+
     let formToggle = this.el.nativeElement.querySelector(".form-toggle");
     let formPanelOne = this.el.nativeElement.querySelector(".form-panel.one");
     let formPanelTwo = this.el.nativeElement.querySelector(".form-panel.two");
-    let form = this.el.nativeElement.querySelector(".form");
 
     if (formToggle.classList.contains('visible'))
     {
@@ -74,10 +89,6 @@ export class AuthFormComponent {
     {
       formPanelTwo.classList.remove('active');
     }
-
-    // form.animate({
-    //   'height': panelOne
-    // }, 200);
   }
 
   public ToForgotPassword(): void{

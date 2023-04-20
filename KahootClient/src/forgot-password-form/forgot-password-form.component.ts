@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./forgot-password-form.component.css']
 })
 export class ForgotPasswordFormComponent {
+  constructor() {
+  }
 
+  public ResetPassword(email: string): void{
+
+  }
 }

@@ -1,9 +1,8 @@
-<!-- Form-->
-<div class="form">
+<div class="form" [@animateOnDivHeight]="flag ? 'firstHeight' : 'lastHeight'">
   <div class="form-toggle" (click)="showLogin($event)"></div>
   <div class="form-panel one">
-    <div class="form-header">
-      <h1>Account Login</h1>
+    <div class="form-header" style="text-align: center">
+      <h1>MyKahoot</h1>
     </div>
     <div class="form-content">
       <form>
@@ -18,9 +17,9 @@
           <input type="password" #Password id="passwordLogin" name="password" required="required"/>
         </div>
         <div class="form-group">
-          <label class="form-remember">
+          <label class="form-remember" style="cursor: pointer">
             <input type="checkbox" (change)="RememberMe(Login.value)"/>Remember Me</label>
-          <a class="form-recovery" (click)="ToForgotPassword()">Forgot Password?</a>
+          <a class="form-recovery" (click)="ToForgotPassword()" style="cursor: pointer">Forgot Password?</a>
         </div>
         <div class="form-group">
           <button type="submit" (click)="LogIn(Login.value, Password.value)">Log In</button>
@@ -52,6 +51,10 @@
         <div class="form-group">
           <label for="email">Email Address</label>
           <input type="email" id="email" name="email" required="required"/>
+        </div>
+        <div class="form-group">
+          <label>Birthday</label>
+          <input type="datetime-local" id="userBirthday" name="userBirthday" required="required"/>
         </div>
         <div class="form-group">
           <button type="submit">Register</button>

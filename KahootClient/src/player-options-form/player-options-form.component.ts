@@ -15,4 +15,12 @@ export class PlayerOptionsFormComponent {
   public ToSubjects(): void{
     this.router.navigate(['/app/player-survey-choosing-form']);
   }
+
+  public ToCreateQuiz(): void{
+    this.router.navigate(['/app/creating-test-form']);
+  }
+
+  public ToProfile(): void{
+    this.router.navigate(['/app/profile-form']);
+  }
 }
