@@ -1,6 +1,8 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
-import {Router} from '@angular/router'; // for navigation
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { User } from '../User'
+import {RegisterModel} from "../RegisterModel";
 
 const animateOnDivHeight = trigger('animateOnDivHeight', [
   state('firstHeight', style(
@@ -23,23 +25,48 @@ const animateOnDivHeight = trigger('animateOnDivHeight', [
   animations: [animateOnDivHeight]
 })
 
-export class AuthFormComponent {
+export class AuthFormComponent{
   //isChecked: boolean = false;
+  private url: string = "https://localhost:7176/api/v1/Account/";
   public flag: boolean = true;
   @ViewChild('Login') nameKey!: ElementRef;
+  @ViewChild('toggleForm') toggle!: ElementRef;
   constructor(private el: ElementRef, private router: Router) {
+
   }
 
+  public LogIn(e:any, login: string, password: string): void{
+    e.preventDefault();
 
-  public LogIn(login: string, password: string): void{
-    if (login === "admin" && password === "admin"){
+    let user = new User(login, password);
+
+    fetch(this.url + "Login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    }).then((response) => {
       localStorage.setItem("Login",this.nameKey.nativeElement.value)
-      this.router.navigate(['/app/player-options-form']); // навигация (~ RedirectToAction() in asp)
-    }
+      this.router.navigate(['/app/player-options-form']);
+    });
   }
 
-  public Register(login: string, password: string, cPassword: string, mail: string): void{
+  public Register(e:any, login: string, password: string, cPassword: string, email: string, birthday: string): void{
+    e.preventDefault();
 
+    let registerModel = new RegisterModel(login, password, cPassword, email, new Date(birthday));
+
+    fetch(this.url + "Register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(registerModel)
+    }).then((response) => {
+      localStorage.setItem("Login",this.nameKey.nativeElement.value)
+      this.router.navigate(['/app/player-options-form']);
+    });
   }
   public showRegister(e: any): void{
     e.preventDefault();

@@ -2,15 +2,16 @@ import {Component, ElementRef, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {ServiceComponent} from "../service/service.component";
 import {interval} from "rxjs";
+import {QuizModel} from "../QuizModel";
 
 @Component({
   selector: 'app-test-process',
   templateUrl: './test-process.component.html',
   styleUrls: ['./test-process.component.css']
 })
+
 export class TestProcessComponent implements OnInit{
   public name: string = "";
-
   public testType: string = "";
   public questionList: any = [];
   public currentQuestion: number = 0;
@@ -21,12 +22,29 @@ export class TestProcessComponent implements OnInit{
   public interval$: any;
   public progress: string = "0";
   public isQuizCompleted: boolean = false;
-
-  //isCorrect: boolean = false;
+  public url: string = "https://localhost:7176/api/v1/Statistics/";
   constructor(private questionService: ServiceComponent, private router: Router) { }
 
   public ngOnInit(): void {
     this.name = localStorage.getItem("Login")!;
+
+    if (localStorage.getItem("MixedTest") !== null)
+    {
+      this.testType = localStorage.getItem("MixedTest")!;
+    }
+    if (localStorage.getItem("Programming") !== null)
+    {
+      this.testType = localStorage.getItem("Programming")!;
+    }
+    if (localStorage.getItem("Math") !== null)
+    {
+      this.testType = localStorage.getItem("Math")!;
+    }
+    if (localStorage.getItem("Logics") !== null)
+    {
+      this.testType = localStorage.getItem("Logics")!;
+    }
+
     this.getAllQuestions();
     this.startCounter();
   }
@@ -63,7 +81,6 @@ export class TestProcessComponent implements OnInit{
         this.resetCounter();
         this.getProgressPercent();
       }, 1000);
-
       this.points -= 10;
     }
   }
@@ -103,11 +120,27 @@ export class TestProcessComponent implements OnInit{
     return this.progress;
   }
 
-  public ToMenu(): void{
+  public ToMenu(e: any): void{
+    this.SaveResult(e);
     this.router.navigate(['/app/player-options-form']);
   }
 
-  public ToStats(): void{
+  public ToStats(e: any): void{
+    this.SaveResult(e);
     this.router.navigate(['/app/stats-and-top10-results-form']);
+  }
+
+  private SaveResult(e: any): void{
+    e.preventDefault();
+
+    let quizInfo = new QuizModel(this.testType, this.points, this.name);
+
+    fetch(this.url + "UploadResult", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(quizInfo)
+    });
   }
 }

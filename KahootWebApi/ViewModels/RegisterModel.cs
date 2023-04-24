@@ -4,15 +4,23 @@ namespace KahootWebApi.ViewModels
 {
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Не указан UserName")]
+        [Required]
         public string? UserName { get; set; }
 
-        [Required(ErrorMessage = "Не указан пароль")]
+        [Required]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Compare("Password", ErrorMessage = "Пароли не совпадают")]
+        [Compare("Password")]
         public string? ConfirmPassword { get; set; }
+
+        [Required]
+        [DataType(DataType.EmailAddress)]
+        public string? Email { get; set; }
+
+        [Required]
+        [DataType(DataType.DateTime)]
+        public DateTime? Birtdhay { get; set; }
     }
 }

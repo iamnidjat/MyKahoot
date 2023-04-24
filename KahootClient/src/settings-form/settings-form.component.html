@@ -1,6 +1,7 @@
+
 <div class="mainDiv">
   <div class="cardStyle">
-    <form name="signupForm" id="signupForm">
+    <form name="changePassword" id="changePassword">
 
       <div class="form-title" style="text-align: center">
         <h1>Change Password</h1>
@@ -8,25 +9,25 @@
 
       <div class="inputDiv">
         <label class="inputLabel">Old Password</label>
-        <input type="password" id="oldPassword" name="oldPassword" required>
+        <input type="password" id="oldPassword" name="oldPassword" required #oldPassword>
       </div>
 
       <div class="inputDiv">
         <label class="inputLabel">New Password</label>
-        <input type="password" id="newPassword" name="newPassword" required>
+        <input type="password" id="newPassword" name="newPassword" required #newPassword>
       </div>
 
       <div class="inputDiv">
         <label class="inputLabel">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword">
+        <input type="password" id="confirmPassword" name="confirmPassword" #cNewPassword>
       </div>
 
       <div class="buttonWrapper">
-        <button type="submit" id="submitButton" class="submitButton pure-button pure-button-primary">
+        <button type="submit"  class="submitButton pure-button pure-button-primary" (click)="changePassword($event, oldPassword.value, newPassword.value, cNewPassword.value)">
           <span>Continue</span>
         </button>
       </div>
-
     </form>
   </div>
 </div>
+

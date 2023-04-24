@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace KahootWebApi.Models
@@ -20,5 +21,7 @@ namespace KahootWebApi.Models
 
         [Required]
         public DateTime? Birthday { get; set; }
+
+        public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
     }
 }

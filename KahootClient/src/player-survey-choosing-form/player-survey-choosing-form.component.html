@@ -1,10 +1,9 @@
 <div id="allthethings">
     <nav>
-      <div id="mixed-test"  (click)="ToRulesForm()"><p>Mixed test</p></div>
-      <div id="programming" (click)="ToRulesForm()"><p>Programming</p></div>
-      <div id="math"  (click)="ToRulesForm()"><p>Math</p></div>
-<!--      <div id="biology"  (click)="ToRulesForm()"><p>Biology</p></div>-->
-<!--      <div id="physics"  (click)="ToRulesForm()"><p>Physics</p></div>-->
+      <div id="mixed-test" #div1 (click)="ToRulesForm(div1)"><p #MixedTest>Mixed test</p></div>
+      <div id="programming" #div2 (click)="ToRulesForm(div2)"><p #Programming>Programming</p></div>
+      <div id="math" #div3 (click)="ToRulesForm(div3)"><p #Math>Math</p></div>
+      <div id="logics" #div4 (click)="ToRulesForm(div4)"><p #Logics>Logics</p></div>
       <div id="exit" (click)="BackOptions()"><p>Exit</p></div>
     </nav>
 </div>

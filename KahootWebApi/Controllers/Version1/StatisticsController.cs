@@ -1,12 +1,32 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using KahootWebApi.Models;
+using KahootWebApi.Services;
+using KahootWebApi.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KahootWebApi.Controllers.v1
 {
-    public class StatisticsController : Controller
+    [ApiController]
+    public class StatisticsController : ControllerBase
     {
-        public IActionResult Index()
+        private readonly IStatisticsManager _manager;
+
+        public StatisticsController(IStatisticsManager manager)
         {
-            return View();
+            _manager = manager;
+        }
+
+        [HttpPost]
+        [Route("api/v1/Statistics/UploadResult")]
+        public async Task UploadResult(QuizStat model)
+        {
+            await _manager.UploadResultAsync(model);
+        }
+
+        [HttpGet]
+        [Route("api/v1/Statistics/DownloadResult")]
+        public async Task<IEnumerable<QuizStat>> DownloadResult()
+        {
+            return await _manager.DownloadResultAsync();
         }
     }
 }

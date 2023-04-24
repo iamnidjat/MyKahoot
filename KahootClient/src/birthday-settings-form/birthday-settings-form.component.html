@@ -1,0 +1,31 @@
+<div class="mainDiv">
+  <div class="cardStyle">
+    <form name="changeBirthday" id="changeBirthday">
+
+      <div class="form-title" style="text-align: center">
+        <h1>Change Birthday</h1>
+      </div>
+
+      <div class="inputDiv">
+        <label class="inputLabel">Old Birthday</label>
+        <input type="date" id="oldBirthday" name="oldPassword" required #oldBirthday>
+      </div>
+
+      <div class="inputDiv">
+        <label class="inputLabel">New Birthday</label>
+        <input type="date" id="newBirthday" name="newPassword" required #newBirthday>
+      </div>
+
+      <div class="inputDiv">
+        <label class="inputLabel">Confirm Birthday</label>
+        <input type="date" id="confirmBirthday" name="confirmBirthday" #cNewBirthday>
+      </div>
+
+      <div class="buttonWrapper">
+        <button type="submit"  class="submitButton pure-button pure-button-primary" (click)="changeBirthday($event, oldBirthday.value, newBirthday.value, cNewBirthday.value)">
+          <span>Continue</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

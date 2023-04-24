@@ -12,14 +12,16 @@ import { RulesFormComponent } from "../rules-form/rules-form.component";
 import { RouterModule, RouterOutlet, Route } from "@angular/router";
 import { ServiceComponent } from "../service/service.component";
 import { HttpClientModule } from '@angular/common/http';
-import {changeBG} from "../changeBG";
-import {ForgotPasswordFormComponent} from "../forgot-password-form/forgot-password-form.component";
-import {ChoiceForCreatingFormComponent} from "../choice-for-creating-form/choice-for-creating-form.component";
-import {SettingsChoiceFormComponent} from "../settings-choice-form/settings-choice-form.component";
-import {SettingsFormComponent} from "../settings-form/settings-form.component";
-import {
-  StatsAndTop10ResultsFormComponent
-} from "../stats-and-top10-results-form/stats-and-top10-results-form.component";
+import { changeBG } from "../changeBG";
+import { ForgotPasswordFormComponent } from "../forgot-password-form/forgot-password-form.component";
+import { ChoiceForCreatingFormComponent } from "../choice-for-creating-form/choice-for-creating-form.component";
+import { SettingsChoiceFormComponent } from "../settings-choice-form/settings-choice-form.component";
+import { SettingsFormComponent } from "../settings-form/settings-form.component";
+import { StatsAndTop10ResultsFormComponent } from "../stats-and-top10-results-form/stats-and-top10-results-form.component";
+import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthday-settings-form.component";
+import { MatDialogModule } from "@angular/material/dialog";
+import {PopupFailureFormComponent} from "../popup-failure-form/popup-failure-form.component";
+import {PopupSuccessFormComponent} from "../popup-success-form/popup-success-form.component";
 
 let routes: Route[] = [
   {
@@ -71,6 +73,10 @@ let routes: Route[] = [
         component: SettingsFormComponent
       },
       {
+        path: 'app/birthday-settings-form',
+        component: BirthdaySettingsFormComponent
+      },
+      {
         path: '',
         redirectTo: 'app/auth-form',
         pathMatch: 'full',
@@ -95,13 +101,17 @@ let routes: Route[] = [
     ChoiceForCreatingFormComponent,
     SettingsChoiceFormComponent,
     SettingsFormComponent,
-    StatsAndTop10ResultsFormComponent
+    StatsAndTop10ResultsFormComponent,
+    BirthdaySettingsFormComponent,
+    PopupFailureFormComponent,
+    PopupSuccessFormComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     RouterOutlet,
+    MatDialogModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],

@@ -1,15 +1,23 @@
 import {Component, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
+import {RegisterModel} from "../RegisterModel";
 @Component({
   selector: 'app-player-options-form',
   templateUrl: './player-options-form.component.html',
   styleUrls: ['./player-options-form.component.css']
 })
 export class PlayerOptionsFormComponent {
+  private url: string = "https://localhost:7176/api/v1/Account/";
   constructor(private router: Router) {
   }
-  public BackAuth(): void{
+  public BackAuth(e: any): void{
+    e.preventDefault();
+
+    fetch(this.url + "Logout", {
+      method: "GET"
+    }).then((response) => {
       this.router.navigate(['/app/auth-form']);
+    });
   }
 
   public ToSubjects(): void{

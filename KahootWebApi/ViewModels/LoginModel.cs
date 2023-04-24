@@ -4,10 +4,10 @@ namespace KahootWebApi.ViewModels
 {
     public class LoginModel
     {
-        [Required(ErrorMessage = "Не указан UserName")]
+        [Required]
         public string? UserName { get; set; }
 
-        [Required(ErrorMessage = "Не указан пароль")]
+        [Required]
         [DataType(DataType.Password)]
         public string? Password { get; set; }
     }

@@ -9,7 +9,17 @@ export class ForgotPasswordFormComponent {
   constructor() {
   }
 
-  public ResetPassword(email: string): void{
-
+  public ResetPassword(e: any, email: string): void{
+    e.preventDefault();
+    // fetch(this.url + "Register", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify(registerModel)
+    // }).then((response) => {
+    //   localStorage.setItem("Login",this.nameKey.nativeElement.value)
+    //   this.router.navigate(['/app/player-options-form']);
+    // });
   }
 }
