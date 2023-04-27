@@ -3,7 +3,7 @@ export class QuizModel{
 
   constructor(public quizName: string | undefined,
               public score: number | undefined,
-              public userName: string | undefined) {  }
+              public userId: number | undefined) {  }
 
   public get Id() {
     return this.id;
@@ -13,8 +13,8 @@ export class QuizModel{
     return this.quizName;
   }
 
-  public get UserName() {
-    return this.userName;
+  public get UserId() {
+    return this.userId;
   }
 
   public get Score() {

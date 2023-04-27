@@ -1,342 +1,341 @@
 {
   "questions": [{
-    "questionText": "W",
+    "questionText": "What is the highest common factor of the numbers 30 and 132?",
     "options": [{
-      "text": "",
+      "text": "6",
       "correct": true
     },
       {
-        "text": ""
+        "text": "8"
       },
       {
-        "text": ""
+        "text": "12"
       },
       {
-        "text": ""
+        "text": "All options are correct"
       }
     ]
   },
     {
-      "questionText": "",
+      "questionText": "Our measurement of time is based on which number system?",
       "options": [{
-        "text": ""
+        "text": "The binary system"
       },
         {
-          "text": ""
+          "text": "The octal system"
         },
         {
-          "text": ""
+          "text": "The hexadecimal system"
         },
         {
-          "text": "",
+          "text": "The Sexagesimal Number System",
           "correct": true
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "123+4-5+67-89 = ?",
       "options": [{
-        "text": ""
+        "text": "99"
       },
         {
-          "text": ""
+          "text": "101"
         },
         {
-          "text": ""
+          "text": "-57"
         },
         {
-          "text": "",
+          "text": "100",
           "correct": true
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Which number is the equivalent to 3^(4)/3^(2)",
       "options": [{
-        "text": ""
+        "text": "6"
       },
         {
-          "text": "",
+          "text": "9",
           "correct": true
         },
         {
-          "text": ""
+          "text": "3"
         },
         {
-          "text": ""
+          "text": "2"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "What is next in the following number series: 256, 289, 324, 361 . . . ?",
       "options": [{
-        "text": "",
+        "text": "400",
         "correct": true
       },
         {
-          "text": ""
+          "text": "525"
         },
         {
-          "text": ""
+          "text": "169"
         },
         {
-          "text": ""
+          "text": "999"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "At a Christmas party, everyone shook hands with everyone else. There were a total of 66 handshakes that happened during the party. How many people were present?",
       "options": [{
-        "text": ""
+        "text": "11"
       },
         {
-          "text": "",
+          "text": "12",
           "correct": true
         },
         {
-          "text": ""
+          "text": "13"
         },
         {
-          "text": ""
+          "text": "All options are false"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "What is the value of Pi to four individual decimal places?",
       "options": [{
-        "text": "",
+        "text": "3,1416",
         "correct": true
       },
         {
-          "text": ""
+          "text": "3,1415"
         },
         {
-          "text": ""
+          "text": "3,1417"
         },
         {
-          "text": ""
+          "text": "3,1414"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "What does 6 raise to the power of 0 equal?",
       "options": [{
-        "text": "",
+        "text": "1",
         "correct": true
       },
         {
-          "text": ""
+          "text": "6"
         },
         {
-          "text": ""
+          "text": "-1"
         },
         {
-          "text": ""
+          "text": "-6"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "How many vertices are present on a cube?",
       "options": [{
-        "text": "",
+        "text": "8",
         "correct": true
       },
         {
-          "text": ""
+          "text": "6"
         },
         {
-          "text": ""
+          "text": "4"
         },
         {
-          "text": ""
+          "text": "1"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Adding the numbers between 1 to 100 consecutively (1+2+3+4+…) gives you what final answer?",
       "options": [{
-        "text": ""
+        "text": "-1/12"
       },
         {
-          "text": "",
+          "text": "5050",
           "correct": true
         },
         {
-          "text": ""
+          "text": "101"
         },
         {
-          "text": ""
+          "text": "6465"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "50 times 5 is equal to",
       "options": [{
-        "text": ""
+        "text": "2050"
       },
         {
-          "text": ""
+          "text": "2500"
         },
         {
-          "text": ";",
+          "text": "None of these",
           "correct": true
         },
         {
-          "text": ""
+          "text": "101"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "90 ÷ 10",
       "options": [{
-        "text": "",
+        "text": "9",
         "correct": true
       },
         {
-          "text": ""
+          "text": "10"
         },
         {
-          "text": ""
+          "text": "8"
         },
         {
-          "text": ""
+          "text": "900"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Simplify: 3 + 6 x (5 + 4) ÷ 3 - 7",
       "options": [{
-        "text": ""
+        "text": "-23"
       },
         {
-          "text": ""
+          "text": "168"
         },
         {
-          "text": ""
+          "text": "7"
         },
         {
-          "text": "",
+          "text": "14",
           "correct": true
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Simplify: 150 ÷ (6 + 3 x 8) - 5",
       "options": [{
-        "text": ""
+        "text": "-1"
       },
         {
-          "text": ""
+          "text": "1"
         },
         {
-          "text": "",
+          "text": "0",
           "correct": true
         },
         {
-          "text": ""
+          "text": "5"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Find the product of 72 × 3",
       "options": [{
-        "text": "",
+        "text": "216",
         "correct": true
       },
         {
-          "text": ""
+          "text": "24"
         },
         {
-          "text": ""
+          "text": "I dont know"
         },
         {
-          "text": ""
+          "text": "100"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Find the sum of 111 + 222 + 333",
       "options": [{
-        "text": ""
+        "text": "444"
       },
         {
-          "text": ""
+          "text": "664"
         },
         {
-          "text": "",
+          "text": "666",
           "correct": true
         },
         {
-          "text": ""
+          "text": "665"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "A man is currently 4 times older than his son. In 10 years, the man will be three times older than his son. What is the man’s age presently?",
       "options": [{
-        "text": ""
+        "text": "90 years old"
       },
         {
-          "text": "",
+          "text": "80 years old",
           "correct": true
         },
         {
-          "text": ""
+          "text": "60 years old"
         },
         {
-          "text": ""
+          "text": "70 years old"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "How many hours are there in a year (rounded to the nearest hour)?",
       "options": [{
-        "text": ""
+        "text": "1000"
       },
         {
-          "text": ""
+          "text": "168"
         },
         {
-          "text": ""
+          "text": "24"
         },
         {
-          "text": "",
+          "text": "8760",
           "correct": true
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "A car is traveling at the rate of 75 kilometers per hour. How many meters is the car traveling in one minute?",
       "options": [{
-        "text": ""
+        "text": "1000"
       },
         {
-          "text": "",
-
+          "text": "1250",
           "correct": true
         },
         {
-          "text": ""
+          "text": "100"
         },
         {
-          "text": ""
+          "text": "750"
         }
       ]
     },
     {
-      "questionText": "",
+      "questionText": "Solve the following equation: -15 + (-5x)=0",
       "options": [{
-        "text": "",
+        "text": "-3",
         "correct": true
       },
         {
-          "text": ""
+          "text": "3"
         },
         {
-          "text": ""
+          "text": "0.3"
         },
         {
-          "text": ""
+          "text": "167"
         }
       ]
     }

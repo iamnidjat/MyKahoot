@@ -1,11 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 #exit {
   height:30px;
   width:30px;
@@ -78,9 +72,9 @@ body {
   top:50px;
 }
 
-#multiplayer:hover,
-#credits:hover,
-#options:hover {
+#create-quiz:hover,
+#play:hover,
+#profile:hover {
   background:#7A0000;
   color:white;
   -webkit-transform:rotate(-2deg);
@@ -88,7 +82,7 @@ body {
 }
 
 #left {
-  height:100px;
+  height:110px;
   width:600px;
   background-color: #b8c6db;
   position:absolute;
@@ -119,7 +113,7 @@ body {
   right:4px;
 }
 
-#multiplayer {
+#create-quiz {
   height:50px;
   width:600px;
   background:#006680;
@@ -135,13 +129,13 @@ body {
   cursor:pointer;
 }
 
-#multiplayer p {
+#create-quiz p {
   position:relative;
   top:0px;
   right:9px;
 }
 
-#options {
+#play {
   height:50px;
   width:450px;
   background:#006680;
@@ -157,13 +151,13 @@ body {
   cursor:pointer;
 }
 
-#options p {
+#play p {
   position:relative;
   top:0px;
   right:4px;
 }
 
-#credits {
+#profile {
   height:50px;
   width:300px;
   position:relative;
@@ -179,7 +173,7 @@ body {
   cursor:pointer;
 }
 
-#credits p {
+#profile p {
   position:relative;
   top:0px;
 }

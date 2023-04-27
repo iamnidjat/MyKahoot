@@ -17,9 +17,9 @@ namespace KahootWebApi.Controllers.v1
 
         [HttpPost]
         [Route("api/v1/Statistics/UploadResult")]
-        public async Task UploadResult(QuizStat model)
+        public async Task<HttpResponseMessage> UploadResult(QuizStat model)
         {
-            await _manager.UploadResultAsync(model);
+            return await _manager.UploadResultAsync(model);
         }
 
         [HttpGet]

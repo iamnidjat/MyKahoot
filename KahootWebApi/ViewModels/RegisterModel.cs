@@ -21,6 +21,6 @@ namespace KahootWebApi.ViewModels
 
         [Required]
         [DataType(DataType.DateTime)]
-        public DateTime? Birtdhay { get; set; }
+        public DateTime? Birthday { get; set; }
     }
 }

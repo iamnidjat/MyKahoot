@@ -1,9 +1,6 @@
 import {Component, Injectable} from '@angular/core';
 import {Router} from "@angular/router";
-import {PopupFailureFormComponent} from "../popup-failure-form/popup-failure-form.component";
-import {PopupSuccessFormComponent} from "../popup-success-form/popup-success-form.component";
-import {MatDialog} from "@angular/material/dialog";
-
+import  Swal  from 'sweetalert2';
 
 @Component({
   selector: 'app-settings-form',
@@ -11,18 +8,16 @@ import {MatDialog} from "@angular/material/dialog";
   styleUrls: ['./settings-form.component.css']
 })
 export class SettingsFormComponent {
- // @Injectable();
   public flag: boolean = false;
   private url: string = "https://localhost:7176/api/v1/Account/";
 
-  constructor(private router: Router, private dialogRef : MatDialog) {
+  constructor(private router: Router) {
   }
 
-  public changePassword(e: any, oldPassword: string, newPassword: string, cNewPassword: string)
-  {
+  public changePassword(e: any, oldPassword: string, newPassword: string, cNewPassword: string) {
     e.preventDefault();
 
-    if (newPassword === cNewPassword)
+    if (newPassword.length >= 5 && newPassword === cNewPassword)
     {
       fetch(this.url + `ChangePassword?oldPassword=${oldPassword}&newPassword=${newPassword}`, {
         method: "PATCH",
@@ -30,22 +25,13 @@ export class SettingsFormComponent {
           "Content-Type": "application/json"
         }
       }).then((response) => {
-        this.openSuccessDialog();
+        Swal.fire('Your password was altered successfully!'); // !
+        this.router.navigate(['/app/settings-choice-form']);
       });
-      //this.router.navigate(['/app/settings-choice-form']);
     }
     else
     {
-        this.openFailureDialog();
+      Swal.fire('Oops', 'Incorrect data!', 'error');
     }
   }
-
-  openSuccessDialog(){
-    this.dialogRef.open(PopupSuccessFormComponent);
-  };
-
-  openFailureDialog(){
-    this.dialogRef.open(PopupFailureFormComponent);
-  };
-
 }

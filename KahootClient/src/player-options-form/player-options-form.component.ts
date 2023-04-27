@@ -16,6 +16,7 @@ export class PlayerOptionsFormComponent {
     fetch(this.url + "Logout", {
       method: "GET"
     }).then((response) => {
+      localStorage.removeItem("Login");
       this.router.navigate(['/app/auth-form']);
     });
   }

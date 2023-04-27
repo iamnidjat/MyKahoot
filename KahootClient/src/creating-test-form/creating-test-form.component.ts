@@ -5,6 +5,10 @@ import { Component } from '@angular/core';
   templateUrl: './creating-test-form.component.html',
   styleUrls: ['./creating-test-form.component.css']
 })
-export class CreatingTestFormComponent {
 
+export class CreatingTestFormComponent {
+  constructor() {
+  }
+
+  // at the stage of development
 }

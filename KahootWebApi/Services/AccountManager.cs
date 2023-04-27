@@ -1,10 +1,11 @@
-﻿using System.Net.Mail;
-using System.Net;
+﻿using System.Net;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using KahootWebApi.Models;
 using KahootWebApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
+using MimeKit;
 
 namespace KahootWebApi.Services
 {
@@ -48,19 +49,28 @@ namespace KahootWebApi.Services
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
 
+            using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
             try
             {
-                MailAddress from = new ("gurbanli.nidjat@mail.ru", "MYKAHOOT");
-                MailAddress to = new (email);
-                MailMessage m = new (from, to);
-                m.Subject = "Reset Password";
-                m.Body = $"Your new password: {newPassword}";
-                SmtpClient smtp = new ("smtp.gmail.com", 587);
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential("gurbanli.nidjat@mail.ru", "liverton2"); // !!!
-                smtp.EnableSsl = true;
+                smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
+                smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
 
-                await smtp.SendMailAsync(m);
+                var message = new MimeMessage();
+
+                message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
+                message.To.Add(new MailboxAddress("You", email));
+
+                message.Subject = "Reset Password";
+
+                var part = new TextPart("plain")
+                {
+                    Text = $"Your new password: {newPassword}\nIf the message was sent by mistake, just ignore it."
+                };
+
+                message.Body = part;
+
+                smtpClient.Send(message);
 
                 var user = await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
 
@@ -78,12 +88,16 @@ namespace KahootWebApi.Services
                     };
                 }
             }
-            catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException)
+            catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
             {
                 return new HttpResponseMessage()
                 {
                     StatusCode = System.Net.HttpStatusCode.BadRequest
                 };
+            }
+            finally
+            {
+                smtpClient.Disconnect(true);
             }
 
             return new HttpResponseMessage()
@@ -92,54 +106,74 @@ namespace KahootWebApi.Services
             };
         }
 
-        public async Task<HttpResponseMessage> ChangePasswordAsync(string oldPassword, string newPassword)
+        public async Task<HttpResponseMessage> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
         {
-            var birthday = await _context.Users.Where(x => x.Password == oldPassword).FirstOrDefaultAsync();
-
-            if (birthday != null)
+            try
             {
-                birthday.Password = newPassword;
+                var birthday = await _context.Users.Where(x => x.Id == userId && x.Password == oldPassword).FirstOrDefaultAsync();
 
-                await _context.SaveChangesAsync();
+                if (birthday != null)
+                {
+                    birthday.Password = newPassword;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                else
+                {
+                    return new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.BadRequest
+                    };
+                }
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK
+                };
             }
-
-            else
+            catch (ArgumentNullException ex)
             {
                 return new HttpResponseMessage()
                 {
                     StatusCode = System.Net.HttpStatusCode.BadRequest
                 };
             }
-
-            return new HttpResponseMessage()
-            {
-                StatusCode = System.Net.HttpStatusCode.OK
-            };
         }
 
-        public async Task<HttpResponseMessage> ChangeBirthdayAsync(DateTime oldBirthday, DateTime newBirthday)
+        public async Task<HttpResponseMessage> ChangeBirthdayAsync(int userId, DateTime oldBirthday, DateTime newBirthday)
         {
-            var birthday = await _context.Users.Where(x => x.Birthday == oldBirthday).FirstOrDefaultAsync();
-
-            if (birthday != null)
+            try
             {
-                birthday.Birthday = newBirthday;
+                var birthday = await _context.Users.Where(x => x.Id == userId && x.Birthday == oldBirthday).FirstOrDefaultAsync();
 
-                await _context.SaveChangesAsync();
+                if (birthday != null)
+                {
+                    birthday.Birthday = newBirthday;
+
+                    await _context.SaveChangesAsync();
+                }
+
+                else
+                {
+                    return new HttpResponseMessage()
+                    {
+                        StatusCode = System.Net.HttpStatusCode.BadRequest
+                    };
+                }
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK
+                };
             }
-
-            else
+            catch (ArgumentNullException ex)
             {
                 return new HttpResponseMessage()
                 {
                     StatusCode = System.Net.HttpStatusCode.BadRequest
                 };
             }
-
-            return new HttpResponseMessage()
-            {
-                StatusCode = System.Net.HttpStatusCode.OK
-            };
         }
     }
 }

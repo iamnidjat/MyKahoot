@@ -28,7 +28,6 @@ export class PlayerSurveyChoosingFormComponent {
     // Get the Id of the element
     let elementId = element.id;
 
-
     switch (elementId)
     {
       case "mixed-test":

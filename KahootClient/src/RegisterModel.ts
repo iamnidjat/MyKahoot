@@ -1,9 +1,9 @@
 export class RegisterModel{
   public id: number | undefined;
 
-  constructor(public login: string | undefined,
+  constructor(public userName: string | undefined,
               public password: string | undefined,
-              public cPassword: string | undefined,
+              public confirmPassword: string | undefined,
               public email: string | undefined,
               public birthday: Date | undefined, ) {  }
 
@@ -11,16 +11,16 @@ export class RegisterModel{
     return this.id;
   }
 
-  public get Login() {
-    return this.login;
+  public get Username() {
+    return this.userName;
   }
 
   public get Password() {
     return this.password;
   }
 
-  public get CPassword() {
-    return this.cPassword;
+  public get ConfirmPassword() {
+    return this.confirmPassword;
   }
 
   public get Email() {

@@ -17,11 +17,9 @@ import { ForgotPasswordFormComponent } from "../forgot-password-form/forgot-pass
 import { ChoiceForCreatingFormComponent } from "../choice-for-creating-form/choice-for-creating-form.component";
 import { SettingsChoiceFormComponent } from "../settings-choice-form/settings-choice-form.component";
 import { SettingsFormComponent } from "../settings-form/settings-form.component";
-import { StatsAndTop10ResultsFormComponent } from "../stats-and-top10-results-form/stats-and-top10-results-form.component";
 import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthday-settings-form.component";
-import { MatDialogModule } from "@angular/material/dialog";
-import {PopupFailureFormComponent} from "../popup-failure-form/popup-failure-form.component";
-import {PopupSuccessFormComponent} from "../popup-success-form/popup-success-form.component";
+import {StatsFormComponent} from "../stats-form/stats-form.component";
+import {Top10FormComponent} from "../top10-form/top10-form.component";
 
 let routes: Route[] = [
   {
@@ -61,8 +59,12 @@ let routes: Route[] = [
         component: ForgotPasswordFormComponent
       },
       {
-        path: 'app/stats-and-top10-results-form',
-        component: StatsAndTop10ResultsFormComponent
+        path: 'app/stats-form',
+        component: StatsFormComponent
+      },
+      {
+        path: 'app/top10-form',
+        component: Top10FormComponent
       },
       {
         path: 'app/settings-choice-form',
@@ -101,17 +103,15 @@ let routes: Route[] = [
     ChoiceForCreatingFormComponent,
     SettingsChoiceFormComponent,
     SettingsFormComponent,
-    StatsAndTop10ResultsFormComponent,
-    BirthdaySettingsFormComponent,
-    PopupFailureFormComponent,
-    PopupSuccessFormComponent
+    StatsFormComponent,
+    Top10FormComponent,
+    BirthdaySettingsFormComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     HttpClientModule,
     RouterOutlet,
-    MatDialogModule,
     RouterModule.forRoot(routes)
   ],
   providers: [],

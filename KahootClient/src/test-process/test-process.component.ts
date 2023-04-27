@@ -26,7 +26,15 @@ export class TestProcessComponent implements OnInit{
   constructor(private questionService: ServiceComponent, private router: Router) { }
 
   public ngOnInit(): void {
-    this.name = localStorage.getItem("Login")!;
+    if (localStorage.getItem("Login") !== null)
+    {
+      this.name = localStorage.getItem("Login")!;
+    }
+
+    if (localStorage.getItem("newLogin") !== null)
+    {
+      this.name = localStorage.getItem("newLogin")!;
+    }
 
     if (localStorage.getItem("MixedTest") !== null)
     {
@@ -49,7 +57,7 @@ export class TestProcessComponent implements OnInit{
     this.startCounter();
   }
   public getAllQuestions() {
-    this.questionService.getQuestionJson()
+    this.questionService.getQuestionJson()!
       .subscribe(res => {
         this.questionList = res.questions;
       })
@@ -127,13 +135,13 @@ export class TestProcessComponent implements OnInit{
 
   public ToStats(e: any): void{
     this.SaveResult(e);
-    this.router.navigate(['/app/stats-and-top10-results-form']);
+    this.router.navigate(['/app/stats-form']);
   }
 
   private SaveResult(e: any): void{
     e.preventDefault();
 
-    let quizInfo = new QuizModel(this.testType, this.points, this.name);
+    let quizInfo = new QuizModel(this.testType, this.points, 2);
 
     fetch(this.url + "UploadResult", {
       method: "POST",

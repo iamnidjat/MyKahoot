@@ -15,11 +15,11 @@ export class ProfileFormComponent {
   }
 
   public ToStats(): void{
-    this.router.navigate(['/app/stats-and-top10-results-form']);
+    this.router.navigate(['/app/stats-form']);
   }
 
   public ToTopResults(): void{
-    this.router.navigate(['/app/stats-and-top10-results-form']);
+    this.router.navigate(['/app/top10-form']);
   }
 
   public BackOptions(): void{

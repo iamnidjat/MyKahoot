@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { User } from '../User'
 import {RegisterModel} from "../RegisterModel";
+import Swal from "sweetalert2";
 
 const animateOnDivHeight = trigger('animateOnDivHeight', [
   state('firstHeight', style(
@@ -26,47 +27,81 @@ const animateOnDivHeight = trigger('animateOnDivHeight', [
 })
 
 export class AuthFormComponent{
-  //isChecked: boolean = false;
+  isChecked: boolean = false;
   private url: string = "https://localhost:7176/api/v1/Account/";
   public flag: boolean = true;
   @ViewChild('Login') nameKey!: ElementRef;
-  @ViewChild('toggleForm') toggle!: ElementRef;
-  constructor(private el: ElementRef, private router: Router) {
+  @ViewChild('newLogin') nameKey2!: ElementRef;
 
+  constructor(private el: ElementRef, private router: Router) {
+    localStorage.removeItem("Login");
+    localStorage.removeItem("newLogin");
   }
 
-  public LogIn(e:any, login: string, password: string): void{
+  public LogIn(e: any, login: string, password: string): void{
     e.preventDefault();
 
     let user = new User(login, password);
 
-    fetch(this.url + "Login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(user)
-    }).then((response) => {
-      localStorage.setItem("Login",this.nameKey.nativeElement.value)
-      this.router.navigate(['/app/player-options-form']);
-    });
+    if (login !== "" && password !== "")
+    {
+      fetch(this.url + "Login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      }).then((response) => {
+        if (response.status == 200)
+        {
+          localStorage.setItem("Login",this.nameKey.nativeElement.value)
+          this.router.navigate(['/app/player-options-form']);
+        }
+        else {
+          Swal.fire('Oops', 'Incorrect data!', 'error');
+          login = "";
+          password = "";
+        }
+      });
+    }
+    else
+    {
+      Swal.fire('Oops', 'Incorrect data!', 'error');
+    }
   }
 
-  public Register(e:any, login: string, password: string, cPassword: string, email: string, birthday: string): void{
+  public Register(e: any, login: string, password: string, cPassword: string, email: string, birthday: string): void{
     e.preventDefault();
 
     let registerModel = new RegisterModel(login, password, cPassword, email, new Date(birthday));
 
-    fetch(this.url + "Register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(registerModel)
-    }).then((response) => {
-      localStorage.setItem("Login",this.nameKey.nativeElement.value)
-      this.router.navigate(['/app/player-options-form']);
-    });
+    if (password === cPassword && password.length >= 5)
+    {
+      console.log(JSON.stringify(registerModel));
+
+      fetch(this.url + "Register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(registerModel)
+      }).then((response) => {
+        if (response.status == 200)
+        {
+          localStorage.setItem("newLogin",this.nameKey2.nativeElement.value)
+          Swal.fire("You registered successfully!");
+          this.router.navigate(['/app/player-options-form']);
+        }
+        else
+        {
+          Swal.fire('Oops', 'Incorrect data!', 'error');
+        }
+      });
+    }
+    else
+    {
+       Swal.fire('Oops', 'Incorrect data!', 'error');
+    }
   }
   public showRegister(e: any): void{
     e.preventDefault();
@@ -123,6 +158,15 @@ export class AuthFormComponent{
   }
 
   public RememberMe(username: string): void{
-    alert(username);
+    this.isChecked = !this.isChecked;
+
+    if (this.isChecked)
+    {
+      localStorage.setItem(username,this.nameKey.nativeElement.value)
+    }
+    else
+    {
+      sessionStorage.setItem(username,this.nameKey.nativeElement.value)
+    }
   }
 }

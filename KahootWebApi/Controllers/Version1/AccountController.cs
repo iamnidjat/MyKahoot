@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using KahootWebApi.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
 namespace KahootWebApi.Controllers.v1
 {
@@ -23,9 +24,9 @@ namespace KahootWebApi.Controllers.v1
 
         [HttpPost]
         [Route("api/v1/Account/Login")]
-        public async Task<HttpResponseMessage> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
 
@@ -36,35 +37,33 @@ namespace KahootWebApi.Controllers.v1
 
                 else
                 {
-                    return new HttpResponseMessage()
-                    {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest
-                    };
+                    return BadRequest();
                 }
             }
-
-            return new HttpResponseMessage()
+            catch (ArgumentNullException ex) 
             {
-                StatusCode = System.Net.HttpStatusCode.OK
-            };
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         [HttpPost]
         [Route("api/v1/Account/Register")]
-        public async Task<HttpResponseMessage> Register(RegisterModel model)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            try
             {
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
 
-                if (user == null && model.Birtdhay < DateTime.Now)
+                if (user == null && model.Birthday < DateTime.Now)
                 {
                     _context.Users.Add(new User
                     {
                         Username = model.UserName,
                         Password = model.Password,
                         Email = model.Email,
-                        Birthday = model.Birtdhay
+                        Birthday = model.Birthday
                     });
 
                     await _context.SaveChangesAsync();
@@ -74,17 +73,15 @@ namespace KahootWebApi.Controllers.v1
 
                 else
                 {
-                    return new HttpResponseMessage()
-                    {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest
-                    };
+                    return BadRequest();
                 }
             }
-
-            return new HttpResponseMessage()
+            catch (ArgumentNullException ex)
             {
-                StatusCode = System.Net.HttpStatusCode.OK
-            };
+                return BadRequest();
+            }
+
+            return Ok();
         }
 
         [HttpGet]
@@ -103,16 +100,16 @@ namespace KahootWebApi.Controllers.v1
 
         [HttpPatch]
         [Route("api/v1/Account/ChangePassword")]
-        public async Task<HttpResponseMessage> ChangePassword(string oldPassword, string newPassword)
+        public async Task<HttpResponseMessage> ChangePassword(int userId, string oldPassword, string newPassword)
         {
-            return await _manager.ChangePasswordAsync(oldPassword, newPassword);
+            return await _manager.ChangePasswordAsync(userId, oldPassword, newPassword);
         }
 
         [HttpPatch]
         [Route("api/v1/Account/ChangeBirthday")]
-        public async Task<HttpResponseMessage> ChangeBirthday(DateTime oldBirthday, DateTime newBirthday)
+        public async Task<HttpResponseMessage> ChangeBirthday(int userId, DateTime oldBirthday, DateTime newBirthday)
         {
-            return await _manager.ChangeBirthdayAsync(oldBirthday, newBirthday);
+            return await _manager.ChangeBirthdayAsync(userId, oldBirthday, newBirthday);
         }
 
         private async Task AuthenticateAsync(string userName)

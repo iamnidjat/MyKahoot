@@ -1,9 +1,5 @@
 @import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
 
-body {
-
-}
-
 #allthethings {
   display: flex;
   align-items: center;
@@ -36,3 +32,14 @@ body {
   background:#7A0000;
 }
 
+@media screen and (max-width: 750px) and (min-width: 550px) {
+  #allthethings nav div{
+    width: 550px;
+  }
+}
+
+@media screen and (max-width: 550px) and (min-width: 350px) {
+  #allthethings nav div{
+    width: 350px;
+  }
+}

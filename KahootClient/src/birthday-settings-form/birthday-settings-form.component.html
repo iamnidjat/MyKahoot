@@ -1,31 +1,17 @@
-<div class="mainDiv">
-  <div class="cardStyle">
-    <form name="changeBirthday" id="changeBirthday">
+<body style="height: 100vh;">
+<div class="row">
+  <h1>Change Birthday</h1>
+  <div class="form-group">
+    <input type="date" name="oldBirthday" id="oldBirthday" required #oldBirthday>
+    <p><label>Old birthday</label></p>
 
-      <div class="form-title" style="text-align: center">
-        <h1>Change Birthday</h1>
-      </div>
+    <input type="date" name="newBirthday" id="newBirthday" required #newBirthday>
+    <p><label>New birthday</label></p>
 
-      <div class="inputDiv">
-        <label class="inputLabel">Old Birthday</label>
-        <input type="date" id="oldBirthday" name="oldPassword" required #oldBirthday>
-      </div>
+    <input type="date" name="confirmBirthday" id="confirmBirthday" required #cNewBirthday>
+    <p><label>Confirm birthday</label></p>
 
-      <div class="inputDiv">
-        <label class="inputLabel">New Birthday</label>
-        <input type="date" id="newBirthday" name="newPassword" required #newBirthday>
-      </div>
-
-      <div class="inputDiv">
-        <label class="inputLabel">Confirm Birthday</label>
-        <input type="date" id="confirmBirthday" name="confirmBirthday" #cNewBirthday>
-      </div>
-
-      <div class="buttonWrapper">
-        <button type="submit"  class="submitButton pure-button pure-button-primary" (click)="changeBirthday($event, oldBirthday.value, newBirthday.value, cNewBirthday.value)">
-          <span>Continue</span>
-        </button>
-      </div>
-    </form>
+    <button (click)="changeBirthday($event, newBirthday.value, newBirthday.value, cNewBirthday.value)">Continue</button>
   </div>
 </div>
+</body>

@@ -14,14 +14,36 @@ namespace KahootWebApi.Services
 
         public async Task<IEnumerable<QuizStat>> DownloadResultAsync()
         {
-            return await _context.Quizzes.ToListAsync();
+            try
+            {
+                return await _context.Quizzes.ToListAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message, ex);
+            }
         }
 
-        public async Task UploadResultAsync(QuizStat item)
+        public async Task<HttpResponseMessage> UploadResultAsync(QuizStat item)
         {
-            await _context.Quizzes.AddAsync(item);
+            try
+            {
+                await _context.Quizzes.AddAsync(item);
 
-            await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+
+                return new HttpResponseMessage()
+                {
+                    StatusCode = System.Net.HttpStatusCode.OK
+                };
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            {
+                return new HttpResponseMessage()
+                {
+                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                };
+            }
         }
     }
 }

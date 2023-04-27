@@ -4,7 +4,7 @@ namespace KahootWebApi.Services
 {
     public interface IStatisticsManager
     {
-        Task UploadResultAsync(QuizStat item);
+        Task<HttpResponseMessage> UploadResultAsync(QuizStat item);
         Task<IEnumerable<QuizStat>> DownloadResultAsync();
     }
 }

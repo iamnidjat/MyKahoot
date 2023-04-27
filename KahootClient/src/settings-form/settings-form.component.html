@@ -1,33 +1,17 @@
+<body style="height: 100vh;">
+<div class="row">
+  <h1>Change Password</h1>
+  <div class="form-group">
+    <input type="password" name="oldPassword" id="oldPassword" required #oldPassword>
+    <p><label>Old password</label></p>
 
-<div class="mainDiv">
-  <div class="cardStyle">
-    <form name="changePassword" id="changePassword">
+    <input type="password" name="newPassword" id="newPassword" required #newPassword>
+    <p><label>New password</label></p>
 
-      <div class="form-title" style="text-align: center">
-        <h1>Change Password</h1>
-      </div>
+    <input type="password" name="confirmPassword" id="confirmPassword" required #cNewPassword>
+    <p><label>Confirm password</label></p>
 
-      <div class="inputDiv">
-        <label class="inputLabel">Old Password</label>
-        <input type="password" id="oldPassword" name="oldPassword" required #oldPassword>
-      </div>
-
-      <div class="inputDiv">
-        <label class="inputLabel">New Password</label>
-        <input type="password" id="newPassword" name="newPassword" required #newPassword>
-      </div>
-
-      <div class="inputDiv">
-        <label class="inputLabel">Confirm Password</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" #cNewPassword>
-      </div>
-
-      <div class="buttonWrapper">
-        <button type="submit"  class="submitButton pure-button pure-button-primary" (click)="changePassword($event, oldPassword.value, newPassword.value, cNewPassword.value)">
-          <span>Continue</span>
-        </button>
-      </div>
-    </form>
+    <button (click)="changePassword($event, oldPassword.value, newPassword.value, cNewPassword.value)">Continue</button>
   </div>
 </div>
-
+</body>

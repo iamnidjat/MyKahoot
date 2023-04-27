@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
-import {PopupSuccessFormComponent} from "../popup-success-form/popup-success-form.component";
-import {PopupFailureFormComponent} from "../popup-failure-form/popup-failure-form.component";
-import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-birthday-settings-form',
@@ -11,7 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 })
 export class BirthdaySettingsFormComponent {
   private url: string = "https://localhost:7176/api/v1/Account/";
-  constructor(private router: Router, private dialogRef : MatDialog) {
+  constructor(private router: Router) {
   }
 
   public changeBirthday(e:any, oldBirthday: string, newBirthday: string, cNewBirthday: string) {
@@ -25,21 +22,13 @@ export class BirthdaySettingsFormComponent {
           "Content-Type": "application/json"
         }
       }).then((response) => {
-        this.openSuccessDialog();
+
         this.router.navigate(['/app/settings-choice-form']);
       });
     }
     else
     {
-      this.openFailureDialog();
+
     }
   }
-
-  openSuccessDialog(){
-    this.dialogRef.open(PopupSuccessFormComponent);
-  };
-
-  openFailureDialog(){
-    this.dialogRef.open(PopupFailureFormComponent);
-  };
 }

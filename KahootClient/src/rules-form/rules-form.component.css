@@ -8,3 +8,16 @@ button{
 button:first-child{
   margin-right: -80px;
 }
+
+@media screen and (max-width: 770px){
+  .buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  button:first-child{
+    margin-left: 30.5%;
+  }
+}
+
+

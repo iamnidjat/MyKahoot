@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./choice-for-creating-form.component.css']
 })
 export class ChoiceForCreatingFormComponent {
+  constructor() {
+  }
 
+  // at the stage of development
 }
