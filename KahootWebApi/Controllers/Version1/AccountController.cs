@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.ActionConstraints;
 namespace KahootWebApi.Controllers.v1
 {
     [ApiController]
+    [Route("api/v1/Account/")]
     public class AccountController : ControllerBase
     {
         private readonly KahootDbContext _context;
@@ -22,13 +23,12 @@ namespace KahootWebApi.Controllers.v1
             _manager = manager;
         }
 
-        [HttpPost]
-        [Route("api/v1/Account/Login")]
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
             try
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
+                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
 
                 if (user != null)
                 {
@@ -40,7 +40,7 @@ namespace KahootWebApi.Controllers.v1
                     return BadRequest();
                 }
             }
-            catch (ArgumentNullException ex) 
+            catch (ArgumentNullException) 
             {
                 return BadRequest();
             }
@@ -48,13 +48,12 @@ namespace KahootWebApi.Controllers.v1
             return Ok();
         }
 
-        [HttpPost]
-        [Route("api/v1/Account/Register")]
+        [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             try
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
+                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
 
                 if (user == null && model.Birthday < DateTime.Now)
                 {
@@ -76,7 +75,7 @@ namespace KahootWebApi.Controllers.v1
                     return BadRequest();
                 }
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 return BadRequest();
             }
@@ -84,29 +83,25 @@ namespace KahootWebApi.Controllers.v1
             return Ok();
         }
 
-        [HttpGet]
-        [Route("api/v1/Account/Logout")]
+        [HttpGet("Logout")]
         public async Task Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }
 
-        [HttpPost]
-        [Route("api/v1/Account/ResetPassword")]
+        [HttpPost("ResetPassword")]
         public async Task<HttpResponseMessage> ResetPassword(string email)
         {
             return await _manager.ResetPasswordAsync(email);
         }
 
-        [HttpPatch]
-        [Route("api/v1/Account/ChangePassword")]
+        [HttpPatch("ChangePassword")]
         public async Task<HttpResponseMessage> ChangePassword(int userId, string oldPassword, string newPassword)
         {
             return await _manager.ChangePasswordAsync(userId, oldPassword, newPassword);
         }
 
-        [HttpPatch]
-        [Route("api/v1/Account/ChangeBirthday")]
+        [HttpPatch("ChangeBirthday")]
         public async Task<HttpResponseMessage> ChangeBirthday(int userId, DateTime oldBirthday, DateTime newBirthday)
         {
             return await _manager.ChangeBirthdayAsync(userId, oldBirthday, newBirthday);

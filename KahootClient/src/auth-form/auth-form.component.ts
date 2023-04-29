@@ -59,8 +59,6 @@ export class AuthFormComponent{
         }
         else {
           Swal.fire('Oops', 'Incorrect data!', 'error');
-          login = "";
-          password = "";
         }
       });
     }

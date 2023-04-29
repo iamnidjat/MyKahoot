@@ -132,7 +132,7 @@ namespace KahootWebApi.Services
                     StatusCode = System.Net.HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 return new HttpResponseMessage()
                 {
@@ -167,7 +167,7 @@ namespace KahootWebApi.Services
                     StatusCode = System.Net.HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 return new HttpResponseMessage()
                 {

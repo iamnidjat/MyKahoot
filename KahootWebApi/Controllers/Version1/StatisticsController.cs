@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace KahootWebApi.Controllers.v1
 {
     [ApiController]
+    [Route("api/v1/Statistics/")]
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsManager _manager;
@@ -15,15 +16,13 @@ namespace KahootWebApi.Controllers.v1
             _manager = manager;
         }
 
-        [HttpPost]
-        [Route("api/v1/Statistics/UploadResult")]
+        [HttpPost("UploadResult")]
         public async Task<HttpResponseMessage> UploadResult(QuizStat model)
         {
             return await _manager.UploadResultAsync(model);
         }
 
-        [HttpGet]
-        [Route("api/v1/Statistics/DownloadResult")]
+        [HttpGet("DownloadResult")]
         public async Task<IEnumerable<QuizStat>> DownloadResult()
         {
             return await _manager.DownloadResultAsync();
