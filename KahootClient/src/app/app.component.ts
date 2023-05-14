@@ -16,7 +16,7 @@ export class AppComponent implements OnInit{
   }
 
     AutoLogin(): void{
-    const access = localStorage.getItem("Login") || localStorage.getItem("newLogin");
+    const access = localStorage.getItem("Username") || localStorage.getItem("newLogin");
 
     if (access) {
       this.router.navigate(['/app/player-options-form']);

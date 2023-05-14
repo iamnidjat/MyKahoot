@@ -14,12 +14,12 @@ import { ServiceComponent } from "../service/service.component";
 import { HttpClientModule } from '@angular/common/http';
 import { changeBG } from "../changeBG";
 import { ForgotPasswordFormComponent } from "../forgot-password-form/forgot-password-form.component";
-import { ChoiceForCreatingFormComponent } from "../choice-for-creating-form/choice-for-creating-form.component";
 import { SettingsChoiceFormComponent } from "../settings-choice-form/settings-choice-form.component";
 import { SettingsFormComponent } from "../settings-form/settings-form.component";
 import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthday-settings-form.component";
 import {StatsFormComponent} from "../stats-form/stats-form.component";
 import {Top10FormComponent} from "../top10-form/top10-form.component";
+import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 
 let routes: Route[] = [
   {
@@ -79,6 +79,10 @@ let routes: Route[] = [
         component: BirthdaySettingsFormComponent
       },
       {
+        path: 'app/creating-quiz-option-form',
+        component: CreatingQuizOptionFormComponent
+      },
+      {
         path: '',
         redirectTo: 'app/auth-form',
         pathMatch: 'full',
@@ -100,12 +104,12 @@ let routes: Route[] = [
     ServiceComponent,
     changeBG,
     ForgotPasswordFormComponent,
-    ChoiceForCreatingFormComponent,
     SettingsChoiceFormComponent,
     SettingsFormComponent,
     StatsFormComponent,
     Top10FormComponent,
-    BirthdaySettingsFormComponent
+    BirthdaySettingsFormComponent,
+    CreatingQuizOptionFormComponent
   ],
   imports: [
     BrowserModule,

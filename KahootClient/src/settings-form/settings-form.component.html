@@ -1,17 +1,17 @@
 <body style="height: 100vh;">
-<div class="row">
-  <h1>Change Password</h1>
-  <div class="form-group">
-    <input type="password" name="oldPassword" id="oldPassword" required #oldPassword>
-    <p><label>Old password</label></p>
+  <div class="row">
+    <h1>Change Password</h1>
+    <div class="form-group">
+      <input type="password" name="oldPassword" id="oldPassword" required #oldPassword>
+      <p><label>Old password</label></p>
 
-    <input type="password" name="newPassword" id="newPassword" required #newPassword>
-    <p><label>New password</label></p>
+      <input type="password" name="newPassword" id="newPassword" required #newPassword>
+      <p><label>New password</label></p>
 
-    <input type="password" name="confirmPassword" id="confirmPassword" required #cNewPassword>
-    <p><label>Confirm password</label></p>
+      <input type="password" name="confirmPassword" id="confirmPassword" required #cNewPassword>
+      <p><label>Confirm password</label></p>
 
-    <button (click)="changePassword($event, oldPassword.value, newPassword.value, cNewPassword.value)">Continue</button>
+      <button (click)="changePassword($event, oldPassword.value, newPassword.value, cNewPassword.value)">Continue</button>
+    </div>
   </div>
-</div>
 </body>

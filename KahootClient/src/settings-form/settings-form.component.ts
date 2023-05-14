@@ -19,14 +19,21 @@ export class SettingsFormComponent {
 
     if (newPassword.length >= 5 && newPassword === cNewPassword)
     {
-      fetch(this.url + `ChangePassword?oldPassword=${oldPassword}&newPassword=${newPassword}`, {
+      fetch(this.url + `ChangePassword?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldPassword=${oldPassword}&newPassword=${newPassword}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
         }
       }).then((response) => {
-        Swal.fire('Your password was altered successfully!'); // !
-        this.router.navigate(['/app/settings-choice-form']);
+        if (response.status == 200)
+        {
+          Swal.fire('Your password was altered successfully!');
+          this.router.navigate(['/app/settings-choice-form']);
+        }
+        else
+        {
+          Swal.fire('Oops', 'Incorrect data!', 'error');
+        }
       });
     }
     else

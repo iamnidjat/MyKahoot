@@ -1,17 +1,17 @@
 <body style="height: 100vh;">
-<div class="row">
-  <h1>Change Birthday</h1>
-  <div class="form-group">
-    <input type="date" name="oldBirthday" id="oldBirthday" required #oldBirthday>
-    <p><label>Old birthday</label></p>
+  <div class="row">
+    <h1>Change Birthday</h1>
+    <div class="form-group">
+      <input type="date" name="oldBirthday" id="oldBirthday" required #oldBirthday>
+      <p><label>Old birthday</label></p>
 
-    <input type="date" name="newBirthday" id="newBirthday" required #newBirthday>
-    <p><label>New birthday</label></p>
+      <input type="date" name="newBirthday" id="newBirthday" required #newBirthday>
+      <p><label>New birthday</label></p>
 
-    <input type="date" name="confirmBirthday" id="confirmBirthday" required #cNewBirthday>
-    <p><label>Confirm birthday</label></p>
+      <input type="date" name="confirmBirthday" id="confirmBirthday" required #cNewBirthday>
+      <p><label>Confirm birthday</label></p>
 
-    <button (click)="changeBirthday($event, newBirthday.value, newBirthday.value, cNewBirthday.value)">Continue</button>
+      <button (click)="changeBirthday($event, oldBirthday.value, newBirthday.value, cNewBirthday.value)">Continue</button>
+    </div>
   </div>
-</div>
 </body>

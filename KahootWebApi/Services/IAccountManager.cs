@@ -6,7 +6,7 @@ namespace KahootWebApi.Services
     public interface IAccountManager
     {
         Task<HttpResponseMessage> ResetPasswordAsync(string email);
-        Task<HttpResponseMessage> ChangePasswordAsync(int userId, string oldPassword, string newPassword);
-        Task<HttpResponseMessage> ChangeBirthdayAsync(int userId, DateTime oldBirthday, DateTime newBirthday);
+        Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword);
+        Task<HttpResponseMessage> ChangeBirthdayAsync(string login, DateTime oldBirthday, DateTime newBirthday);
     }
 }

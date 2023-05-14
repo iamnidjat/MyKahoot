@@ -18,7 +18,6 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
-       
         public static string RandomPasswordGenerator(int length)
         {
             try
@@ -84,7 +83,7 @@ namespace KahootWebApi.Services
                 {
                     return new HttpResponseMessage()
                     {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest
+                        StatusCode = HttpStatusCode.BadRequest
                     };
                 }
             }
@@ -92,7 +91,7 @@ namespace KahootWebApi.Services
             {
                 return new HttpResponseMessage()
                 {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
             finally
@@ -102,19 +101,19 @@ namespace KahootWebApi.Services
 
             return new HttpResponseMessage()
             {
-                StatusCode = System.Net.HttpStatusCode.OK
+                StatusCode = HttpStatusCode.OK
             };
         }
 
-        public async Task<HttpResponseMessage> ChangePasswordAsync(int userId, string oldPassword, string newPassword)
+        public async Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword)
         {
             try
             {
-                var birthday = await _context.Users.Where(x => x.Id == userId && x.Password == oldPassword).FirstOrDefaultAsync();
+                var password = await _context.Users.Where(x => x.Username == login && x.Password == oldPassword).FirstOrDefaultAsync();
 
-                if (birthday != null)
+                if (password != null)
                 {
-                    birthday.Password = newPassword;
+                    password.Password = newPassword;
 
                     await _context.SaveChangesAsync();
                 }
@@ -123,29 +122,29 @@ namespace KahootWebApi.Services
                 {
                     return new HttpResponseMessage()
                     {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest
+                        StatusCode = HttpStatusCode.BadRequest
                     };
                 }
 
                 return new HttpResponseMessage()
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK
+                    StatusCode = HttpStatusCode.OK
                 };
             }
             catch (ArgumentNullException)
             {
                 return new HttpResponseMessage()
                 {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
         }
 
-        public async Task<HttpResponseMessage> ChangeBirthdayAsync(int userId, DateTime oldBirthday, DateTime newBirthday)
+        public async Task<HttpResponseMessage> ChangeBirthdayAsync(string login, DateTime oldBirthday, DateTime newBirthday)
         {
             try
             {
-                var birthday = await _context.Users.Where(x => x.Id == userId && x.Birthday == oldBirthday).FirstOrDefaultAsync();
+                var birthday = await _context.Users.Where(x => x.Username == login && x.Birthday == oldBirthday).FirstOrDefaultAsync();
 
                 if (birthday != null)
                 {
@@ -158,20 +157,20 @@ namespace KahootWebApi.Services
                 {
                     return new HttpResponseMessage()
                     {
-                        StatusCode = System.Net.HttpStatusCode.BadRequest
+                        StatusCode = HttpStatusCode.BadRequest
                     };
                 }
 
                 return new HttpResponseMessage()
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK
+                    StatusCode = HttpStatusCode.OK
                 };
             }
             catch (ArgumentNullException)
             {
                 return new HttpResponseMessage()
                 {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.BadRequest
                 };
             }
         }

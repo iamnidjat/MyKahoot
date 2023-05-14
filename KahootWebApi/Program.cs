@@ -44,16 +44,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-
-app.UseAuthorization();
-
 app.UseCors(options =>
 {
     options.AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader();
 }); //!
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

@@ -17,6 +17,8 @@ export class PlayerOptionsFormComponent {
       method: "GET"
     }).then((response) => {
       localStorage.removeItem("Login");
+      localStorage.removeItem("newLogin");
+      localStorage.removeItem("Username");
       this.router.navigate(['/app/auth-form']);
     });
   }
@@ -26,7 +28,7 @@ export class PlayerOptionsFormComponent {
   }
 
   public ToCreateQuiz(): void{
-    this.router.navigate(['/app/creating-test-form']);
+    this.router.navigate(['/app/creating-quiz-option-form']);
   }
 
   public ToProfile(): void{

@@ -24,25 +24,19 @@ namespace KahootWebApi.Services
             }
         }
 
-        public async Task<HttpResponseMessage> UploadResultAsync(QuizStat item)
+        public QuizStat UploadResultAsync(QuizStat item)
         {
             try
             {
-                await _context.Quizzes.AddAsync(item);
+                var result = _context.Quizzes.Add(item);
 
-                await _context.SaveChangesAsync();
+                 _context.SaveChangesAsync();
 
-                return new HttpResponseMessage()
-                {
-                    StatusCode = System.Net.HttpStatusCode.OK
-                };
+                return result.Entity;
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
             {
-                return new HttpResponseMessage()
-                {
-                    StatusCode = System.Net.HttpStatusCode.BadRequest
-                };
+                throw new Exception(ex.Message, ex);
             }
         }
     }

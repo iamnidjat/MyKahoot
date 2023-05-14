@@ -32,10 +32,12 @@ export class AuthFormComponent{
   public flag: boolean = true;
   @ViewChild('Login') nameKey!: ElementRef;
   @ViewChild('newLogin') nameKey2!: ElementRef;
+  @ViewChild('Guest') nameKey3!: ElementRef;
 
   constructor(private el: ElementRef, private router: Router) {
     localStorage.removeItem("Login");
     localStorage.removeItem("newLogin");
+    localStorage.removeItem("Username");
   }
 
   public LogIn(e: any, login: string, password: string): void{
@@ -52,6 +54,7 @@ export class AuthFormComponent{
         },
         body: JSON.stringify(user)
       }).then((response) => {
+        console.log(user.id);
         if (response.status == 200)
         {
           localStorage.setItem("Login",this.nameKey.nativeElement.value)
@@ -86,7 +89,7 @@ export class AuthFormComponent{
       }).then((response) => {
         if (response.status == 200)
         {
-          localStorage.setItem("newLogin",this.nameKey2.nativeElement.value)
+          localStorage.setItem("newLogin", this.nameKey2.nativeElement.value)
           Swal.fire("You registered successfully!");
           this.router.navigate(['/app/player-options-form']);
         }
@@ -155,16 +158,25 @@ export class AuthFormComponent{
     this.router.navigate(['/app/forgot-password-form']);
   }
 
+  public SignInAsAGuest(): void{
+    localStorage.setItem("Guest", this.nameKey3.nativeElement.innerText);
+    this.router.navigate(['/app/player-survey-choosing-form']);
+  }
+
   public RememberMe(username: string): void{
     this.isChecked = !this.isChecked;
 
-    if (this.isChecked)
+    if (this.isChecked && username !== "")
     {
-      localStorage.setItem(username,this.nameKey.nativeElement.value)
+      localStorage.setItem("Username", this.nameKey.nativeElement.value)
+    }
+    else if (!this.isChecked && username !== "")
+    {
+      sessionStorage.setItem("Username", this.nameKey.nativeElement.value)
     }
     else
     {
-      sessionStorage.setItem(username,this.nameKey.nativeElement.value)
+      Swal.fire("Oops", "Enter credentials before checking \"Remember me\"", "error"); // !
     }
   }
 }

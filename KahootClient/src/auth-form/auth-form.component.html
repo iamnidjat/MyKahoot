@@ -16,11 +16,12 @@
         </div>
         <div class="form-group">
           <label class="form-remember" style="cursor: pointer">
-            <input type="checkbox" (change)="RememberMe(Login.value)"/>Remember Me</label>
-          <a class="form-recovery" (click)="ToForgotPassword()" style="cursor: pointer">Forgot Password?</a>
+            <input type="checkbox" (change)="RememberMe(Login.value)" style="cursor: pointer"/>Remember Me</label>
+          <span class="form-recovery" (click)="ToForgotPassword()" style="cursor: pointer">Forgot Password?</span>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
           <button type="submit" (click)="LogIn($event, Login.value, Password.value)">Log In</button>
+          <div class="form-recovery" #Guest style="cursor: pointer; margin-top: 10px;" (click)=" SignInAsAGuest()">Sign in as a Guest</div>
         </div>
       </form>
     </div>
@@ -28,7 +29,7 @@
 
   <div class="form-panel two" (click)="flag ? showRegister($event) : null">
     <div class="form-header">
-      <h1>Register Account</h1>
+      <h1>Register an account</h1>
     </div>
     <div class="form-content">
       <form>

@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
     "@types/angular": "^1.8.4",
+    "@types/node": "^18.16.3",
     "angular": "^1.8.3",
     "jquery": "^3.6.3",
     "rxjs": "~7.8.0",

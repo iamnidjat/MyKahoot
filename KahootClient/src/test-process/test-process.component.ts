@@ -36,6 +36,11 @@ export class TestProcessComponent implements OnInit{
       this.name = localStorage.getItem("newLogin")!;
     }
 
+    if (localStorage.getItem("Guest") !== null)
+    {
+      this.name = "Guest";
+    }
+
     if (localStorage.getItem("MixedTest") !== null)
     {
       this.testType = localStorage.getItem("MixedTest")!;
@@ -69,7 +74,7 @@ export class TestProcessComponent implements OnInit{
     this.currentQuestion--;
   }
   public answer(currentQno: number, option: any): void {
-    if(currentQno === this.questionList.length){
+    if (currentQno === this.questionList.length){
       this.isQuizCompleted = true;
       this.stopCounter();
     }

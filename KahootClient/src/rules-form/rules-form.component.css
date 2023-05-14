@@ -9,7 +9,7 @@ button:first-child{
   margin-right: -80px;
 }
 
-@media screen and (max-width: 770px){
+@media screen and (max-width: 770px) and (min-width: 350px){
   .buttons{
     display: flex;
     flex-direction: column;

@@ -79,3 +79,5 @@ D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\runtimes\win\lib\netcoreap
 D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\BouncyCastle.Cryptography.dll
 D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\MailKit.dll
 D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\MimeKit.dll
+D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Castle.Core.dll
+D:\gurba\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Moq.dll

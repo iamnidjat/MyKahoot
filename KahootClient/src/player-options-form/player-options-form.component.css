@@ -177,3 +177,7 @@
   position:relative;
   top:0px;
 }
+
+@media screen and (max-width: 500px) and (min-width: 350px) {
+
+}

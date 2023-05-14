@@ -19,13 +19,20 @@ export class PlayerSurveyChoosingFormComponent {
     localStorage.removeItem("MixedTest");
   }
   public BackOptions(): void{
-    this.router.navigate(['/app/player-options-form']);
+    if (localStorage.getItem("Guest") !== null)
+    {
+      this.router.navigate(['/app/auth-form']);
+      localStorage.removeItem("Guest");
+    }
+    else
+    {
+      this.router.navigate(['/app/player-options-form']);
+    }
   }
 
   public ToRulesForm(elemRef: any): void{
-    // Get the element's reference
     let element = elemRef;
-    // Get the Id of the element
+
     let elementId = element.id;
 
     switch (elementId)

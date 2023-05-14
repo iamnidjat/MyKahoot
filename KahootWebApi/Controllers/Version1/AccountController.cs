@@ -7,6 +7,7 @@ using System.Security.Claims;
 using KahootWebApi.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Authorization;
 
 namespace KahootWebApi.Controllers.v1
 {
@@ -16,6 +17,7 @@ namespace KahootWebApi.Controllers.v1
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
+       // private int userId;
 
         public AccountController(IAccountManager manager, KahootDbContext context)
         {
@@ -32,9 +34,10 @@ namespace KahootWebApi.Controllers.v1
 
                 if (user != null)
                 {
-                    await AuthenticateAsync(model.UserName);
-                }
+                    await AuthenticateAsync(model.UserName!);
 
+                    //userId = user.Id;
+                }
                 else
                 {
                     return BadRequest();
@@ -67,9 +70,15 @@ namespace KahootWebApi.Controllers.v1
 
                     await _context.SaveChangesAsync();
 
-                    await AuthenticateAsync(model.UserName);
-                }
+                    await AuthenticateAsync(model.UserName!);
 
+                    //User? newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
+
+                    //if (newUser != null)
+                    //{
+                    //    userId = newUser.Id;
+                    //}
+                }
                 else
                 {
                     return BadRequest();
@@ -96,32 +105,36 @@ namespace KahootWebApi.Controllers.v1
         }
 
         [HttpPatch("ChangePassword")]
-        public async Task<HttpResponseMessage> ChangePassword(int userId, string oldPassword, string newPassword)
+      //  [Authorize]
+        public async Task<HttpResponseMessage> ChangePassword(string login, string oldPassword, string newPassword)
         {
-            return await _manager.ChangePasswordAsync(userId, oldPassword, newPassword);
+            return await _manager.ChangePasswordAsync(login, oldPassword, newPassword);
         }
 
         [HttpPatch("ChangeBirthday")]
-        public async Task<HttpResponseMessage> ChangeBirthday(int userId, DateTime oldBirthday, DateTime newBirthday)
+      //  [Authorize]
+        public async Task<HttpResponseMessage> ChangeBirthday(string login, DateTime oldBirthday, DateTime newBirthday)
         {
-            return await _manager.ChangeBirthdayAsync(userId, oldBirthday, newBirthday);
+            return await _manager.ChangeBirthdayAsync(login, oldBirthday, newBirthday);
         }
 
         private async Task AuthenticateAsync(string userName)
         {
-            var claims = new List<Claim>
+            try
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                };
 
-            ClaimsIdentity id = new(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+                ClaimsIdentity id = new (claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message, ex);
+            }
         }
     }
 }
-
-
-
-
-   
