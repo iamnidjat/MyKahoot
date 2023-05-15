@@ -19,7 +19,7 @@ import { SettingsFormComponent } from "../settings-form/settings-form.component"
 import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthday-settings-form.component";
 import {StatsFormComponent} from "../stats-form/stats-form.component";
 import {Top10FormComponent} from "../top10-form/top10-form.component";
-import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
+import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component"
 
 let routes: Route[] = [
   {

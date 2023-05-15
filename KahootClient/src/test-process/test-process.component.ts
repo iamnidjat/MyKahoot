@@ -134,7 +134,11 @@ export class TestProcessComponent implements OnInit{
   }
 
   public ToMenu(e: any): void{
-    this.SaveResult(e);
+    if (localStorage.getItem("Guest") === null)
+    {
+      this.SaveResult(e);
+    }
+
     this.router.navigate(['/app/player-options-form']);
   }
 

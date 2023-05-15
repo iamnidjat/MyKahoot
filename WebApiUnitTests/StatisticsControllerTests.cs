@@ -18,7 +18,7 @@ namespace WebApiUnitTests
         public async Task DownloadResultTest()
         {
             //arrange
-            var users = GetUsers();
+            var users = GetStats();
             _mock.Setup(x => x.DownloadResultAsync()).ReturnsAsync(users!);
             var controller = new StatisticsController(_mock.Object);
 
@@ -27,8 +27,8 @@ namespace WebApiUnitTests
 
             //assert
             Assert.NotNull(data);
-            Assert.Equal(GetUsers().Count(), data.Count());
-            Assert.Equal(GetUsers().ToString(), data.ToString());
+            Assert.Equal(GetStats().Count(), data.Count());
+            Assert.Equal(GetStats().ToString(), data.ToString());
             Assert.True(users!.Equals(data));
         }
 
@@ -36,7 +36,7 @@ namespace WebApiUnitTests
         public void UploadResultTest()
         {
             //arrange
-            var users = GetUsers();
+            var users = GetStats();
             _mock.Setup(x => x.UploadResultAsync(users![1])).Returns(users![1]);
             var controller = new StatisticsController(_mock.Object);
 
@@ -49,7 +49,7 @@ namespace WebApiUnitTests
             Assert.True(users[1].Id == data.Id);
         }
 
-        private List<QuizStat> GetUsers()
+        private List<QuizStat> GetStats()
         {
             var users = new List<QuizStat>
             {
