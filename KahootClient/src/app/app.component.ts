@@ -15,7 +15,7 @@ export class AppComponent implements OnInit{
     this.AutoLogin();
   }
 
-    AutoLogin(): void{
+    public AutoLogin(): void{
     const access = localStorage.getItem("Username") || localStorage.getItem("newLogin");
 
     if (access) {

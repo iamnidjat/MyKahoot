@@ -19,6 +19,7 @@ export class PlayerOptionsFormComponent {
       localStorage.removeItem("Login");
       localStorage.removeItem("newLogin");
       localStorage.removeItem("Username");
+      localStorage.removeItem("Guest");
       this.router.navigate(['/app/auth-form']);
     });
   }

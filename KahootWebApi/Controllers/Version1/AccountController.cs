@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using KahootWebApi.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using Microsoft.AspNetCore.Authorization;
+using System.Runtime.ConstrainedExecution;
+
 
 namespace KahootWebApi.Controllers.v1
 {
@@ -28,9 +28,11 @@ namespace KahootWebApi.Controllers.v1
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            User? user;
+
             try
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
+                user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
 
                 if (user != null)
                 {
@@ -48,17 +50,18 @@ namespace KahootWebApi.Controllers.v1
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(user);
         }
 
         [HttpPost("Register")]
         public async Task<IActionResult> Register(RegisterModel model)
         {
+            User? newUser;
             try
             {
                 User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
 
-                if (user == null && model.Birthday < DateTime.Now)
+                if (user == null && model.Birthday < DateTime.Now && AccountManager.IsValid(model.Email!))
                 {
                     _context.Users.Add(new User
                     {
@@ -72,7 +75,7 @@ namespace KahootWebApi.Controllers.v1
 
                     await AuthenticateAsync(model.UserName!);
 
-                    //User? newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
+                    newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
 
                     //if (newUser != null)
                     //{
@@ -89,7 +92,7 @@ namespace KahootWebApi.Controllers.v1
                 return BadRequest();
             }
 
-            return Ok();
+            return Ok(newUser);
         }
 
         [HttpGet("Logout")]

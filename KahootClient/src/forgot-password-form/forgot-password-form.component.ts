@@ -23,8 +23,14 @@ export class ForgotPasswordFormComponent {
           "Content-Type": "application/json"
         },
       }).then((response) => {
-        Swal.fire("Instructions were sent to your mail address!");
-        this.router.navigate(['/app/auth-form']);
+        if (response.status == 200) {
+          Swal.fire("Instructions were sent to your mail address!");
+          this.router.navigate(['/app/auth-form']);
+        }
+        else
+        {
+          Swal.fire('Oops', 'Incorrect data!', 'error');
+        }
       });
     }
     else

@@ -52,7 +52,7 @@ button:focus{
   background-color: #44b927;
 }
 
-#backToMenuButton, #showStatsButton{
+.backToMenuButton, .showStatsButton{
   background-color: #007bff;
   color: #fff;
   width: 150px;
@@ -62,7 +62,7 @@ button:focus{
   border-radius: 10px;
 }
 
-#backToMenuButton:hover, #showStatsButton:hover{
+.backToMenuButton:hover, .showStatsButton:hover{
   opacity: .9;
 }
 

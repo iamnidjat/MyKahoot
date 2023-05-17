@@ -12,11 +12,11 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<QuizStat>> DownloadResultAsync()
+        public async Task<IEnumerable<QuizStat>> DownloadResultAsync(int userId)
         {
             try
             {
-                return await _context.Quizzes.ToListAsync();
+                return await _context.Quizzes.Where(x => x.UserId == userId).ToListAsync();
             }
             catch (ArgumentNullException ex)
             {

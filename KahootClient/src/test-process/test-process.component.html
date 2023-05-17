@@ -58,10 +58,17 @@
           <p>Total correct answered: {{correctAnswer}} </p>
           <p>Total wrong answered: {{inCorrectAnswer}} </p>
           <p>Your score: {{points}} points </p>
-          <div class="buttons">
-            <input type="button" id="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu($event)"/>
-            <input type="button" id="showStatsButton" name="showStatsButton" value="Stats" (click)="ToStats($event)"/>
-          </div>
+          <ng-container *ngIf="name !== 'Guest'">
+            <div class="buttons">
+              <input type="button" class="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu($event)"/>
+              <input type="button" class="showStatsButton" name="showStatsButton" value="Stats" (click)="ToStats($event)"/>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="name === 'Guest'">
+            <div class="buttons">
+              <input type="button" class="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu($event)" style="width: 200px"/>
+            </div>
+          </ng-container>
         </div>
       </div>
     </ng-container>

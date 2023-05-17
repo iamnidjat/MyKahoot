@@ -27,17 +27,24 @@ const animateOnDivHeight = trigger('animateOnDivHeight', [
 })
 
 export class AuthFormComponent{
-  isChecked: boolean = false;
+  public isChecked: boolean = false;
   private url: string = "https://localhost:7176/api/v1/Account/";
   public flag: boolean = true;
   @ViewChild('Login') nameKey!: ElementRef;
   @ViewChild('newLogin') nameKey2!: ElementRef;
   @ViewChild('Guest') nameKey3!: ElementRef;
+  @ViewChild('Password') nameKeyPassword!: ElementRef;
+  @ViewChild('newPassword') nameKeyNewPassword!: ElementRef;
+  @ViewChild('cNewPassword') nameKeyCNewPassword!: ElementRef;
+  @ViewChild('birthday') nameKeyBirthday!: ElementRef;
+  @ViewChild('email') nameKeyMail!: ElementRef;
 
   constructor(private el: ElementRef, private router: Router) {
     localStorage.removeItem("Login");
     localStorage.removeItem("newLogin");
     localStorage.removeItem("Username");
+    localStorage.removeItem("Guest");
+    localStorage.removeItem("userId");
   }
 
   public LogIn(e: any, login: string, password: string): void{
@@ -54,20 +61,26 @@ export class AuthFormComponent{
         },
         body: JSON.stringify(user)
       }).then((response) => {
-        console.log(user.id);
         if (response.status == 200)
         {
           localStorage.setItem("Login",this.nameKey.nativeElement.value)
           this.router.navigate(['/app/player-options-form']);
         }
-        else {
+        else
+        {
           Swal.fire('Oops', 'Incorrect data!', 'error');
+          this.ClearLoginInputs();
         }
+        return response.json();
+    }).then((data) => {
+        let userid = JSON.parse(JSON.stringify(data));
+        localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
+      this.ClearLoginInputs();
     }
   }
 
@@ -78,8 +91,6 @@ export class AuthFormComponent{
 
     if (password === cPassword && password.length >= 5)
     {
-      console.log(JSON.stringify(registerModel));
-
       fetch(this.url + "Register", {
         method: "POST",
         headers: {
@@ -89,19 +100,25 @@ export class AuthFormComponent{
       }).then((response) => {
         if (response.status == 200)
         {
-          localStorage.setItem("newLogin", this.nameKey2.nativeElement.value)
+          localStorage.setItem("newLogin", this.nameKey2.nativeElement.value);
           Swal.fire("You registered successfully!");
           this.router.navigate(['/app/player-options-form']);
         }
         else
         {
           Swal.fire('Oops', 'Incorrect data!', 'error');
+          this.ClearRegisterInputs();
         }
+        return response.json();
+      }).then((data) => {
+        let userid = JSON.parse(JSON.stringify(data));
+        localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
       });
     }
     else
     {
-       Swal.fire('Oops', 'Incorrect data!', 'error');
+      Swal.fire('Oops', 'Incorrect data!', 'error');
+      this.ClearRegisterInputs();
     }
   }
   public showRegister(e: any): void{
@@ -176,7 +193,22 @@ export class AuthFormComponent{
     }
     else
     {
-      Swal.fire("Oops", "Enter credentials before checking \"Remember me\"", "error"); // !
+      Swal.fire("Oops", "Enter credentials before checking \"Remember me\"", "error");
     }
+  }
+
+  private ClearRegisterInputs(): any
+  {
+    this.nameKey2.nativeElement.value = '';
+    this.nameKeyNewPassword.nativeElement.value = '';
+    this.nameKeyCNewPassword.nativeElement.value = '';
+    this.nameKeyBirthday.nativeElement.value = '';
+    this.nameKeyMail.nativeElement.value = '';
+  }
+
+  private ClearLoginInputs(): any
+  {
+    this.nameKey.nativeElement.value = '';
+    this.nameKeyPassword.nativeElement.value = '';
   }
 }

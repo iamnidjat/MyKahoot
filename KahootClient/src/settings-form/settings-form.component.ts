@@ -1,4 +1,4 @@
-import {Component, Injectable} from '@angular/core';
+import {Component, ElementRef, Injectable, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import  Swal  from 'sweetalert2';
 
@@ -10,6 +10,9 @@ import  Swal  from 'sweetalert2';
 export class SettingsFormComponent {
   public flag: boolean = false;
   private url: string = "https://localhost:7176/api/v1/Account/";
+  @ViewChild('oldPassword') nameKeyPassword!: ElementRef;
+  @ViewChild('newPassword') nameKeyNewPassword!: ElementRef;
+  @ViewChild('cNewPassword') nameKeyCNewPassword!: ElementRef;
 
   constructor(private router: Router) {
   }
@@ -33,12 +36,21 @@ export class SettingsFormComponent {
         else
         {
           Swal.fire('Oops', 'Incorrect data!', 'error');
+          this.ClearChangePasswordInputs();
         }
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
+      this.ClearChangePasswordInputs();
     }
+  }
+
+  private ClearChangePasswordInputs(): any
+  {
+    this.nameKeyNewPassword.nativeElement.value = '';
+    this.nameKeyCNewPassword.nativeElement.value = '';
+    this.nameKeyPassword.nativeElement.value = '';
   }
 }

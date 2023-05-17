@@ -6,6 +6,8 @@ using KahootWebApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using MimeKit;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 
 namespace KahootWebApi.Services
 {
@@ -18,7 +20,7 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
-        public static string RandomPasswordGenerator(int length)
+        private static string RandomPasswordGenerator(int length)
         {
             try
             {
@@ -37,11 +39,18 @@ namespace KahootWebApi.Services
             }
         }
 
-        public static int RandomPasswordLength()
+        private static int RandomPasswordLength()
         {
             var number = new Random().Next(5, 10);
 
             return number;
+        }
+
+        public static bool IsValid(string email)
+        {
+            string regex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov|ru)$";
+
+            return Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
         }
 
         public async Task<HttpResponseMessage> ResetPasswordAsync(string email)
@@ -50,58 +59,66 @@ namespace KahootWebApi.Services
 
             using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
 
-            try
+            if (IsValid(email))
             {
-                smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
-                smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
-
-                var message = new MimeMessage();
-
-                message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
-                message.To.Add(new MailboxAddress("You", email));
-
-                message.Subject = "Reset Password";
-
-                var part = new TextPart("plain")
+                try
                 {
-                    Text = $"Your new password: {newPassword}\nIf the message was sent by mistake, just ignore it."
-                };
+                    smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
+                    smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
 
-                message.Body = part;
+                    var message = new MimeMessage();
 
-                smtpClient.Send(message);
+                    message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
+                    message.To.Add(new MailboxAddress("You", email));
 
-                var user = await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+                    message.Subject = "Reset Password";
 
-                if (user != null)
-                {
-                    user.Password = newPassword;
+                    var part = new TextPart("plain")
+                    {
+                        Text = $"Your new password: {newPassword}\nIf the message was sent by mistake, just ignore it."
+                    };
 
-                    await _context.SaveChangesAsync();
+                    message.Body = part;
+
+                    smtpClient.Send(message);
+
+                    var user = await _context.Users.Where(x => x.Email == email).FirstOrDefaultAsync();
+
+                    if (user != null)
+                    {
+                        user.Password = newPassword;
+
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        return new HttpResponseMessage()
+                        {
+                            StatusCode = HttpStatusCode.BadRequest
+                        };
+                    }
                 }
-                else
+                catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
                     };
                 }
-            }
-            catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
-            {
+                finally
+                {
+                    smtpClient.Disconnect(true);
+                }
+
                 return new HttpResponseMessage()
                 {
-                    StatusCode = HttpStatusCode.BadRequest
+                    StatusCode = HttpStatusCode.OK
                 };
-            }
-            finally
-            {
-                smtpClient.Disconnect(true);
             }
 
             return new HttpResponseMessage()
             {
-                StatusCode = HttpStatusCode.OK
+                StatusCode = HttpStatusCode.BadRequest
             };
         }
 

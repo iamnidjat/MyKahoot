@@ -150,7 +150,7 @@ export class TestProcessComponent implements OnInit{
   private SaveResult(e: any): void{
     e.preventDefault();
 
-    let quizInfo = new QuizModel(this.testType, this.points, 2);
+    let quizInfo = new QuizModel(this.testType, this.points, parseInt(localStorage.getItem("userId")!));
 
     fetch(this.url + "UploadResult", {
       method: "POST",

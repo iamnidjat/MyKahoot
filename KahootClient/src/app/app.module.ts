@@ -20,6 +20,7 @@ import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthda
 import {StatsFormComponent} from "../stats-form/stats-form.component";
 import {Top10FormComponent} from "../top10-form/top10-form.component";
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component"
+import {DatePipe} from "@angular/common";
 
 let routes: Route[] = [
   {
@@ -118,6 +119,7 @@ let routes: Route[] = [
     RouterOutlet,
     RouterModule.forRoot(routes)
   ],
+  // providers: [DatePipe, AuthFormComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

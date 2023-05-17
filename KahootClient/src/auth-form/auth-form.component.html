@@ -47,7 +47,7 @@
         </div>
         <div class="form-group">
           <label for="email">Email Address</label>
-          <input type="email" #email id="email" name="email" required="required"/>
+          <input type="email" #email id="email" name="email" required pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"/>
         </div>
         <div class="form-group">
           <label>Birthday</label>

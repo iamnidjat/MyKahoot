@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 
@@ -9,6 +9,9 @@ import Swal from "sweetalert2";
 })
 export class BirthdaySettingsFormComponent {
   private url: string = "https://localhost:7176/api/v1/Account/";
+  @ViewChild('oldBirthday') nameKeyBirthday!: ElementRef;
+  @ViewChild('newBirthday') nameKeyNewBirthday!: ElementRef;
+  @ViewChild('cNewBirthday') nameKeyCNewBirthday!: ElementRef;
   constructor(private router: Router) {
   }
 
@@ -17,7 +20,7 @@ export class BirthdaySettingsFormComponent {
 
     if (newBirthday === cNewBirthday)
     {
-      fetch(this.url + `ChangeBirthday?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldBirthday=${new Date(oldBirthday)}&newBirthday=${new Date(newBirthday)}`, {
+      fetch(this.url + `ChangeBirthday?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldBirthday=${new Date(oldBirthday).toISOString()}&newBirthday=${new Date(newBirthday).toISOString()}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -32,12 +35,21 @@ export class BirthdaySettingsFormComponent {
         else
         {
           Swal.fire('Oops', 'Incorrect data!', 'error');
+          this.ClearChangeBirthdayInputs();
         }
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
+      this.ClearChangeBirthdayInputs();
     }
+  }
+
+  private ClearChangeBirthdayInputs(): any
+  {
+    this.nameKeyNewBirthday.nativeElement.value = '';
+    this.nameKeyCNewBirthday.nativeElement.value = '';
+    this.nameKeyBirthday.nativeElement.value = '';
   }
 }

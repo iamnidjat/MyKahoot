@@ -18,35 +18,35 @@ namespace WebApiUnitTests
         public async Task DownloadResultTest()
         {
             //arrange
-            var users = GetStats();
-            _mock.Setup(x => x.DownloadResultAsync()).ReturnsAsync(users!);
+            var stats = GetStats();
+            _mock.Setup(x => x.DownloadResultAsync(1)).ReturnsAsync(stats!);
             var controller = new StatisticsController(_mock.Object);
 
             //act
-            var data = await controller.DownloadResult();
+            var data = await controller.DownloadResult(1);
 
             //assert
             Assert.NotNull(data);
             Assert.Equal(GetStats().Count(), data.Count());
             Assert.Equal(GetStats().ToString(), data.ToString());
-            Assert.True(users!.Equals(data));
+            Assert.True(stats!.Equals(data));
         }
 
         [Fact]
         public void UploadResultTest()
         {
             //arrange
-            var users = GetStats();
-            _mock.Setup(x => x.UploadResultAsync(users![1])).Returns(users![1]);
+            var stats = GetStats();
+            _mock.Setup(x => x.UploadResultAsync(stats![1])).Returns(stats![1]);
             var controller = new StatisticsController(_mock.Object);
 
             //act
-            var data = controller.UploadResult(users![1]);
+            var data = controller.UploadResult(stats![1]);
 
             //assert
             Assert.NotNull(data);
-            Assert.Equal(users[1].Id, data.Id);
-            Assert.True(users[1].Id == data.Id);
+            Assert.Equal(stats[1].Id, data.Id);
+            Assert.True(stats[1].Id == data.Id);
         }
 
         private List<QuizStat> GetStats()
