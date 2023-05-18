@@ -10,7 +10,6 @@ import {QuizModel} from "../QuizModel";
 export class Top10FormComponent implements OnInit{
   public info: QuizModel[] = [];
   private quizType: string = '';
-
   public url: string = "https://localhost:7176/api/v1/Statistics/";
 
   constructor() {

@@ -23,5 +23,7 @@ namespace KahootWebApi.Models
         public DateTime? Birthday { get; set; }
 
         public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
+
+       // public ICollection<Quiz> Questions { get; set; } = new ObservableCollection<Quiz>();
     }
 }
