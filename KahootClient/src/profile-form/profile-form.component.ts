@@ -19,7 +19,7 @@ export class ProfileFormComponent {
   }
 
   public ToTopResults(): void{
-    this.router.navigate(['/app/top10-form']);
+    this.router.navigate(['/app/choose-field-form']);
   }
 
   public BackOptions(): void{

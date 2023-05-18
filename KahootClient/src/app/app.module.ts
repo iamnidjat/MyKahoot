@@ -21,6 +21,8 @@ import {StatsFormComponent} from "../stats-form/stats-form.component";
 import {Top10FormComponent} from "../top10-form/top10-form.component";
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component"
 import {DatePipe} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {ChooseFieldFormComponent} from "../choose-field-form/choose-field-form.component";
 
 let routes: Route[] = [
   {
@@ -84,6 +86,10 @@ let routes: Route[] = [
         component: CreatingQuizOptionFormComponent
       },
       {
+        path: 'app/choose-field-form',
+        component: ChooseFieldFormComponent
+      },
+      {
         path: '',
         redirectTo: 'app/auth-form',
         pathMatch: 'full',
@@ -110,15 +116,17 @@ let routes: Route[] = [
     StatsFormComponent,
     Top10FormComponent,
     BirthdaySettingsFormComponent,
-    CreatingQuizOptionFormComponent
+    CreatingQuizOptionFormComponent,
+    ChooseFieldFormComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    RouterOutlet,
-    RouterModule.forRoot(routes)
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        RouterOutlet,
+        RouterModule.forRoot(routes),
+        FormsModule
+    ],
   // providers: [DatePipe, AuthFormComponent],
   providers: [],
   bootstrap: [AppComponent]

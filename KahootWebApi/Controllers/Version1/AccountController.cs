@@ -102,7 +102,7 @@ namespace KahootWebApi.Controllers.v1
         }
 
         [HttpPost("ResetPassword")]
-        public async Task<HttpResponseMessage> ResetPassword(string email)
+        public async Task<IActionResult> ResetPassword(string email)
         {
             return await _manager.ResetPasswordAsync(email);
         }

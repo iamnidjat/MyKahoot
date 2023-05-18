@@ -22,11 +22,11 @@
     <ng-container *ngIf="!isQuizCompleted">
       <div class="d-flex justify-content-around py-3">
         <div class="question-remain">
-          <span style="font-style: italic;">Question {{currentQuestion + 1}} of {{questionList.length}}</span>
+          <span style="font-style: italic;">Question {{currentQuestion + 1}} of 20</span>
         </div>
       </div>
       <div class="question">
-        <div class="card" style="text-align: center">
+        <div class="card" style="text-align: center; margin: 5px">
 <!--          <h3>{{questionList[currentQuestion]?.questionText}}</h3>-->
           <input type="text" #Question placeholder="Enter your question here..."/>
         </div>
@@ -41,23 +41,24 @@
 <!--        </ol>-->
         <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
           <li style="cursor: pointer;">
-            <input type="text" #Answer1 style="cursor: pointer; padding: 5px" placeholder="Enter your answer here...">
+            <input type="text" #Answer1 style="cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+<!--            <input type="radio" style="display: inline-block">-->
           </li>
           <li style="cursor: pointer;">
-            <input type="text" #Answer2 style="cursor: pointer; padding: 5px" placeholder="Enter your answer here...">
+            <input type="text" #Answer2 style="cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
           </li>
           <li style="cursor: pointer;">
-            <input type="text" #Answer3 style="cursor: pointer; padding: 5px" placeholder="Enter your answer here...">
+            <input type="text" #Answer3 style="cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
           </li>
           <li style="cursor: pointer;">
-            <input type="text" #Answer4 style="cursor: pointer; padding: 5px" placeholder="Enter your answer here...">
+            <input type="text" #Answer4 style="cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
           </li>
         </ol>
       </div>
       <div class="d-flex justify-content-between">
         <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
         <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
-        <button class="btn" (click)="nextQuestion(Question.value, Answer1.value, Answer2.value, Answer3.value, Answer4.value)"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        <button class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
       </div>
     </ng-container>
 

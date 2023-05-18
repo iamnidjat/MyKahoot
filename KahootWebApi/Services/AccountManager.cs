@@ -1,13 +1,9 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Security.Claims;
-using KahootWebApi.Models;
-using KahootWebApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http;
 using MimeKit;
-using System.Net.Mail;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace KahootWebApi.Services
 {
@@ -53,7 +49,7 @@ namespace KahootWebApi.Services
             return Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
         }
 
-        public async Task<HttpResponseMessage> ResetPasswordAsync(string email)
+        public async Task<IActionResult> ResetPasswordAsync(string email) // !
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
 
@@ -92,34 +88,22 @@ namespace KahootWebApi.Services
                     }
                     else
                     {
-                        return new HttpResponseMessage()
-                        {
-                            StatusCode = HttpStatusCode.BadRequest
-                        };
+                        return new StatusCodeResult(400);
                     }
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
-                    return new HttpResponseMessage()
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
+                    return new StatusCodeResult(400);
                 }
                 finally
                 {
                     smtpClient.Disconnect(true);
                 }
 
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
+                return new StatusCodeResult(200);
             }
 
-            return new HttpResponseMessage()
-            {
-                StatusCode = HttpStatusCode.BadRequest
-            };
+            return new StatusCodeResult(400);
         }
 
         public async Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword)

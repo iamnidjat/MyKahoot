@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-creating-test-form',
@@ -9,10 +9,23 @@ import {Component, OnInit} from '@angular/core';
 export class CreatingTestFormComponent implements OnInit{
   public name: string = "";
   public testType: string = "";
-  public questionList: any = [];
   public currentQuestion: number = 0;
   public isQuizCompleted: boolean = false;
-  yourQuestions: any = [];
+  yourQuestionsArray: any = [];
+  yourQuestionsObject: any = {"questions": [{
+    "questionText": "",
+      "options": [
+        {"text1": ""},
+        {"text2": ""},
+        {"text3": ""},
+        {"text4": ""}
+      ]
+    }]};
+  @ViewChild('Question') Question!: ElementRef;
+  @ViewChild('Answer1') Answer1!: ElementRef;
+  @ViewChild('Answer2') Answer2!: ElementRef;
+  @ViewChild('Answer3') Answer3!: ElementRef;
+  @ViewChild('Answer4') Answer4!: ElementRef;
   constructor() {
   }
 
@@ -38,10 +51,17 @@ export class CreatingTestFormComponent implements OnInit{
     }
   }
 
-  public nextQuestion(question: string, ...answers: string[]): void {
+  public nextQuestion(): void {
     this.currentQuestion++;
 
-
+    // this.yourQuestionsObject.questions.questionText = this.Question.nativeElement.innerText;
+    // this.yourQuestionsObject.questions.text1 = this.Answer1.nativeElement.innerText;
+    // this.yourQuestionsObject.questions.text2 = this.Answer2.nativeElement.innerText;
+    // this.yourQuestionsObject.questions.text3 = this.Answer3.nativeElement.innerText;
+    // this.yourQuestionsObject.questions.text4 = this.Answer4.nativeElement.innerText;
+    // this.yourQuestionsArray.push(this.yourQuestionsObject);
+    //
+    // console.log(this.yourQuestionsArray);
   }
   public previousQuestion(): void {
     this.currentQuestion--;
@@ -51,6 +71,6 @@ export class CreatingTestFormComponent implements OnInit{
   public resetQuiz(): void {
     this.currentQuestion = 0;
 
-    this.yourQuestions.length = 0;
+    //this.yourQuestionsArray.length = 0;
   }
 }

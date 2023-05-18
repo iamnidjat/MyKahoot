@@ -1,6 +1,7 @@
 ﻿using KahootWebApi.Controllers.v1;
 using KahootWebApi.Models;
 using KahootWebApi.Services;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Moq;
 
 namespace WebApiUnitTests
@@ -14,16 +15,36 @@ namespace WebApiUnitTests
             _mock = new Mock<IStatisticsManager>();
         }
 
-        [Fact]
-        public async Task DownloadResultTest()
+        [Theory]
+        [InlineData(1)]
+        public async Task DownloadResultByUserIdTest(int userId)
         {
             //arrange
             var stats = GetStats();
-            _mock.Setup(x => x.DownloadResultAsync(1)).ReturnsAsync(stats!);
+            _mock.Setup(x => x.DownloadResultAsync(userId)).ReturnsAsync(stats!);
             var controller = new StatisticsController(_mock.Object);
 
             //act
-            var data = await controller.DownloadResult(1);
+            var data = await controller.DownloadResult(userId);
+
+            //assert
+            Assert.NotNull(data);
+            Assert.Equal(GetStats().Count(), data.Count());
+            Assert.Equal(GetStats().ToString(), data.ToString());
+            Assert.True(stats!.Equals(data));
+        }
+
+        [Theory]
+        [InlineData("math")]
+        public async Task DownloadResultTest(string quizType)
+        {
+            //arrange
+            var stats = GetStats();
+            _mock.Setup(x => x.DownloadResultAsync(quizType)).ReturnsAsync(stats!);
+            var controller = new StatisticsController(_mock.Object);
+
+            //act
+            var data = await controller.DownloadResult(quizType);
 
             //assert
             Assert.NotNull(data);

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, ElementRef, ViewChild} from '@angular/core';
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
 
@@ -9,7 +9,9 @@ import {Router} from "@angular/router";
 })
 export class ForgotPasswordFormComponent {
   private url: string = "https://localhost:7176/api/v1/Account/";
-  constructor(private router: Router) {
+
+  @ViewChild('Email') nameKeyMail!: ElementRef;
+  constructor(private el: ElementRef, private router: Router) {
   }
 
   public ResetPassword(e: any, email: string): void{
@@ -30,12 +32,14 @@ export class ForgotPasswordFormComponent {
         else
         {
           Swal.fire('Oops', 'Incorrect data!', 'error');
+          this.nameKeyMail.nativeElement.value = '';
         }
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
+      this.nameKeyMail.nativeElement.value = '';
     }
   }
 }

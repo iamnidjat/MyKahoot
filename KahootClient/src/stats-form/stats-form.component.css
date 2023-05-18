@@ -11,9 +11,7 @@ table th, table td {
   padding: 0.25em 0.5em;
   text-align: left;
 }
-table th:nth-child(2), table td:nth-child(2) {
-  text-align: right;
-}
+
 table td {
   background-color: #eee;
 }

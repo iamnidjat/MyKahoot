@@ -2,6 +2,7 @@
 using KahootWebApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace KahootWebApi.Controllers.v1
 { 
@@ -33,6 +34,12 @@ namespace KahootWebApi.Controllers.v1
         public async Task<IEnumerable<QuizStat>> DownloadResult(int userId)
         {
             return await _manager.DownloadResultAsync(userId);
+        }
+
+        [HttpGet("DownloadResult4")]
+        public async Task<IEnumerable<QuizStat>> DownloadResult(string quizType)
+        {
+            return await _manager.DownloadResultAsync(quizType);
         }
     }
 }

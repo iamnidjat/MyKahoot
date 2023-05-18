@@ -28,6 +28,7 @@ const animateOnDivHeight = trigger('animateOnDivHeight', [
 
 export class AuthFormComponent{
   public isChecked: boolean = false;
+  public isDisabled: boolean = true;
   private url: string = "https://localhost:7176/api/v1/Account/";
   public flag: boolean = true;
   @ViewChild('Login') nameKey!: ElementRef;
@@ -178,6 +179,10 @@ export class AuthFormComponent{
   public SignInAsAGuest(): void{
     localStorage.setItem("Guest", this.nameKey3.nativeElement.innerText);
     this.router.navigate(['/app/player-survey-choosing-form']);
+  }
+
+  public IsLoginFieldEmpty(): any{
+      this.isDisabled = !this.isDisabled;
   }
 
   public RememberMe(username: string): void{

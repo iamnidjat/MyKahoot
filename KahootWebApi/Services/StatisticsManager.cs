@@ -24,6 +24,18 @@ namespace KahootWebApi.Services
             }
         }
 
+        public async Task<IEnumerable<QuizStat>> DownloadResultAsync(string quizType)
+        {
+            try
+            {
+                return await _context.Quizzes.OrderByDescending(x => x.Score).Take(10).Where(x => x.QuizName == quizType).ToListAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new ArgumentNullException(ex.Message, ex);
+            }
+        }
+
         public QuizStat UploadResultAsync(QuizStat item)
         {
             try
