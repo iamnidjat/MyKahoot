@@ -22,5 +22,9 @@ namespace KahootWebApi.ViewModels
         [Required]
         [DataType(DataType.DateTime)]
         public DateTime? Birthday { get; set; }
+
+        //[Required]
+        //[DataType(DataType.Text)]
+        //public string? Role { get; set; }
     }
 }

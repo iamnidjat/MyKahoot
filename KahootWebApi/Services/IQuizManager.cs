@@ -4,11 +4,12 @@ namespace KahootWebApi.Services
 {
     public interface IQuizManager
     {
-        Task ReadQuizAsync(int quizId);
-        Task CreateQuizAsync(string[] questions);
-        Task UpdateQuizAsync(Quiz quiz);
+        Task<Quiz> ReadQuizAsync(int quizId);
+        Task<Quiz> CreateQuizAsync(string[] questions);
+        Task<Quiz> UpdateQuizAsync(Quiz quiz);
         Task DeleteQuizAsync(int quizId);
-        Task SearchQuizByTitle(string quizTitle);
-        Task FilterQuizzes();
+        Task<Quiz> SearchQuizByTitle(string quizTitle);
+        Task<IEnumerable<Quiz>> SearchQuizByCategories(string quizType);
+        Task<IEnumerable<Quiz>> FilterQuizzesAsync(bool asc);
     }
 }

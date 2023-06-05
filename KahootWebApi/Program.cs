@@ -18,6 +18,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAccountManager, AccountManager>();
 builder.Services.AddTransient<IStatisticsManager, StatisticsManager>();
 builder.Services.AddTransient<IQuizManager, QuizManager>();
+builder.Services.AddTransient<IQuizHistoryManager, QuizHistoryManager>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");

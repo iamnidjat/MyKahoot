@@ -121,6 +121,12 @@ namespace KahootWebApi.Controllers.v1
             return await _manager.ChangeBirthdayAsync(login, oldBirthday, newBirthday);
         }
 
+        [HttpGet("GetRandomLogin")]
+        public string GetRandomLogin()
+        {
+            return _manager.RandomLoginGenerator();
+        }
+
         private async Task AuthenticateAsync(string userName)
         {
             try

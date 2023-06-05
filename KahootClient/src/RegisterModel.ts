@@ -5,7 +5,8 @@ export class RegisterModel{
               public password: string | undefined,
               public confirmPassword: string | undefined,
               public email: string | undefined,
-              public birthday: Date | undefined, ) {  }
+              public birthday: Date | undefined,
+              public role: string | undefined) {  }
 
   public get Id() {
     return this.id;
@@ -30,4 +31,8 @@ export class RegisterModel{
   public get Birthday() {
     return this.birthday;
   }
-};
+
+  public get Role() {
+    return this.role;
+  }
+}

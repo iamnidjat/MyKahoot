@@ -20,4 +20,4 @@ export class QuizModel{
   public get Score() {
     return this.score;
   }
-};
+}

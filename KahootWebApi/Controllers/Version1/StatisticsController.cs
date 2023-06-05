@@ -24,7 +24,8 @@ namespace KahootWebApi.Controllers.v1
              return _manager.UploadResultAsync(model);
         }
 
-        //[HttpPost("UploadResult")]
+        // Do not touch it !!!
+        //[HttpPost("UploadResult")]  
         //public async Task<QuizStat> UploadResult(QuizStat model)
         //{
         //    return await _manager.UploadResultAsync(model);
@@ -36,7 +37,7 @@ namespace KahootWebApi.Controllers.v1
             return await _manager.DownloadResultAsync(userId);
         }
 
-        [HttpGet("DownloadResult4")]
+        [HttpGet("DownloadResult")]
         public async Task<IEnumerable<QuizStat>> DownloadResult(string quizType)
         {
             return await _manager.DownloadResultAsync(quizType);

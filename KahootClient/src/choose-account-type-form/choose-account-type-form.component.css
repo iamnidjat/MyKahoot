@@ -1,0 +1,73 @@
+.container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.form-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form{
+  margin: 30px;
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.form:hover{
+  transition: all 0.15s ease-in-out 0s;
+}
+
+.image{
+  height: 225px;
+  width: 200px;
+  background-color: #e21b3c;
+}
+
+.title{
+  height: 75px;
+  width: 200px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.5;
+  letter-spacing: 0.2px;
+  word-break: break-word;
+}
+
+.title:hover{
+  background-color: red;
+  color: #fff;
+}
+
+.form:nth-child(2) > .title:hover{
+  background-color: blue;
+  color: #fff;
+}
+
+.form:last-child > .title:hover{
+  background-color: orange;
+  color: #fff;
+}
+
+
+.form:nth-child(2) > .image{
+  background-color: blue;
+}
+
+.form:last-child > .image{
+  background-color: orange;
+}
+
+#login:hover{
+  opacity: .66;
+}

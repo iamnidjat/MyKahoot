@@ -1,7 +1,7 @@
-<div class="form" [@animateOnDivHeight]="flag ? 'firstHeight' : 'lastHeight'">
-  <div class="form-toggle" (click)="showLogin($event)"></div>
+<div class="form">
+  <div class="form-toggle"></div>
   <div class="form-panel one">
-    <div class="form-header" style="text-align: center">
+    <div class="form-header" style="text-align: center; margin-top: -15px">
       <h1>MyKahoot</h1>
     </div>
     <div class="form-content">
@@ -12,53 +12,32 @@
         </div>
         <div class="form-group">
           <label>Password</label>
-          <input type="password" #Password id="passwordLogin" name="password" required="required"/>
+            <input [type]="Visibility ? 'text' : 'password'" #Password id="passwordLogin" name="password" required="required"/>
+            <button class="hidden-eye" (click)="ChangeVisibility()">
+              <span [class]="Visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+            </button>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="position: relative; top: -40px;">
           <label class="form-remember" style="cursor: pointer">
             <input type="checkbox" [disabled]="isDisabled" (change)="RememberMe(Login.value)" style="cursor: pointer"/>Remember Me</label>
-          <span class="form-recovery" (click)="ToForgotPassword()" style="cursor: pointer">Forgot Password?</span>
+          <span class="form-recovery" id="forgot-password" (click)="ToForgotPassword()" style="cursor: pointer">Forgot Password?</span>
         </div>
-        <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-          <button type="submit" (click)="LogIn($event, Login.value, Password.value)">Log In</button>
-          <div class="form-recovery" #Guest style="cursor: pointer; margin-top: 10px;" (click)=" SignInAsAGuest()">Sign in as a Guest</div>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="form-panel two" (click)="flag ? showRegister($event) : null">
-    <div class="form-header">
-      <h1>Register an account</h1>
-    </div>
-    <div class="form-content">
-      <form>
-        <div class="form-group">
-          <label>Username</label>
-          <input type="text" #newLogin id="usernameRegister" name="username" required="required"/>
-        </div>
-        <div class="form-group">
-          <label>Password</label>
-          <input type="password" #newPassword id="passwordRegister" name="password" required="required"/>
-        </div>
-        <div class="form-group">
-          <label for="cpassword">Confirm Password</label>
-          <input type="password" #cNewPassword id="cpassword" name="cpassword" required="required"/>
-        </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" #email id="email" name="email" required pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"/>
-        </div>
-        <div class="form-group">
-          <label>Birthday</label>
-          <input type="date" #birthday id="userBirthday" name="userBirthday" required="required"/>
-        </div>
-        <div class="form-group">
-          <button type="submit" (click)="Register($event, newLogin.value, newPassword.value, cNewPassword.value, email.value, birthday.value)">Register</button>
+        <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: -50px">
+          <button type="submit" (click)="LogIn($event, Login.value, Password.value)" style="width: 450px">Log In</button>
+          <div class="form-recovery" style="margin-top: 10px;">
+            <span style="color: black">Don't have an account? Click </span>
+            <span (click)="ToRegisterForm()" class="register-route" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer;">here</span>
+          </div>
+          <div class="form-recovery" style="margin-top: 10px;">
+            <span style="color: black">OR Sign in as a </span>
+            <span id="guest-sign" #Guest (click)="SignInAsAGuest()" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer; ">Guest</span>
+          </div>
         </div>
       </form>
     </div>
   </div>
 </div>
+
+
 
 

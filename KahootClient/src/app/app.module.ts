@@ -20,9 +20,15 @@ import { BirthdaySettingsFormComponent } from "../birthday-settings-form/birthda
 import {StatsFormComponent} from "../stats-form/stats-form.component";
 import {Top10FormComponent} from "../top10-form/top10-form.component";
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component"
-import {DatePipe} from "@angular/common";
 import {FormsModule} from "@angular/forms";
 import {ChooseFieldFormComponent} from "../choose-field-form/choose-field-form.component";
+import {ChooseAccountTypeFormComponent} from "../choose-account-type-form/choose-account-type-form.component";
+import {RegisterFormComponent} from "../register-form/register-form.component";
+import {MatDialogModule} from "@angular/material/dialog";
+import {AddNewCategoryPopupFormComponent} from "../add-new-category-popup-form/add-new-category-popup-form.component";
+import {YourQuizzesFormComponent} from "../your-quizzes-form/your-quizzes-form.component";
+import {ChooseTypeOfQuizFormComponent} from "../choose-type-of-quiz-form/choose-type-of-quiz-form.component";
+
 
 let routes: Route[] = [
   {
@@ -90,6 +96,14 @@ let routes: Route[] = [
         component: ChooseFieldFormComponent
       },
       {
+        path: 'app/choose-account-type-form',
+        component: ChooseAccountTypeFormComponent
+      },
+      {
+        path: 'app/register-form',
+        component: RegisterFormComponent
+      },
+      {
         path: '',
         redirectTo: 'app/auth-form',
         pathMatch: 'full',
@@ -117,7 +131,12 @@ let routes: Route[] = [
     Top10FormComponent,
     BirthdaySettingsFormComponent,
     CreatingQuizOptionFormComponent,
-    ChooseFieldFormComponent
+    ChooseFieldFormComponent,
+    ChooseAccountTypeFormComponent,
+    RegisterFormComponent,
+    AddNewCategoryPopupFormComponent,
+    YourQuizzesFormComponent,
+    ChooseTypeOfQuizFormComponent
   ],
     imports: [
         BrowserModule,
@@ -125,7 +144,8 @@ let routes: Route[] = [
         HttpClientModule,
         RouterOutlet,
         RouterModule.forRoot(routes),
-        FormsModule
+        FormsModule,
+        MatDialogModule
     ],
   // providers: [DatePipe, AuthFormComponent],
   providers: [],

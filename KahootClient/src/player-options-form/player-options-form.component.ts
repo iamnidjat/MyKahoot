@@ -35,4 +35,16 @@ export class PlayerOptionsFormComponent {
   public ToProfile(): void{
     this.router.navigate(['/app/profile-form']);
   }
+
+  public ToReadMore(): void{
+    window.open('https://openli.com/guides/cookie-consent', "_blank");
+  }
+
+  public AcceptCookies(): void{
+
+  }
+
+  public DeclineCookies(): void{
+
+  }
 }

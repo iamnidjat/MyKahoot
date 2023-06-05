@@ -58,6 +58,7 @@
           <p>Total correct answered: {{correctAnswer}} </p>
           <p>Total wrong answered: {{inCorrectAnswer}} </p>
           <p>Your score: {{points}} points </p>
+          <p>{{feedback}}</p>
           <ng-container *ngIf="name !== 'Guest'">
             <div class="buttons">
               <input type="button" class="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu($event)"/>

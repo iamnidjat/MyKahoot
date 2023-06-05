@@ -1,0 +1,43 @@
+<div class="form-panel two">
+  <div class="form-header">
+    <h1>Register an account</h1>
+  </div>
+  <div class="form-content">
+    <form>
+      <div class="form-group" style="height: 80px;">
+        <label>Username</label>
+        <input type="text" #newLogin id="usernameRegister" name="username" required="required" style="display: inline-block"/>
+        <button class="random-login" (click)="GetRandomLogin()">
+          <span class="fa fa-user"></span>
+        </button>
+      </div>
+      <div class="form-group" style="height: 80px;">
+        <label>Password</label>
+        <input [type]="Visibility1 ? 'text' : 'password'" #newPassword id="passwordRegister" name="password" required="required"/>
+        <button id="hidden-eye1" (click)="ChangeVisibilityOfNewPassword()">
+          <span [class]="Visibility1 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+        </button>
+      </div>
+      <div class="form-group" style="height: 80px;">
+        <label for="cpassword">Confirm Password</label>
+        <input [type]="Visibility2 ? 'text' : 'password'" #cNewPassword id="cpassword" name="cpassword" required="required"/>
+        <button id="hidden-eye2" (click)="ChangeVisibilityOfCNewPassword()">
+          <span [class]="Visibility2 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+        </button>
+      </div>
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" #email id="email" name="email" required="required"/>
+      </div>
+      <div class="form-group">
+        <label>Birthday</label>
+        <input type="date" #birthday id="userBirthday" name="userBirthday" required="required"/>
+      </div>
+      <div class="form-group">
+        <button type="submit" (click)="Register($event, newLogin.value, newPassword.value, cNewPassword.value, email.value, birthday.value)">Register</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+

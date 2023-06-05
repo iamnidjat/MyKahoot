@@ -9,5 +9,6 @@ namespace KahootWebApi.Services
         Task<IActionResult> ResetPasswordAsync(string email);
         Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword);
         Task<HttpResponseMessage> ChangeBirthdayAsync(string login, DateTime oldBirthday, DateTime newBirthday);
+        string RandomLoginGenerator();
     }
 }

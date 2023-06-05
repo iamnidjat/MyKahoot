@@ -16,13 +16,14 @@ export class TestProcessComponent implements OnInit{
   public questionList: any = [];
   public currentQuestion: number = 0;
   public points: number = 0;
-  public counter = 60;
+  public counter: number = 60;
   public correctAnswer: number = 0;
   public inCorrectAnswer: number = 0;
   public interval$: any;
   public progress: string = "0";
   public isQuizCompleted: boolean = false;
   public url: string = "https://localhost:7176/api/v1/Statistics/";
+  public feedback: string = "";
   constructor(private questionService: ServiceComponent, private router: Router) { }
 
   public ngOnInit(): void {
@@ -145,6 +146,28 @@ export class TestProcessComponent implements OnInit{
   public ToStats(e: any): void{
     this.SaveResult(e);
     this.router.navigate(['/app/stats-form']);
+  }
+
+  private FeedbackGenerator(): any {
+    if (this.correctAnswer > 0 && this.correctAnswer <= 8)
+    {
+      this.feedback = "You have gaps in this field! Study better!";
+    }
+
+    else if (this.correctAnswer > 8 && this.correctAnswer <= 12)
+    {
+      this.feedback = "You need to improve your knowledge in this field!";
+    }
+
+    else if (this.correctAnswer > 12 && this.correctAnswer <= 16)
+    {
+      this.feedback = "Good result! You have an average score!";
+    }
+
+    else  if (this.correctAnswer > 16 && this.correctAnswer <= 20)
+    {
+      this.feedback = "Keep it up! You have great knowledge in this field!";
+    }
   }
 
   private SaveResult(e: any): void{

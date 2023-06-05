@@ -29,7 +29,7 @@ namespace KahootWebApi.Services
 
                 return System.Text.Encoding.ASCII.GetString(result);
             }
-            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException)
+            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
             {
                 throw new Exception(ex.Message, ex);
             }
@@ -49,7 +49,7 @@ namespace KahootWebApi.Services
             return Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
         }
 
-        public async Task<IActionResult> ResetPasswordAsync(string email) // !
+        public async Task<IActionResult> ResetPasswordAsync(string email)
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
 
@@ -173,6 +173,60 @@ namespace KahootWebApi.Services
                 {
                     StatusCode = HttpStatusCode.BadRequest
                 };
+            }
+        }
+
+        public string RandomLoginGenerator()
+        {
+            try
+            {
+                Random rand = new ();
+
+                string[] consonants = { "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "l", "n", "p", "q", "r", "s", "t", "v", "w", "x" };
+                string[] vowels = { "a", "e", "i", "o", "u", "y" };
+                int[] nums = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+
+                string userName = "";
+                userName += consonants[rand.Next(consonants.Length)].ToUpper();
+                userName += vowels[rand.Next(vowels.Length)];
+
+                int counter = 2;
+
+
+                if (rand.Next(1, 3) == 1)
+                {
+                    while (counter < RandomPasswordLength())
+                    {
+                        userName += consonants[rand.Next(consonants.Length)];
+                        counter++;
+
+                        userName += vowels[rand.Next(vowels.Length)];
+                        counter++;
+                    }
+                }
+                else
+                {
+                    while (counter < RandomPasswordLength() - 2)
+                    {
+                        userName += consonants[rand.Next(consonants.Length)];
+                        counter++;
+
+                        userName += vowels[rand.Next(vowels.Length)];
+                        counter++;
+                    }
+
+                    for (int i = 0; i < 2; i++)
+                    {
+                        userName += nums[rand.Next(nums.Length)];
+                        counter++;
+                    }
+                }
+
+                return userName;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                throw new ArgumentOutOfRangeException(ex.Message, ex);
             }
         }
     }

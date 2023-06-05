@@ -242,6 +242,30 @@ a{
   font-size: 12px;
 }
 
+.hidden-eye{
+  width: 50px !important;
+  height: 47px;
+  position: relative;
+  top: -47px;
+  left: 400px;
+}
+
+.random-login,
+#hidden-eye1,
+#hidden-eye2{
+  width: 50px !important;
+  height: 47px;
+  position: relative;
+  top: -47px;
+  left: 370px;
+}
+
+.register-route:hover,
+#guest-sign:hover,
+#forgot-password:hover{
+  opacity: .66;
+}
+
 @media screen and (max-width: 600px) and (min-width: 450px) {
   .form{
     width: 450px;

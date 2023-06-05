@@ -1,0 +1,28 @@
+<body style="height: 100vh;">
+    <div class="container">
+      <h1>Choose your account type</h1>
+      <div class="form-container">
+        <div class="form" (click)="toRegisterProcess(Teacher)">
+          <div class="image"></div>
+          <div class="title" id="teacher" #Teacher>Teacher</div>
+        </div>
+
+        <div class="form" (click)="toRegisterProcess(Student)">
+          <div class="image">
+            <span class="fa fa-user"></span>
+          </div>
+          <div class="title" id="student" #Student>Student</div>
+        </div>
+
+        <div class="form" (click)="toRegisterProcess(Personal)">
+          <div class="image"></div>
+          <div class="title" id="personal" #Personal>Personal</div>
+        </div>
+      </div>
+
+      <div class="toLogin" style="margin-top: 20px;">
+        <span style="color: black">Already have an account? </span>
+        <span id="login" (click)="ToLoginForm()" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer; color: #4285f4;">Log in</span>
+      </div>
+    </div>
+</body>

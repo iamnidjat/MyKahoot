@@ -8,6 +8,12 @@ namespace KahootWebApi.Models
         public int Id { get; set; }
 
         [Required]
+        public string? QuizType { get; set; }
+
+        [Required]
+        public string? QuizName { get; set; }
+
+        [Required]
         public string? Question { get; set; }
 
         public string? ImageName { get; set; }
@@ -18,10 +24,10 @@ namespace KahootWebApi.Models
         [Required]
         public string? Option2 { get; set; }
 
-        [Required]
+      //  [Required]
         public string? Option3 { get; set; }
 
-        [Required]
+      //  [Required]
         public string? Option4 { get; set; }
 
         [Required]

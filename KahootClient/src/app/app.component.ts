@@ -13,6 +13,7 @@ export class AppComponent implements OnInit{
   }
   ngOnInit(): void {
     this.AutoLogin();
+
   }
 
     public AutoLogin(): void{
