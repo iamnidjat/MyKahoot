@@ -1,13 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
 
-#allthethings {
+.allthethings {
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10%;
 }
 
-#allthethings nav div{
+.allthethings nav div{
   height:50px;
   width:750px;
   background:#006680;
@@ -21,14 +21,14 @@
   border-radius: 15px;
 }
 
-#allthethings nav div:not(:last-child):hover{
+.allthethings nav div:not(:last-child):hover{
   background:#7A0000;
   color:white;
   -webkit-transform:rotate(-2deg);
   transform:rotate(-2deg);
 }
 
-#allthethings nav div:last-child:hover{
+.allthethings nav div:last-child:hover{
   background:#7A0000;
 }
 

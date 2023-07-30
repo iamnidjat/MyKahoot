@@ -3,6 +3,12 @@
   box-sizing: border-box;
 }
 
+.wrapper{
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 .card {
   box-shadow: 0 0 30px rgba(0, 0, 0, .1);
 }
@@ -66,4 +72,7 @@ button:focus{
   opacity: .9;
 }
 
+.disabledDiv{
+  pointer-events: none;
+}
 

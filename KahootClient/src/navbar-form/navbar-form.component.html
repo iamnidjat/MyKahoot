@@ -1,0 +1,95 @@
+<ng-container *ngIf="username != null">
+  <nav>
+    <div class="languages" >
+      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="UK" alt="en">
+      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="Russia" alt="ru">
+      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="Azerbaijan" alt="az">
+    </div>
+
+    <div class="menu-icon">
+      <span class="fas fa-bars"></span>
+    </div>
+
+    <div class="logo">MyKahoot</div>
+
+    <div class="nav-items">
+      <li><a routerLink="/app/player-options-form">{{'Home' | translate}}</a></li>
+      <li><a routerLink="/app/about-form">{{'About' | translate}}</a></li>
+      <li><a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a></li>
+    </div>
+
+    <form>
+      <input type="search" #SearchRequest class="search-data" placeholder="Search" required="required">
+      <button type="submit" class="fas fa-search" (click)="Search(SearchRequest.value)"></button>
+    </form>
+
+    <img src="/assets/images/user.png" class="user-pic" (click)="toggleMenu()">
+
+    <div class="sub-menu-wrap" id="subMenu">
+      <div class="sub-menu">
+        <div class="user-info">
+          <img src="/assets/images/user.png">
+          <h3> {{username}} </h3>
+        </div>
+
+        <hr>
+
+        <a class="sub-menu-link" (click)="ToProfile()">
+          <img src="/assets/images/profile.png">
+          <p>Edit Profile</p>
+          <span> > </span>
+        </a>
+
+        <a class="sub-menu-link" (click)="ToSettings()">
+          <img src="/assets/images/setting.png">
+          <p>Settings and Privacy</p>
+          <span> > </span>
+        </a>
+
+        <a class="sub-menu-link" (click)="ToSendFeedback()">
+          <img src="/assets/images/help.png">
+          <p>Help & Support</p>
+          <span> > </span>
+        </a>
+
+        <a class="sub-menu-link" (click)="ToDeleteAcc()">
+          <img src="/assets/images/deleteacc.png">
+          <p>Delete Acocunt</p>
+          <span> > </span>
+        </a>
+
+        <a class="sub-menu-link" (click)="Logout($event)">
+          <img src="/assets/images/logout.png">
+          <p>Logout</p>
+          <span> > </span>
+        </a>
+
+      </div>
+    </div>
+
+    <!--  <div class="toggle">-->
+    <!--    <input type="checkbox" class="checkbox" id="checkbox" (change)="changeTheme()">-->
+    <!--    <label for="checkbox" class="checkbox-label">-->
+    <!--      <i class="fas fa-moon"></i>-->
+    <!--      <i class="fas fa-sun"></i>-->
+    <!--      <span class="ball"></span>-->
+    <!--    </label>-->
+    <!--  </div>-->
+  </nav>
+</ng-container>
+
+<ng-container *ngIf="username == null">
+  <nav style="width: 1525px">
+    <div class="menu-icon">
+      <span class="fas fa-bars"></span>
+    </div>
+
+    <div class="logo">MyKahoot</div>
+
+    <div class="nav-items">
+      <li><a routerLink="/app/auth-form">{{'Auth' | translate}}</a></li>
+      <li><a routerLink="/app/about-form">{{'About' | translate}}</a></li>
+      <li><a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a></li>
+    </div>
+  </nav>
+</ng-container>

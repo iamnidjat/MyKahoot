@@ -1,9 +1,13 @@
+import {User} from "./User";
+
 export class QuizModel{
   public id: number | undefined;
 
   constructor(public quizName: string | undefined,
               public score: number | undefined,
-              public userId: number | undefined) {  }
+              public userId: number | undefined,
+              public userName: string | undefined,
+              public passedDate: Date) {  }
 
   public get Id() {
     return this.id;
@@ -19,5 +23,13 @@ export class QuizModel{
 
   public get Score() {
     return this.score;
+  }
+
+  public get UserName() {
+    return this.userName;
+  }
+
+  public get PassedDate() {
+    return this.passedDate;
   }
 }

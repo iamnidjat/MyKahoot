@@ -8,7 +8,6 @@ namespace KahootWebApi.Controllers.v1
 { 
     [ApiController]
     [Route("api/v1/Statistics/")]
-    //[Authorize]
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsManager _manager;
@@ -18,18 +17,24 @@ namespace KahootWebApi.Controllers.v1
             _manager = manager;
         }
 
-        [HttpPost("UploadResult")]
-        public QuizStat UploadResult(QuizStat model)
-        {
-             return _manager.UploadResultAsync(model);
-        }
+        //[HttpPost("UploadResult")]
+        //public QuizStat UploadResult(QuizStat model)
+        //{
+        //    return _manager.UploadResultAsync(model);
+        //}
 
         // Do not touch it !!!
-        //[HttpPost("UploadResult")]  
+        //[HttpPost("UploadResult")]
         //public async Task<QuizStat> UploadResult(QuizStat model)
         //{
         //    return await _manager.UploadResultAsync(model);
         //}
+
+        [HttpPost("UploadResult")]
+        public async Task UploadResult(QuizStat model)
+        {
+            await _manager.UploadResultAsync(model);
+        }
 
         [HttpGet("DownloadResult/{userId:int}")]
         public async Task<IEnumerable<QuizStat>> DownloadResult(int userId)

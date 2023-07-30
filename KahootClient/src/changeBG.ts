@@ -7,7 +7,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/
 export class changeBG{
   @Input() isCorrect : Boolean = false;
   constructor(private el : ElementRef, private render : Renderer2) { }
-  @HostListener('click') answer() {
+  @HostListener('click') answer(): void {
     if (this.isCorrect) {
       this.render.setStyle(this.el.nativeElement,'background','green');
       this.render.setStyle(this.el.nativeElement,'color','#fff');

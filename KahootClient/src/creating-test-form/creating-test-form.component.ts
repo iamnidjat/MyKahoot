@@ -1,4 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {ChooseTypeOfQuizFormComponent} from "../choose-type-of-quiz-form/choose-type-of-quiz-form.component";
+import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 
 @Component({
   selector: 'app-creating-test-form',
@@ -11,6 +13,7 @@ export class CreatingTestFormComponent implements OnInit{
   public testType: string = "";
   public currentQuestion: number = 0;
   public isQuizCompleted: boolean = false;
+  public variable: ChooseTypeOfQuizFormComponent;
   yourQuestionsArray: any = [];
   yourQuestionsObject: any = {"questions": [{
     "questionText": "",
@@ -26,7 +29,11 @@ export class CreatingTestFormComponent implements OnInit{
   @ViewChild('Answer2') Answer2!: ElementRef;
   @ViewChild('Answer3') Answer3!: ElementRef;
   @ViewChild('Answer4') Answer4!: ElementRef;
-  constructor() {
+  public testFormat: string | null = "";
+  constructor(private  _variable: ChooseTypeOfQuizFormComponent) { // !
+    this.variable = _variable;
+    this.testFormat = localStorage.getItem('testFormat');
+    localStorage.removeItem('testFormat');
   }
 
   public ngOnInit(): void {

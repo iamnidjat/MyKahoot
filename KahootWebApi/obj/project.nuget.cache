@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "dE4dQkxZF4F3rahwLe1BpqSlsCC8v+EkDRzeAOM2F9cKAvXb0+xElzAlCNZIBwFkCMGQfXXxK+xMpdkECeMppA==",
+  "dgSpecHash": "UUik0qlLSli3XYSodLjz1DRFFxbdJG8+1L7AQAouoO1MDnf63o+MlGyFJ+KCECR/aW3Bedzihx+zlWtMQjDViw==",
   "success": true,
   "projectFilePath": "C:\\Important Files\\Kahoot Project\\KahootWebApi\\KahootWebApi.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\huawei\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\huawei\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\bouncycastle.cryptography\\2.1.1\\bouncycastle.cryptography.2.1.1.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\mailkit\\4.0.0\\mailkit.4.0.0.nupkg.sha512",

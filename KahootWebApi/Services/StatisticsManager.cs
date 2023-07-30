@@ -36,15 +36,29 @@ namespace KahootWebApi.Services
             }
         }
 
-        public QuizStat UploadResultAsync(QuizStat item)
+        //public QuizStat UploadResultAsync(QuizStat item)
+        //{
+        //    try
+        //    {
+        //        var result = _context.Quizzes.Add(item);
+
+        //        _context.SaveChangesAsync();
+
+        //        return result.Entity;
+        //    }
+        //    catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+        //    {
+        //        throw new Exception(ex.Message, ex);
+        //    }
+        //}
+
+        public async Task UploadResultAsync(QuizStat item)
         {
             try
             {
-                var result = _context.Quizzes.Add(item);
+                _context.Quizzes.Add(item);
 
-                 _context.SaveChangesAsync();
-
-                return result.Entity;
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
             {

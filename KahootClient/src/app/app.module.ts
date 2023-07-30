@@ -11,7 +11,6 @@ import { TestProcessComponent } from "../test-process/test-process.component";
 import { RulesFormComponent } from "../rules-form/rules-form.component";
 import { RouterModule, RouterOutlet, Route } from "@angular/router";
 import { ServiceComponent } from "../service/service.component";
-import { HttpClientModule } from '@angular/common/http';
 import { changeBG } from "../changeBG";
 import { ForgotPasswordFormComponent } from "../forgot-password-form/forgot-password-form.component";
 import { SettingsChoiceFormComponent } from "../settings-choice-form/settings-choice-form.component";
@@ -24,11 +23,32 @@ import {FormsModule} from "@angular/forms";
 import {ChooseFieldFormComponent} from "../choose-field-form/choose-field-form.component";
 import {ChooseAccountTypeFormComponent} from "../choose-account-type-form/choose-account-type-form.component";
 import {RegisterFormComponent} from "../register-form/register-form.component";
-import {MatDialogModule} from "@angular/material/dialog";
 import {AddNewCategoryPopupFormComponent} from "../add-new-category-popup-form/add-new-category-popup-form.component";
 import {YourQuizzesFormComponent} from "../your-quizzes-form/your-quizzes-form.component";
 import {ChooseTypeOfQuizFormComponent} from "../choose-type-of-quiz-form/choose-type-of-quiz-form.component";
-
+import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
+import {FooterFormComponent} from "../footer-form/footer-form.component";
+import {AboutPageFormComponent} from "../about-page-form/about-page-form.component";
+import {ContactsPageFormComponent} from "../contacts-page-form/contacts-page-form.component";
+import {CookiesServiceComponent} from "../cookies-service/cookies-service.component";
+import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
+import {SpecifyNameOfTestComponent} from "../specify-name-of-test/specify-name-of-test.component";
+import {AuthGuard} from "./_service/auth-guard.service";
+import {Novisitguard} from "./_service/novisitguard.service";
+import {Studentsguard} from "./_service/studentsguard.service";
+import {NotAllowedPageFormComponent} from "../not-allowed-page-form/not-allowed-page-form.component";
+import {Specialguard} from "./_service/specialguard.service";
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {DataTablesModule} from "angular-datatables";
+import {Specialguard2} from "./_service/specialguard2.guard";
+import {ContactListFormComponent} from "../contact-list-form/contact-list-form.component";
+import {ProfileDashboardFormComponent} from "../profile-dashboard-form/profile-dashboard-form.component";
+import {BarchartFormComponent} from "../barchart-form/barchart-form.component";
+import {EmailConfirmedFormComponent} from "../email-confirmed-form/email-confirmed-form.component";
+import {DeleteAccFormComponent} from "../delete-acc-form/delete-acc-form.component";
+import {DeleteAccPopupFormComponent} from "../delete-acc-popup-form/delete-acc-popup-form.component";
 
 let routes: Route[] = [
   {
@@ -41,27 +61,33 @@ let routes: Route[] = [
       },
       {
         path: 'app/player-options-form',
-        component: PlayerOptionsFormComponent
+        component: PlayerOptionsFormComponent,
+        canActivate: [Specialguard2]
       },
       {
         path: 'app/player-survey-choosing-form',
-        component: PlayerSurveyChoosingFormComponent
+        component: PlayerSurveyChoosingFormComponent,
+        canActivate: [Specialguard]
       },
       {
         path: 'app/profile-form',
-        component: ProfileFormComponent
+        component: ProfileFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/test-process-form',
-        component: TestProcessComponent
+        component: TestProcessComponent,
+        canActivate: [Specialguard, Novisitguard]
       },
       {
         path: 'app/creating-test-form',
-        component: CreatingTestFormComponent
+        component: CreatingTestFormComponent,
+        canActivate: [AuthGuard, Studentsguard]
       },
       {
         path: 'app/rules-form',
-        component: RulesFormComponent
+        component: RulesFormComponent,
+        canActivate: [Specialguard, Novisitguard]
       },
       {
         path: 'app/forgot-password-form',
@@ -69,31 +95,38 @@ let routes: Route[] = [
       },
       {
         path: 'app/stats-form',
-        component: StatsFormComponent
+        component: StatsFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/top10-form',
-        component: Top10FormComponent
+        component: Top10FormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/settings-choice-form',
-        component: SettingsChoiceFormComponent
+        component: SettingsChoiceFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/settings-form',
-        component: SettingsFormComponent
+        component: SettingsFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/birthday-settings-form',
-        component: BirthdaySettingsFormComponent
+        component: BirthdaySettingsFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/creating-quiz-option-form',
-        component: CreatingQuizOptionFormComponent
+        component: CreatingQuizOptionFormComponent,
+        canActivate: [AuthGuard, Studentsguard]
       },
       {
         path: 'app/choose-field-form',
-        component: ChooseFieldFormComponent
+        component: ChooseFieldFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/choose-account-type-form',
@@ -102,6 +135,44 @@ let routes: Route[] = [
       {
         path: 'app/register-form',
         component: RegisterFormComponent
+      },
+      {
+        path: 'app/about-form',
+        component: AboutPageFormComponent
+      },
+      {
+        path: 'app/contacts-form',
+        component: ContactsPageFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/my-quizzes-form',
+        component: YourQuizzesFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/404-page-form',
+        component: NotAllowedPageFormComponent
+      },
+      {
+        path: 'app/contact-list-form',
+        component: ContactListFormComponent
+      },
+      {
+        path: 'app/my-profile-form',
+        component: ProfileDashboardFormComponent
+      },
+      {
+        path: 'app/barchart-form',
+        component: BarchartFormComponent
+      },
+      {
+        path: 'app/email-confirmed-form/:id',
+        component: EmailConfirmedFormComponent
+      },
+      {
+        path: 'app/delete-acc-form',
+        component: DeleteAccFormComponent
       },
       {
         path: '',
@@ -136,19 +207,45 @@ let routes: Route[] = [
     RegisterFormComponent,
     AddNewCategoryPopupFormComponent,
     YourQuizzesFormComponent,
-    ChooseTypeOfQuizFormComponent
+    ChooseTypeOfQuizFormComponent,
+    NavbarFormComponent,
+    FooterFormComponent,
+    AboutPageFormComponent,
+    ContactsPageFormComponent,
+    CookiesServiceComponent,
+    ScrollToTopFormComponent,
+    SpecifyNameOfTestComponent,
+    NotAllowedPageFormComponent,
+    ContactListFormComponent,
+    ProfileDashboardFormComponent,
+    BarchartFormComponent,
+    EmailConfirmedFormComponent,
+    DeleteAccFormComponent,
+    DeleteAccPopupFormComponent
   ],
-    imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        HttpClientModule,
-        RouterOutlet,
-        RouterModule.forRoot(routes),
-        FormsModule,
-        MatDialogModule
-    ],
-  // providers: [DatePipe, AuthFormComponent],
-  providers: [],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    RouterOutlet,
+    RouterModule.forRoot(routes),
+    FormsModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
+    DataTablesModule
+  ],
+  providers: [AddNewCategoryPopupFormComponent, PlayerOptionsFormComponent, ChooseTypeOfQuizFormComponent, AddNewCategoryPopupFormComponent,
+    CreatingQuizOptionFormComponent, SpecifyNameOfTestComponent, RegisterFormComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+// required for AOT compilation
+export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
+  return new TranslateHttpLoader(http);
+}

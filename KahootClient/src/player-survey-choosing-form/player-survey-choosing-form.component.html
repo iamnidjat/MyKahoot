@@ -1,7 +1,9 @@
+<app-navbar-form></app-navbar-form>
+
 <body style="height: 100vh; margin-top: -10%;">
   <div id="allthethings">
       <nav>
-        <div class="statement">Choose field to pass quiz: </div>
+        <div class="statement">Choose a field to pass a quiz: </div>
         <div id="mixed-test" #div1 (click)="ToRulesForm(div1)"><p #MixedTest>Mixed test</p></div>
         <div id="programming" #div2 (click)="ToRulesForm(div2)"><p #Programming>Programming</p></div>
         <div id="math" #div3 (click)="ToRulesForm(div3)"><p #Math>Math</p></div>
@@ -10,4 +12,7 @@
       </nav>
   </div>
 </body>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
 

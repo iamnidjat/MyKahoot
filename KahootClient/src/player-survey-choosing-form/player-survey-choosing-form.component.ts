@@ -17,6 +17,7 @@ export class PlayerSurveyChoosingFormComponent {
     localStorage.removeItem("Math");
     localStorage.removeItem("Logics");
     localStorage.removeItem("MixedTest");
+    localStorage.removeItem("surveyGuard");
   }
   public BackOptions(): void{
     if (localStorage.getItem("Guest") !== null)
@@ -50,6 +51,8 @@ export class PlayerSurveyChoosingFormComponent {
         localStorage.setItem("Logics",this.nameKey4.nativeElement.innerText);
         break;
     }
+
+    localStorage.setItem("surveyGuard", "guard");
 
     this.router.navigate([`/app/rules-form`]);
   }

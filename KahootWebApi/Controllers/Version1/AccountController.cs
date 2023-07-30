@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using KahootWebApi.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Runtime.ConstrainedExecution;
-
+using BCrypt.Net;
+using BC = BCrypt.Net.BCrypt;
 
 namespace KahootWebApi.Controllers.v1
 {
@@ -17,7 +17,6 @@ namespace KahootWebApi.Controllers.v1
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
-       // private int userId;
 
         public AccountController(IAccountManager manager, KahootDbContext context)
         {
@@ -32,13 +31,11 @@ namespace KahootWebApi.Controllers.v1
 
             try
             {
-                user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
+                user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
 
-                if (user != null)
+                if (user != null && BC.EnhancedVerify(model.Password, user!.Password, HashType.SHA512))
                 {
-                    await AuthenticateAsync(model.UserName!);
-
-                    //userId = user.Id;
+                    await AuthenticateAsync(model.UserName!);                    
                 }
                 else
                 {
@@ -61,26 +58,22 @@ namespace KahootWebApi.Controllers.v1
             {
                 User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
 
-                if (user == null && model.Birthday < DateTime.Now && AccountManager.IsValid(model.Email!))
+                if (user == null && model.Birthday < DateTime.Now.AddYears(-16) && Validators.IsEmailValid(model.Email!))
                 {
                     _context.Users.Add(new User
                     {
                         Username = model.UserName,
-                        Password = model.Password,
+                        Password = BC.EnhancedHashPassword(model.Password, 13, HashType.SHA512),
                         Email = model.Email,
-                        Birthday = model.Birthday
+                        Birthday = model.Birthday,
+                        Role = model.Role
                     });
 
                     await _context.SaveChangesAsync();
 
                     await AuthenticateAsync(model.UserName!);
 
-                    newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName && u.Password == model.Password);
-
-                    //if (newUser != null)
-                    //{
-                    //    userId = newUser.Id;
-                    //}
+                    newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
                 }
                 else
                 {
@@ -108,14 +101,12 @@ namespace KahootWebApi.Controllers.v1
         }
 
         [HttpPatch("ChangePassword")]
-      //  [Authorize]
         public async Task<HttpResponseMessage> ChangePassword(string login, string oldPassword, string newPassword)
         {
             return await _manager.ChangePasswordAsync(login, oldPassword, newPassword);
         }
 
         [HttpPatch("ChangeBirthday")]
-      //  [Authorize]
         public async Task<HttpResponseMessage> ChangeBirthday(string login, DateTime oldBirthday, DateTime newBirthday)
         {
             return await _manager.ChangeBirthdayAsync(login, oldBirthday, newBirthday);
@@ -125,6 +116,12 @@ namespace KahootWebApi.Controllers.v1
         public string GetRandomLogin()
         {
             return _manager.RandomLoginGenerator();
+        }
+
+        [HttpPost("DeleteAcc")]
+        public async Task DeleteAcc(int userId, DeletedAccount deletedAccount)
+        {
+            await _manager.DeleteAccAsync(userId, deletedAccount);
         }
 
         private async Task AuthenticateAsync(string userName)

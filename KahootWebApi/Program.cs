@@ -18,7 +18,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<IAccountManager, AccountManager>();
 builder.Services.AddTransient<IStatisticsManager, StatisticsManager>();
 builder.Services.AddTransient<IQuizManager, QuizManager>();
-builder.Services.AddTransient<IQuizHistoryManager, QuizHistoryManager>();
+builder.Services.AddTransient<IContactManager, ContactManager>();
+builder.Services.AddTransient<IBarChartStatsManager, BarChartStatsManager>();
+builder.Services.AddTransient<ICredentialsChangingManager, CredentialsChangingManager>();
+builder.Services.AddTransient<IMailConfirmationManager, MailConfirmationManager>();
+builder.Services.AddTransient<IUserInfoManager, UserInfoManager>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");

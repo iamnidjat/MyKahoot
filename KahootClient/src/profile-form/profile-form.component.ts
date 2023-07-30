@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
+import {PlayerOptionsFormComponent} from "../player-options-form/player-options-form.component";
 
 @Component({
   selector: 'app-profile-form',
@@ -7,7 +8,9 @@ import {Router} from "@angular/router";
   styleUrls: ['./profile-form.component.css']
 })
 export class ProfileFormComponent {
-    constructor(private router: Router) {
+  role: string = "";
+    constructor(private router: Router, private _originalRole: PlayerOptionsFormComponent) {
+      this.role = _originalRole.role;
     }
 
   public ToSettings(): void{

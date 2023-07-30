@@ -1,14 +1,33 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {RegisterModel} from "../RegisterModel";
+import {CookiesServiceComponent} from "../cookies-service/cookies-service.component";
+
 @Component({
   selector: 'app-player-options-form',
   templateUrl: './player-options-form.component.html',
   styleUrls: ['./player-options-form.component.css']
 })
-export class PlayerOptionsFormComponent {
+
+export class PlayerOptionsFormComponent implements OnInit{
   private url: string = "https://localhost:7176/api/v1/Account/";
-  constructor(private router: Router) {
+  role: string = "";
+  private cookie: CookiesServiceComponent;
+
+  constructor(private router: Router, private el: ElementRef, _cookie: CookiesServiceComponent) {
+    if (localStorage.getItem('Role') === JSON.stringify("Teacher"))
+    {
+      this.role = 'Teacher';
+    }
+    else if (localStorage.getItem('Role') === JSON.stringify("Student"))
+    {
+      this.role = 'Student';
+    }
+    else if (localStorage.getItem('Role') === JSON.stringify("Personal"))
+    {
+      this.role = 'Personal';
+    }
+
+    this.cookie = _cookie;
   }
   public BackAuth(e: any): void{
     e.preventDefault();
@@ -19,7 +38,15 @@ export class PlayerOptionsFormComponent {
       localStorage.removeItem("Login");
       localStorage.removeItem("newLogin");
       localStorage.removeItem("Username");
+      localStorage.removeItem("UsernameDate");
       localStorage.removeItem("Guest");
+      localStorage.removeItem("Role");
+      // localStorage.removeItem("UserMail");
+      // localStorage.removeItem("UserBirthday");
+      // localStorage.removeItem("name");
+      // localStorage.removeItem("surname");
+      // localStorage.removeItem("bMail");
+
       this.router.navigate(['/app/auth-form']);
     });
   }
@@ -41,10 +68,38 @@ export class PlayerOptionsFormComponent {
   }
 
   public AcceptCookies(): void{
+    this.cookie.setCookie("username", localStorage.getItem("Login")! || localStorage.getItem("newLogin")!, 365);
 
+    let wrapper = this.el.nativeElement.querySelector(".wrapper");
+
+    wrapper.style.display = "none";
   }
 
   public DeclineCookies(): void{
+    this.cookie.setCookie("username", localStorage.getItem("Login")! || localStorage.getItem("newLogin")!, 0);
 
+    let wrapper = this.el.nativeElement.querySelector(".wrapper");
+
+    wrapper.style.display = "none";
+  }
+
+  ngOnInit(): void {
+    if (this.cookie.checkCookie("username") == (localStorage.getItem("Login")! || localStorage.getItem("newLogin")!))
+    {
+      let wrapper = this.el.nativeElement.querySelector(".wrapper");
+
+      wrapper.style.display = "none";
+    }
+
+    // let wrapper = this.el.nativeElement.querySelector(".wrapper");
+    //
+    // if (localStorage.getItem("mode") === "dark") {
+    //   wrapper.style.backgroundColor = "red";
+    //   alert(5);
+    // }
+    // else {
+    //   wrapper.style.backgroundColor = "white";
+    //   alert(4);
+    // }
   }
 }

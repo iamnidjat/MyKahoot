@@ -1,17 +1,25 @@
-<div id="allthethings">
+<app-navbar-form></app-navbar-form>
+
+<ng-container *ngIf="role === 'Teacher'">
+  <div class="allthethings">
     <nav>
-      <div id="left"></div>
+      <div class="create-quiz" (click)="ToCreateQuiz()"><p>CREATE A QUIZ</p></div>
+      <div class="play" (click)="ToSubjects()"><p>PLAY</p></div>
+      <div class="profile" (click)="ToProfile()"><p>PROFILE</p></div>
+      <div class="exit" (click)="BackAuth($event)"><p>EXIT</p></div>
+    </nav>
+  </div>
+</ng-container>
 
-      <div id="create-quiz" (click)="ToCreateQuiz()"><p>CREATE QUIZ</p></div>
-      <div id="play" (click)="ToSubjects()"><p>PLAY</p></div>
-      <div id="profile" (click)="ToProfile()"><p>PROFILE</p></div>
-
-      <div id="right"></div>
-
-      <div id="exit" (click)="BackAuth($event)"></div>
-      <div id="circle"></div>
-      </nav>
-</div>
+<ng-container *ngIf="role === 'Student'">
+  <div class="allthethings">
+    <nav>
+      <div class="play" (click)="ToSubjects()"><p>{{'Play' | translate}}</p></div>
+      <div class="profile" (click)="ToProfile()"><p>{{'Profile' | translate}}</p></div>
+      <div class="exit" (click)="BackAuth($event)"><p>{{'Exit' | translate}}</p></div>
+    </nav>
+  </div>
+</ng-container>
 
 <div class="wrapper">
   <header>
@@ -29,3 +37,5 @@
   </div>
 </div>
 
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

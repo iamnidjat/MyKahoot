@@ -16,7 +16,7 @@ namespace KahootWebApi.Models
         [Required]
         public string? Question { get; set; }
 
-        public string? ImageName { get; set; }
+       // public string? ImageName { get; set; }
 
         [Required]
         public string? Option1 { get; set; }

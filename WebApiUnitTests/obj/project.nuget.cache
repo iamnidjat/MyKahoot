@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "YxuMqyRmr57+vVxSucqzl7T+h4+lRp4kb9aBpdbdx6A5WDNXUz9x7mVXga6PyDexNMUpSTxDxfNl3VcZieBFAw==",
+  "dgSpecHash": "C9wm4+lf7xaYOlx+DyetJy2x4JqDs8lgiWw5pKXF4GEPPZefN5A8HXH3CrhFaJGMj+U4m6/pAeEjRf0FkdeaxQ==",
   "success": true,
   "projectFilePath": "C:\\Important Files\\Kahoot Project\\WebApiUnitTests\\WebApiUnitTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\huawei\\.nuget\\packages\\azure.core\\1.24.0\\azure.core.1.24.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\azure.identity\\1.6.0\\azure.identity.1.6.0.nupkg.sha512",
+    "C:\\Users\\huawei\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\bouncycastle.cryptography\\2.1.1\\bouncycastle.cryptography.2.1.1.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\coverlet.collector\\3.1.2\\coverlet.collector.3.1.2.nupkg.sha512",

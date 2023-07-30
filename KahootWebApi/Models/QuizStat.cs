@@ -14,6 +14,12 @@ namespace KahootWebApi.Models
         [Required]
         public int Score { get; set; }
 
+        [Required]
+        public string? UserName { get; set; }
+
+        [Required]
+        public DateTime PassedDate { get; set; }
+
         public int UserId { get; set; }
 
         public User? User { get; set; }

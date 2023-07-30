@@ -8,6 +8,7 @@ import {Router} from "@angular/router";
   templateUrl: './register-form.component.html',
   styleUrls: ['./register-form.component.css']
 })
+
 export class RegisterFormComponent {
   public Visibility1: boolean = false;
   public Visibility2: boolean = false;
@@ -18,23 +19,29 @@ export class RegisterFormComponent {
   @ViewChild('email') nameKeyMail!: ElementRef;
 
   private url: string = "https://localhost:7176/api/v1/Account/";
+  private url2: string = "https://localhost:7176/api/v1/MailConfirmation/";
 
   constructor(private el: ElementRef, private router: Router) {
-    // localStorage.removeItem("Login");
-    // localStorage.removeItem("newLogin");
-    // localStorage.removeItem("Username");
-    // localStorage.removeItem("Guest");
-    // localStorage.removeItem("userId");
+    localStorage.removeItem("newLogin");
+    localStorage.removeItem("RandomLogin");
+  }
+
+  public SentConfirmationMail(email: string, userId: number): void
+  {
+    fetch(this.url2 + `ConfirmEmail?email=${email}&userId=${userId}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
   }
 
   public Register(e: any, login: string, password: string, cPassword: string, email: string, birthday: string): void{
     e.preventDefault();
 
-    let role = this.Role();
+    let registerModel: RegisterModel = new RegisterModel(login, password, cPassword, email, new Date(birthday), localStorage.getItem("Role")!);
 
-    let registerModel = new RegisterModel(login, password, cPassword, email, new Date(birthday), role);
-
-    if (password === cPassword && password.length >= 5)
+    if (password === cPassword && password.length >= 5 && login.length >= 5 && localStorage.getItem("Role") !== "undefined")
     {
       fetch(this.url + "Register", {
         method: "POST",
@@ -46,24 +53,30 @@ export class RegisterFormComponent {
         if (response.status == 200)
         {
           localStorage.setItem("newLogin", this.nameKey2.nativeElement.value);
-          Swal.fire("You registered successfully!");
+          Swal.fire("You registered successfully! Please confirm your account, we have sent an instruction to your mail");
           this.router.navigate(['/app/player-options-form']);
         }
         else
         {
-          Swal.fire('Oops', 'Incorrect data!', 'error');
+          Swal.fire('Oops', 'Incorrect data (check your age and other data and remember you must be 16 years or older)!', 'error');
           this.ClearRegisterInputs();
+          this.Visibility1 ? this.Visibility1 = !this.Visibility1 : this.Visibility1;
+          this.Visibility2 ? this.Visibility2 = !this.Visibility2 : this.Visibility2;
         }
         return response.json();
       }).then((data) => {
         let userid = JSON.parse(JSON.stringify(data));
         localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
+        localStorage.setItem("Role", JSON.stringify(Object.values(userid)[11]));
+        this.SentConfirmationMail(email, parseInt(localStorage.getItem("userId")!));
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
       this.ClearRegisterInputs();
+      this.Visibility1 ? this.Visibility1 = !this.Visibility1 : this.Visibility1;
+      this.Visibility2 ? this.Visibility2 = !this.Visibility2 : this.Visibility2;
     }
   }
 
@@ -74,23 +87,6 @@ export class RegisterFormComponent {
     this.nameKeyCNewPassword.nativeElement.value = '';
     this.nameKeyBirthday.nativeElement.value = '';
     this.nameKeyMail.nativeElement.value = '';
-  }
-
-  private Role(): string {
-    if (localStorage.getItem("Teacher") !== null)
-    {
-      return localStorage.getItem("Teacher")!;
-    }
-    else if (localStorage.getItem("Student") !== null)
-    {
-      return localStorage.getItem("Student")!;
-    }
-    else if (localStorage.getItem("Personal") !== null)
-    {
-      return localStorage.getItem("Personal")!;
-    }
-
-    return null!;
   }
 
   public ChangeVisibilityOfNewPassword(): any {
@@ -112,7 +108,7 @@ export class RegisterFormComponent {
       method: 'GET'
     }).then(text => text.text()).then(data => {
       localStorage.setItem("RandomLogin", data);
-    })
+    });
 
     this.nameKey2.nativeElement.value = localStorage.getItem("RandomLogin");
   }

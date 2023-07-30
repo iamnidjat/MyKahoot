@@ -1,3 +1,5 @@
+<app-navbar-form></app-navbar-form>
+
 <div class="form">
   <div class="form-toggle"></div>
   <div class="form-panel one">
@@ -8,11 +10,11 @@
       <form>
         <div class="form-group">
           <label>Username</label>
-          <input type="text" #Login id="usernameLogin" name="username" required="required" (change)="IsLoginFieldEmpty()"/>
+          <input type="text" #Login id="usernameLogin" name="username" required="required" (change)="IsLoginFieldEmpty()" (cut)="false" (copy)="false" (paste)="false"/>
         </div>
         <div class="form-group">
           <label>Password</label>
-            <input [type]="Visibility ? 'text' : 'password'" #Password id="passwordLogin" name="password" required="required"/>
+            <input [type]="Visibility ? 'text' : 'password'" #Password id="passwordLogin" name="password" required="required" (cut)="false" (copy)="false" (paste)="false"/>
             <button class="hidden-eye" (click)="ChangeVisibility()">
               <span [class]="Visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
             </button>
@@ -38,6 +40,7 @@
   </div>
 </div>
 
-
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
 
 

@@ -1,22 +1,21 @@
+<app-navbar-form></app-navbar-form>
+
 <body style="height: 100vh;">
     <div class="container">
       <h1>Choose your account type</h1>
       <div class="form-container">
         <div class="form" (click)="toRegisterProcess(Teacher)">
-          <div class="image"></div>
+          <div class="image">
+            <img src="assets/images/teacher.png">
+          </div>
           <div class="title" id="teacher" #Teacher>Teacher</div>
         </div>
 
         <div class="form" (click)="toRegisterProcess(Student)">
           <div class="image">
-            <span class="fa fa-user"></span>
+            <img src="assets/images/user.png">
           </div>
           <div class="title" id="student" #Student>Student</div>
-        </div>
-
-        <div class="form" (click)="toRegisterProcess(Personal)">
-          <div class="image"></div>
-          <div class="title" id="personal" #Personal>Personal</div>
         </div>
       </div>
 
@@ -26,3 +25,6 @@
       </div>
     </div>
 </body>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

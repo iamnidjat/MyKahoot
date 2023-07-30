@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {ServiceComponent} from "../service/service.component";
 import {interval} from "rxjs";
 import {QuizModel} from "../QuizModel";
+import {ChooseTypeOfQuizFormComponent} from "../choose-type-of-quiz-form/choose-type-of-quiz-form.component";
 
 @Component({
   selector: 'app-test-process',
@@ -22,9 +23,10 @@ export class TestProcessComponent implements OnInit{
   public interval$: any;
   public progress: string = "0";
   public isQuizCompleted: boolean = false;
-  public url: string = "https://localhost:7176/api/v1/Statistics/";
+  private url: string = "https://localhost:7176/api/v1/Statistics/";
   public feedback: string = "";
-  constructor(private questionService: ServiceComponent, private router: Router) { }
+  public isActive: boolean = false;
+  constructor(private questionService: ServiceComponent, private router: Router, _variable: ChooseTypeOfQuizFormComponent) {}
 
   public ngOnInit(): void {
     if (localStorage.getItem("Login") !== null)
@@ -62,7 +64,7 @@ export class TestProcessComponent implements OnInit{
     this.getAllQuestions();
     this.startCounter();
   }
-  public getAllQuestions() {
+  public getAllQuestions(): void {
     this.questionService.getQuestionJson()!
       .subscribe(res => {
         this.questionList = res.questions;
@@ -75,9 +77,11 @@ export class TestProcessComponent implements OnInit{
     this.currentQuestion--;
   }
   public answer(currentQno: number, option: any): void {
+    this.isActive = true;
     if (currentQno === this.questionList.length){
       this.isQuizCompleted = true;
       this.stopCounter();
+      this.FeedbackGenerator();
     }
     if (option.correct) {
       this.points += 10;
@@ -86,6 +90,7 @@ export class TestProcessComponent implements OnInit{
         this.currentQuestion++;
         this.resetCounter();
         this.getProgressPercent();
+        this.isActive = false;
       }, 1000);
     }
     else {
@@ -94,6 +99,7 @@ export class TestProcessComponent implements OnInit{
         this.inCorrectAnswer++;
         this.resetCounter();
         this.getProgressPercent();
+        this.isActive = false;
       }, 1000);
       this.points -= 10;
     }
@@ -173,7 +179,8 @@ export class TestProcessComponent implements OnInit{
   private SaveResult(e: any): void{
     e.preventDefault();
 
-    let quizInfo = new QuizModel(this.testType, this.points, parseInt(localStorage.getItem("userId")!));
+    let quizInfo: QuizModel = new QuizModel(this.testType, this.points, parseInt(localStorage.getItem("userId")!),
+      localStorage.getItem("Login")! || localStorage.getItem("newLogin")!, new Date());
 
     fetch(this.url + "UploadResult", {
       method: "POST",

@@ -1,0 +1,41 @@
+* {
+  font-family: Nunito, sans-serif;
+}
+
+.text-blk {
+  margin: 0;
+  padding: 0;
+  line-height: 25px;
+}
+
+.text-blk.heading {
+  font-size: 36px !important;
+  line-height: 45px !important;
+  font-weight: 800 !important;
+  margin: 0 0 30px !important;
+}
+
+.responsive-container-block.Container {
+  max-width: 800px;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding: 20px;
+  margin: 30px auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
+.responsive-container-block.Container div{
+  margin-top: 15px;
+}
+
+.responsive-container-block.Container input {
+  margin-left: 15px;
+}
+
+

@@ -13,7 +13,6 @@ export class Top10FormComponent implements OnInit{
   public url: string = "https://localhost:7176/api/v1/Statistics/";
 
   constructor() {
-
   }
 
   ngOnInit(): void {
@@ -38,8 +37,6 @@ export class Top10FormComponent implements OnInit{
   }
 
   public DownloadResults(): any{
-    alert(this.url + `DownloadResult?quizType=${this.quizType}`)
-
     fetch(this.url + `DownloadResult?quizType=${this.quizType}`, {
       method: "GET"
     }).then(text => text.json()).then(data => {

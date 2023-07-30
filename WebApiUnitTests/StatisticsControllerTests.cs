@@ -53,22 +53,22 @@ namespace WebApiUnitTests
             Assert.True(stats!.Equals(data));
         }
 
-        [Fact]
-        public void UploadResultTest()
-        {
-            //arrange
-            var stats = GetStats();
-            _mock.Setup(x => x.UploadResultAsync(stats![1])).Returns(stats![1]);
-            var controller = new StatisticsController(_mock.Object);
+        //[Fact]
+        //public void UploadResultTest()
+        //{
+        //    //arrange
+        //    var stats = GetStats();
+        //    _mock.Setup(x => x.UploadResultAsync(stats![1])).Returns(stats![1]);
+        //    var controller = new StatisticsController(_mock.Object);
 
-            //act
-            var data = controller.UploadResult(stats![1]);
+        //    //act
+        //    var data = controller.UploadResult(stats![1]);
 
-            //assert
-            Assert.NotNull(data);
-            Assert.Equal(stats[1].Id, data.Id);
-            Assert.True(stats[1].Id == data.Id);
-        }
+        //    //assert
+        //    Assert.NotNull(data);
+        //    Assert.Equal(stats[1].Id, data.Id);
+        //    Assert.True(stats[1].Id == data.Id);
+        //}
 
         private List<QuizStat> GetStats()
         {

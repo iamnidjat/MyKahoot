@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-service',
@@ -16,7 +17,7 @@ export class ServiceComponent{
   questions: any[] = [];
   constructor(private http: HttpClient) { }
 
-  getQuestionJson(){
+  getQuestionJson(): Observable<any> | null{
     if (localStorage.getItem("MixedTest") !== null)
     {
     //  this.MixQuestions();

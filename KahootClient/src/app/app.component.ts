@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
+import {TranslateService} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-root',
@@ -9,18 +10,15 @@ import {Router} from "@angular/router";
 
 export class AppComponent implements OnInit{
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private translate: TranslateService) {
+    translate.setDefaultLang('en');
+    translate.use('en');
   }
   ngOnInit(): void {
-    this.AutoLogin();
 
   }
 
-    public AutoLogin(): void{
-    const access = localStorage.getItem("Username") || localStorage.getItem("newLogin");
-
-    if (access) {
-      this.router.navigate(['/app/player-options-form']);
-    }
+  public switchLang(lang: string): void{
+    this.translate.use(lang);
   }
 }

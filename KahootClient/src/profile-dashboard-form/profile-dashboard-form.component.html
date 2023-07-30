@@ -1,0 +1,112 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="responsive-container-block bigContainer">
+  <div class="responsive-container-block Container">
+    <div class="text-blk.heading">
+      Your Credentials
+    </div>
+
+    <div class="username" *ngIf="!flag1; else changeUsername">
+      <label>Username: </label>
+      <input type="text" value="{{username}}" [readOnly]="flag1">
+      <input #flag1 id="flag1" type="button" *ngIf="flagHideButton1" value="Change" (click)="changeFlag(flag1)">
+      <br/>
+      <label style="font-size: 15px; color: red; margin-left: 55px;">{{usernameLabel}}</label>
+    </div>
+
+    <ng-template #changeUsername>
+      <div class="username">
+        <label>Username: </label>
+        <input #Username type="text" value="{{username}}" [readonly]="!flag1">
+        <input #flag1 id="flag11" type="button" value="back" (click)="back(flag1)">
+        <input type="button" value="confirm" (click)="setUsername($event, Username.value)">
+      </div>
+    </ng-template>
+
+    <div class="name" *ngIf="!flag2; else changeName">
+      <label>Name: </label>
+      <input type="text" [readOnly]="flag2" value="{{name}}">
+      <input #flag2 id="flag2" type="button" value="Change" (click)="changeFlag(flag2)">
+    </div>
+
+    <ng-template #changeName>
+      <div class="name">
+        <label>Name: </label>
+        <input #Name type="text" [readonly]="!flag2" value="{{name}}">
+        <input #flag2 id="flag21" type="button" value="back" (click)="back(flag2)">
+        <input type="button" value="confirm" (click)="setName($event, Name.value)">
+      </div>
+    </ng-template>
+
+    <div class="surname" *ngIf="!flag3; else changeSurname">
+      <label>Surname: </label>
+      <input type="text" [readOnly]="flag3" value="{{surname}}">
+      <input #flag3 id="flag3" type="button" value="Change" (click)="changeFlag(flag3)">
+    </div>
+
+    <ng-template #changeSurname>
+      <div class="surname">
+        <label>Surname: </label>
+        <input #Surname type="text" [readonly]="!flag3" value="{{surname}}">
+        <input #flag3 id="flag31" type="button" value="back" (click)="back(flag3)">
+        <input type="button" value="confirm" (click)="setSurname($event, Surname.value)">
+      </div>
+    </ng-template>
+
+    <div class="email" *ngIf="!flag4; else changeMail">
+      <label>Mail: </label>
+      <input type="text" [readOnly]="flag4" value="{{mail}}">
+      <input #flag4 id="flag4" type="button" *ngIf="flagHideButton2" value="Change" (click)="changeFlag(flag4)">
+      <br/>
+      <label style="font-size: 15px; color: red; margin-left: 55px;">{{mailLabel}}</label>
+    </div>
+
+    <ng-template #changeMail>
+      <div class="email">
+        <label>Mail: </label>
+        <input #Mail type="text" [readonly]="!flag4" value="{{mail}}">
+        <input #flag4 id="flag41" type="button" value="back" (click)="back(flag4)">
+        <input type="button" value="confirm" (click)="setMail($event, Mail.value)">
+      </div>
+    </ng-template>
+
+    <div class="email" *ngIf="!flag5; else changeBMail">
+      <label>Backup Mail: </label>
+      <input type="text" [readOnly]="flag5" value="{{backUpMail}}">
+      <input #flag5 id="flag5" type="button" value="Change" (click)="changeFlag(flag5)">
+    </div>
+
+    <ng-template #changeBMail>
+      <div class="email">
+        <label>Backup Mail: </label>
+        <input #BMail type="text" value="{{backUpMail}}" [readonly]="!flag5">
+        <input #flag5 id="flag51" type="button" value="back" (click)="back(flag5)">
+        <input type="button" value="confirm" (click)="setBackUpMail($event, BMail.value)">
+      </div>
+    </ng-template>
+
+    <div class="birthday">
+      <label>Birthday: </label>
+      <label style="font-size: 20px; color: green">If you want to change birthday just tap this</label>
+      <input type="button" value="Change" (click)="ToBirthdayChanging()">
+      <label>button</label>
+    </div>
+
+    <div class="password">
+      <label>Password: </label>
+      <label style="font-size: 20px; color: green"> If you want to change password just tap this</label>
+      <input type="button" value="Change" (click)="ToPasswordChanging()">
+      <label>button</label>
+    </div>
+
+    <div class="role">
+      <label>Role: </label>
+      <input type="text" value="{{role}}" readonly>
+      <br/>
+      <label style="font-size: 15px; color: red; margin-left: 55px;">You cannot change your role:(</label>
+    </div>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

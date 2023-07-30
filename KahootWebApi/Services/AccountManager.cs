@@ -4,6 +4,8 @@ using MimeKit;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using KahootWebApi.Models;
 
 namespace KahootWebApi.Services
 {
@@ -15,6 +17,38 @@ namespace KahootWebApi.Services
         {
             _context = context;
         }
+
+        public async Task DeleteAccAsync(int userId, DeletedAccount deletedAccount)
+        {
+            try
+            {
+                var user = await GetAccByIdAsync(userId);
+
+                if (user != null)
+                {
+                    var removedUser = _context.Users.Remove(user!);
+
+                    await _context.DeletedAccounts.AddAsync(deletedAccount);
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        private async Task<User?> GetAccByIdAsync(int? userId)
+        {
+            if (userId == null)
+            {
+                return null;
+            }
+
+            return await _context.Users.SingleOrDefaultAsync(x => x.Id == userId);
+        }
+
 
         private static string RandomPasswordGenerator(int length)
         {
@@ -42,20 +76,13 @@ namespace KahootWebApi.Services
             return number;
         }
 
-        public static bool IsValid(string email)
-        {
-            string regex = @"^[^@\s]+@[^@\s]+\.(com|net|org|gov|ru)$";
-
-            return Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
-        }
-
         public async Task<IActionResult> ResetPasswordAsync(string email)
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
 
             using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
 
-            if (IsValid(email))
+            if (Validators.IsEmailValid(email))
             {
                 try
                 {

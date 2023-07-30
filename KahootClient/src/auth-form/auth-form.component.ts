@@ -20,17 +20,34 @@ export class AuthFormComponent{
   @ViewChild('Password') nameKeyPassword!: ElementRef;
 
   constructor(private el: ElementRef, private router: Router) {
-    localStorage.removeItem("Login");
-    localStorage.removeItem("newLogin"); //!
-    localStorage.removeItem("Username");
+    //localStorage.removeItem("Login");
+   // localStorage.removeItem("Username");
     localStorage.removeItem("Guest");
     localStorage.removeItem("userId");
+   // localStorage.removeItem("Role");
+    localStorage.removeItem("RandomLogin");
+    localStorage.removeItem("newLogin");
+    localStorage.removeItem("testFormat");
+    localStorage.removeItem("Guest");
+
+    // const access: string | null = localStorage.getItem("Username") && localStorage.getItem("CurrentUsage");
+    const access: string | null = localStorage.getItem("Username");
+
+    if (access
+      && (+new Date().valueOf() - (+new Date(localStorage.getItem("UsernameDate")!)).valueOf()) / (24 * 60 * 60 * 1000) <= 30) {
+      this.router.navigate(['/app/player-options-form']);
+    }
+    else {
+      localStorage.removeItem("Username");
+      localStorage.removeItem("UsernameDate");
+      localStorage.removeItem("Login");
+    }
   }
 
   public LogIn(e: any, login: string, password: string): void{
     e.preventDefault();
 
-    let user = new LoginModel(login, password);
+    let user: LoginModel = new LoginModel(login, password);
 
     if (login !== "" && password !== "")
     {
@@ -50,17 +67,28 @@ export class AuthFormComponent{
         {
           Swal.fire('Oops', 'Incorrect data!', 'error');
           this.ClearLoginInputs();
+
+          if (this.Visibility)
+          {
+            this.Visibility = !this.Visibility;
+          }
         }
         return response.json();
     }).then((data) => {
         let userid = JSON.parse(JSON.stringify(data));
         localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
+        localStorage.setItem("Role", JSON.stringify(Object.values(userid)[11]));
       });
     }
     else
     {
       Swal.fire('Oops', 'Incorrect data!', 'error');
       this.ClearLoginInputs();
+
+      if (this.Visibility)
+      {
+        this.Visibility = !this.Visibility;
+      }
     }
   }
 
@@ -83,18 +111,14 @@ export class AuthFormComponent{
   public RememberMe(username: string): void{
     this.isChecked = !this.isChecked;
 
-    if (this.isChecked && username !== "")
-    {
-      localStorage.setItem("Username", this.nameKey.nativeElement.value)
+    if (this.isChecked && username !== "") {
+      localStorage.setItem("Username", this.nameKey.nativeElement.value);
+      localStorage.setItem("UsernameDate", new Date().toLocaleDateString());
     }
     else if (!this.isChecked && username !== "")
     {
-      sessionStorage.setItem("Username", this.nameKey.nativeElement.value)
+      sessionStorage.setItem("Username", this.nameKey.nativeElement.value);
     }
-    // else
-    // {
-    //   Swal.fire("Oops", "Enter credentials before checking \"Remember me\"", "error");
-    // }
   }
 
   public ChangeVisibility(): any {

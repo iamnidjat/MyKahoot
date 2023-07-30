@@ -45,43 +45,9 @@ namespace KahootWebApi.Services
             return await _context.Questions.SingleOrDefaultAsync(x => x.Id == quizId);
         }
 
-        public async Task<IEnumerable<Quiz>> FilterQuizzesAsync(bool asc)
-        {
-            if (asc)
-            {
-                return await _context.Questions.OrderBy(x => x.QuizName).ToListAsync();
-            }
-
-            return await _context.Questions.OrderByDescending(x => x.QuizName).ToListAsync();
-        }
-
         public async Task<Quiz> ReadQuizAsync(int quizId)
         {
             throw new NotImplementedException();
-        }
-
-        public async Task<Quiz> SearchQuizByTitle(string quizTitle)
-        {
-            try
-            {
-                return await _context.Questions.FirstOrDefaultAsync(x => x.QuizName == quizTitle);
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new ArgumentNullException(ex.Message, ex);
-            }
-        }
-
-        public async Task<IEnumerable<Quiz>> SearchQuizByCategories(string quizType)
-        {
-            try
-            {
-                return await _context.Questions.Where(x => x.QuizType == quizType).ToListAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                throw new ArgumentNullException(ex.Message, ex);
-            }
         }
 
         public async Task<Quiz> UpdateQuizAsync(Quiz quiz)

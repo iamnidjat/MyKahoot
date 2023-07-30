@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+
 
 @Component({
   selector: 'app-your-quizzes-form',
   templateUrl: './your-quizzes-form.component.html',
   styleUrls: ['./your-quizzes-form.component.css']
 })
-export class YourQuizzesFormComponent {
+
+export class YourQuizzesFormComponent{
 
 }

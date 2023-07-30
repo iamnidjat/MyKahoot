@@ -7,8 +7,11 @@ import {Router} from "@angular/router";
   styleUrls: ['./rules-form.component.css']
 })
 export class RulesFormComponent{
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    localStorage.removeItem("ruleGuard");
+  }
   ToTheQuiz(): void{
+    localStorage.setItem("ruleGuard", "guard2");
     this.router.navigate(['/app/test-process-form']);
   }
 

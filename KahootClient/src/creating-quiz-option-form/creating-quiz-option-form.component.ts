@@ -1,24 +1,25 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
-import {MatDialog} from "@angular/material/dialog";
-import {AddNewCategoryPopupFormComponent} from "../add-new-category-popup-form/add-new-category-popup-form.component";
 
 @Component({
   selector: 'app-creating-quiz-option-form',
   templateUrl: './creating-quiz-option-form.component.html',
   styleUrls: ['./creating-quiz-option-form.component.css']
 })
+
 export class CreatingQuizOptionFormComponent {
   @ViewChild('MixedTest') nameKey!: ElementRef;
   @ViewChild('Programming') nameKey2!: ElementRef;
   @ViewChild('Math') nameKey3!: ElementRef;
   @ViewChild('Logics') nameKey4!: ElementRef;
+  flag: boolean = false;
 
-  constructor(private router: Router, private dialogRef : MatDialog) {
+  constructor(private router: Router) {
     localStorage.removeItem("ProgrammingC");
     localStorage.removeItem("MathC");
     localStorage.removeItem("LogicsC");
     localStorage.removeItem("MixedTestC");
+
   }
   public BackOptions(): void{
       this.router.navigate(['/app/player-options-form']);
@@ -48,7 +49,7 @@ export class CreatingQuizOptionFormComponent {
     this.router.navigate([`/app/creating-test-form`]);
   }
 
-  public OpenModalWindow(): any{
-      this.dialogRef.open(AddNewCategoryPopupFormComponent);
+  OpenModalWindow(): any{
+    this.flag = true;
   }
 }
