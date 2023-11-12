@@ -13,16 +13,19 @@ export class SettingsFormComponent {
   @ViewChild('oldPassword') nameKeyPassword!: ElementRef;
   @ViewChild('newPassword') nameKeyNewPassword!: ElementRef;
   @ViewChild('cNewPassword') nameKeyCNewPassword!: ElementRef;
+  public Visibility1: boolean = false;
+  public Visibility2: boolean = false;
+  public Visibility3: boolean = false;
 
   constructor(private router: Router) {
   }
 
-  public changePassword(e: any, oldPassword: string, newPassword: string, cNewPassword: string) {
+  public async changePassword(e: any, oldPassword: string, newPassword: string, cNewPassword: string): Promise<void> {
     e.preventDefault();
 
     if (newPassword.length >= 5 && newPassword === cNewPassword)
     {
-      fetch(this.url + `ChangePassword?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldPassword=${oldPassword}&newPassword=${newPassword}`, {
+      await fetch(this.url + `ChangePassword?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldPassword=${oldPassword}&newPassword=${newPassword}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"
@@ -52,5 +55,26 @@ export class SettingsFormComponent {
     this.nameKeyNewPassword.nativeElement.value = '';
     this.nameKeyCNewPassword.nativeElement.value = '';
     this.nameKeyPassword.nativeElement.value = '';
+  }
+
+  public ChangeVisibilityPassword1(): any {
+    if (this.nameKeyPassword.nativeElement.value !== "")
+    {
+      this.Visibility1 = !this.Visibility1;
+    }
+  }
+
+  public ChangeVisibilityPassword2(): any {
+    if (this.nameKeyNewPassword.nativeElement.value !== "")
+    {
+      this.Visibility2 = !this.Visibility2;
+    }
+  }
+
+  public ChangeVisibilityPassword3(): any {
+    if (this.nameKeyCNewPassword.nativeElement.value !== "")
+    {
+      this.Visibility3 = !this.Visibility3;
+    }
   }
 }

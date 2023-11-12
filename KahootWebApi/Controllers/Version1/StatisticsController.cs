@@ -37,15 +37,15 @@ namespace KahootWebApi.Controllers.v1
         }
 
         [HttpGet("DownloadResult/{userId:int}")]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(int userId)
+        public async Task<IEnumerable<QuizStat>> DownloadResult(int userId, string catType, string quizType, string level)
         {
-            return await _manager.DownloadResultAsync(userId);
+            return await _manager.DownloadResultAsync(userId, catType, quizType, level);
         }
-
-        [HttpGet("DownloadResult")]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(string quizType)
+        
+        [HttpGet("DownloadResults")]
+        public async Task<IEnumerable<QuizStat>> DownloadResult(string catType, string quizType, string level)
         {
-            return await _manager.DownloadResultAsync(quizType);
+            return await _manager.DownloadResultAsync(catType, quizType, level);
         }
     }
 }

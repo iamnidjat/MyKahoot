@@ -28,9 +28,9 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SetUsername")]
-        public Task<HttpResponseMessage> SetUsername(string oldUsername, string newUsername)
+        public Task<HttpResponseMessage> SetUsername(string oldUsername, string newUsername, DateTime DateOfChangingUsername)
         {
-            return _manager.SetUsernameAsync(oldUsername, newUsername);
+            return _manager.SetUsernameAsync(oldUsername, newUsername, DateOfChangingUsername);
         }
 
         [HttpPost("SetMail")]

@@ -54,6 +54,5 @@ namespace KahootWebApi.Services
 
             return new StatusCodeResult(400);
         }
-
     }
 }

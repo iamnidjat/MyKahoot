@@ -18,46 +18,24 @@ export class ServiceComponent{
   constructor(private http: HttpClient) { }
 
   getQuestionJson(): Observable<any> | null{
-    if (localStorage.getItem("MixedTest") !== null)
+    if (localStorage.getItem("TMixedTest") !== null)
     {
     //  this.MixQuestions();
       return this.http.get<any>("assets/questions/mixedtestquestions.json");
     }
-    if (localStorage.getItem("Programming") !== null)
+    if (localStorage.getItem("TProgramming") !== null)
     {
       return this.http.get<any>("assets/questions/programming1questions.json");
     }
-    if (localStorage.getItem("Math") !== null)
+    if (localStorage.getItem("TMath") !== null)
     {
       return this.http.get<any>("assets/questions/math1questions.json");
     }
-    if (localStorage.getItem("Logics") !== null)
+    if (localStorage.getItem("TLogics") !== null)
     {
       return this.http.get<any>("assets/questions/logic1questions.json");
     }
 
     return null;
   }
-
-  // MixQuestions(): any{
-  //   this.questions.push(this.http.get<any>("assets/questions/programming1questions.json"),
-  //     this.http.get<any>("assets/questions/math1questions.json"),
-  //     this.http.get<any>("assets/questions/logic1questions.json"));
-  //
-  //   this.Shuffle(this.questions);
-  // }
-  //
-  // Shuffle<T>(array: T[]): T[] {
-  //   let currentIndex = array.length,  randomIndex;
-  //
-  //   while (currentIndex != 0) {
-  //     randomIndex = Math.floor(Math.random() * currentIndex);
-  //     currentIndex--;
-  //
-  //     [array[currentIndex], array[randomIndex]] = [
-  //       array[randomIndex], array[currentIndex]];
-  //   }
-  //
-  //   return array;
-  // };
 }

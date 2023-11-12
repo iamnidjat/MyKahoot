@@ -15,12 +15,15 @@ namespace KahootWebApi.Models
 
         public bool IsUsernameChanged { get; set; } = false;
 
+        public DateTime? DateOfChangingUsername { get; set; }
+
+        public int DeadlineForChangingName { get; set; }
+
         public string? Name { get; set; } = "";
 
         public string? Surname { get; set; } = "";
 
-        [Required]
-        public string? Password { get; set; }
+        public string? Password { get; set; } = "";
 
         [Required]
         public string? Email { get; set; }
@@ -31,15 +34,24 @@ namespace KahootWebApi.Models
 
         public bool IsEmailConfirmed { get; set; } = false;
 
-        [Required]
-        public DateTime? Birthday { get; set; }
+        public DateTime Birthday { get; set; }
 
         [Required]
         public string? Role { get; set; }
 
-        public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
+        public string? Provider { get; set; }
 
-        public ICollection<Quiz> Questions { get; set; } = new ObservableCollection<Quiz>();
+        public string? PhotoURL { get; set; }
+
+        public bool IsFrozen { get; set; } = false;
+
+        public string? FreezingReason { get; set; }
+
+        //public DateTime? DateOfFreezing { get; set; }
+
+        //public int? FreezingDeadline { get; set; }
+
+        public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
 
         public ICollection<CreatedQuiz> CreatedQuizzes { get; set; } = new ObservableCollection<CreatedQuiz>();
     }

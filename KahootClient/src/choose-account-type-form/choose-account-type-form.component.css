@@ -1,25 +1,45 @@
+
 .container{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
   flex-direction: column;
 }
 
 .form-container{
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
 }
 
 .form{
   margin: 50px;
   border-radius: 4px;
+  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .1);
   box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   cursor: pointer;
 }
 
 .form:hover{
+  -webkit-transition: all 0.15s ease-in-out 0s;
+  -o-transition: all 0.15s ease-in-out 0s;
   transition: all 0.15s ease-in-out 0s;
 }
 
@@ -38,8 +58,14 @@
   height: 75px;
   width: 200px;
   background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1rem;
@@ -66,3 +92,11 @@
 #login:hover{
   opacity: .66;
 }
+
+@media screen and (max-width: 600px)
+{
+  .form{
+    width: 150px;
+  }
+}
+

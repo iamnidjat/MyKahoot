@@ -19,7 +19,7 @@
     </div>
 
     <form>
-      <input type="search" #SearchRequest class="search-data" placeholder="Search" required="required">
+      <input type="search" #SearchRequest class="search-data" placeholder="{{'Search' | translate}}" required="required">
       <button type="submit" class="fas fa-search" (click)="Search(SearchRequest.value)"></button>
     </form>
 
@@ -28,7 +28,7 @@
     <div class="sub-menu-wrap" id="subMenu">
       <div class="sub-menu">
         <div class="user-info">
-          <img src="/assets/images/user.png">
+          <img [src]=imageURL (click)="OpenPhotoModalWindow()">
           <h3> {{username}} </h3>
         </div>
 
@@ -36,31 +36,37 @@
 
         <a class="sub-menu-link" (click)="ToProfile()">
           <img src="/assets/images/profile.png">
-          <p>Edit Profile</p>
+          <p>{{"EditProfile" | translate}}</p>
           <span> > </span>
         </a>
 
         <a class="sub-menu-link" (click)="ToSettings()">
           <img src="/assets/images/setting.png">
-          <p>Settings and Privacy</p>
+          <p>{{"S&P" | translate}}</p>
           <span> > </span>
         </a>
 
         <a class="sub-menu-link" (click)="ToSendFeedback()">
           <img src="/assets/images/help.png">
-          <p>Help & Support</p>
+          <p>{{"H&S" | translate}}</p>
+          <span> > </span>
+        </a>
+
+        <a class="sub-menu-link" (click)="OpenPhotoModalWindow()">
+          <img src="/assets/images/user.png">
+          <p>{{"UpdateProfilePhoto" | translate}}</p>
           <span> > </span>
         </a>
 
         <a class="sub-menu-link" (click)="ToDeleteAcc()">
           <img src="/assets/images/deleteacc.png">
-          <p>Delete Acocunt</p>
+          <p>{{"DeleteAcc" | translate}}</p>
           <span> > </span>
         </a>
 
         <a class="sub-menu-link" (click)="Logout($event)">
           <img src="/assets/images/logout.png">
-          <p>Logout</p>
+          <p>{{"Logout" | translate}}</p>
           <span> > </span>
         </a>
 
@@ -80,16 +86,24 @@
 
 <ng-container *ngIf="username == null">
   <nav style="width: 1525px">
+    <div class="languages" >
+      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="UK" alt="en">
+      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="Russia" alt="ru">
+      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="Azerbaijan" alt="az">
+    </div>
+
     <div class="menu-icon">
       <span class="fas fa-bars"></span>
     </div>
 
     <div class="logo">MyKahoot</div>
 
-    <div class="nav-items">
+    <div class="nav-items" style="padding-left: 10%">
       <li><a routerLink="/app/auth-form">{{'Auth' | translate}}</a></li>
       <li><a routerLink="/app/about-form">{{'About' | translate}}</a></li>
       <li><a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a></li>
     </div>
   </nav>
 </ng-container>
+
+<app-add-photo-popup-form *ngIf="flag"></app-add-photo-popup-form>

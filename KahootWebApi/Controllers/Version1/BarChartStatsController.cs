@@ -17,9 +17,9 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpGet("DownloadResult")]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(string quizType)
+        public async Task<IEnumerable<QuizStat>> DownloadResult(string catType, string quizType, string level)
         {
-            return await _manager.DownloadResultAsync(quizType);
+            return await _manager.DownloadResultAsync(catType, quizType, level);
         }
     }
 }

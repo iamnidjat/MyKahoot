@@ -1,46 +1,50 @@
-<!--<app-navbar-form></app-navbar-form>-->
+<app-navbar-form></app-navbar-form>
 
 <div class="form-panel two">
   <div class="form-header">
-    <h1>Register an account</h1>
+    <h1>{{"Register an account" | translate}}</h1>
   </div>
   <div class="form-content">
     <form>
       <div class="form-group" style="height: 80px;">
-        <label>Username</label>
-        <input type="text" #newLogin id="usernameRegister" name="username" required="required" style="display: inline-block"/>
+        <label>{{'Username' | translate}}</label>
+        <input type="text" #newLogin id="usernameRegister" name="username" required="required" style="display: inline-block" (cut)="false" (copy)="false" (paste)="false"/>
         <button class="random-login" (click)="GetRandomLogin()">
           <span class="fa fa-user"></span>
         </button>
       </div>
       <div class="form-group" style="height: 80px;">
-        <label>Password</label>
-        <input [type]="Visibility1 ? 'text' : 'password'" #newPassword id="passwordRegister" name="password" required="required"/>
+        <label>{{"Password" | translate}}</label>
+        <input [type]="Visibility1 ? 'text' : 'password'" #newPassword id="passwordRegister" name="password" required="required" (cut)="false" (copy)="false" (paste)="false"/>
         <button id="hidden-eye1" (click)="ChangeVisibilityOfNewPassword()">
           <span [class]="Visibility1 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
         </button>
       </div>
       <div class="form-group" style="height: 80px;">
-        <label for="cpassword">Confirm Password</label>
-        <input [type]="Visibility2 ? 'text' : 'password'" #cNewPassword id="cpassword" name="cpassword" required="required"/>
+        <label for="cpassword">{{"Confirm password" | translate}}</label>
+        <input [type]="Visibility2 ? 'text' : 'password'" #cNewPassword id="cpassword" name="cpassword" required="required" (cut)="false" (copy)="false" (paste)="false"/>
         <button id="hidden-eye2" (click)="ChangeVisibilityOfCNewPassword()">
           <span [class]="Visibility2 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
         </button>
       </div>
       <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" #email id="email" name="email" required="required"/>
+        <label for="email">{{'Email Address' | translate}}</label>
+        <input type="email" #email id="email" name="email" required="required" (cut)="false" (copy)="false" (paste)="false"/>
       </div>
       <div class="form-group">
-        <label>Birthday</label>
+        <label>{{"Birthday" | translate}}</label>
         <input type="date" #birthday id="userBirthday" name="userBirthday" required="required"/>
       </div>
       <div class="form-group">
-        <button type="submit" (click)="Register($event, newLogin.value, newPassword.value, cNewPassword.value, email.value, birthday.value)">Register</button>
+        <button type="submit" (click)="Register($event, newLogin.value, newPassword.value, cNewPassword.value, email.value, birthday.value)">
+          {{"Register" | translate}}</button>
+      </div>
+      <div>
+        <asl-google-signin-button></asl-google-signin-button>
       </div>
     </form>
   </div>
 </div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
-<!--<app-footer-form></app-footer-form>-->
+<app-footer-form></app-footer-form>

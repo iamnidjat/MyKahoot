@@ -10,6 +10,7 @@
   },
   "private": true,
   "dependencies": {
+    "@abacritt/angularx-social-login": "^2.1.0",
     "@angular/animations": "^16.1.4",
     "@angular/cdk": "^15.2.9",
     "@angular/common": "^16.1.4",
@@ -26,6 +27,7 @@
     "@types/node": "^18.16.3",
     "angular": "^1.8.3",
     "angular-datatables": "^16.0.0",
+    "angular-electron": "^0.2.1",
     "chart.js": "^4.3.0",
     "datatables.net": "^1.11.3",
     "datatables.net-dt": "^1.11.3",

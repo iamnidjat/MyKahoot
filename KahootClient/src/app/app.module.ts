@@ -49,6 +49,20 @@ import {BarchartFormComponent} from "../barchart-form/barchart-form.component";
 import {EmailConfirmedFormComponent} from "../email-confirmed-form/email-confirmed-form.component";
 import {DeleteAccFormComponent} from "../delete-acc-form/delete-acc-form.component";
 import {DeleteAccPopupFormComponent} from "../delete-acc-popup-form/delete-acc-popup-form.component";
+import { ReactiveFormsModule } from '@angular/forms';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig, GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
+import { GoogleLoginProvider } from '@abacritt/angularx-social-login';
+import {FreezeAccPopupFormComponent} from "../freeze-acc-popup-form/freeze-acc-popup-form.component";
+import {ChooseLevelFormComponent} from "../choose-level-form/choose-level-form.component";
+import {UpdateQuizFormComponent} from "../update-quiz-form/update-quiz-form.component";
+import {WatchQuizFormComponent} from "../watch-quiz-form/watch-quiz-form.component";
+import {AddPhotoPopupFormComponent} from "../add-photo-popup-form/add-photo-popup-form.component";
+import {AvailableTestsListsFormComponent} from "../available-tests-lists-form/available-tests-lists-form.component";
+import {ChooseFieldLevelFormComponent} from "../choose-field-level-form/choose-field-level-form.component";
+import {AvailableTestsStatsFormComponent} from "../available-tests-stats-form/available-tests-stats-form.component";
 
 let routes: Route[] = [
   {
@@ -121,7 +135,8 @@ let routes: Route[] = [
       {
         path: 'app/creating-quiz-option-form',
         component: CreatingQuizOptionFormComponent,
-        canActivate: [AuthGuard, Studentsguard]
+        canActivate: [AuthGuard]
+    //    canActivate: [AuthGuard]
       },
       {
         path: 'app/choose-field-form',
@@ -143,7 +158,7 @@ let routes: Route[] = [
       {
         path: 'app/contacts-form',
         component: ContactsPageFormComponent,
-        canActivate: [AuthGuard]
+       canActivate: [AuthGuard]
       },
       {
         path: 'app/my-quizzes-form',
@@ -160,19 +175,53 @@ let routes: Route[] = [
       },
       {
         path: 'app/my-profile-form',
-        component: ProfileDashboardFormComponent
+        component: ProfileDashboardFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/barchart-form',
-        component: BarchartFormComponent
+        component: BarchartFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/email-confirmed-form/:id',
-        component: EmailConfirmedFormComponent
+        component: EmailConfirmedFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: 'app/delete-acc-form',
-        component: DeleteAccFormComponent
+        component: DeleteAccFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/choose-level-form',
+        component: ChooseLevelFormComponent,
+        canActivate: [Specialguard]
+      },
+      {
+        path: 'app/watch-quiz-form',
+        component: WatchQuizFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/update-quiz-form',
+        component: UpdateQuizFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/tests-list-form',
+        component: AvailableTestsListsFormComponent,
+        canActivate: [Specialguard]
+      },
+      {
+        path: 'app/tests-list-stats-form',
+        component: AvailableTestsStatsFormComponent,
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'app/choose-field-level-form',
+        component: ChooseFieldLevelFormComponent,
+        canActivate: [AuthGuard]
       },
       {
         path: '',
@@ -221,7 +270,15 @@ let routes: Route[] = [
     BarchartFormComponent,
     EmailConfirmedFormComponent,
     DeleteAccFormComponent,
-    DeleteAccPopupFormComponent
+    DeleteAccPopupFormComponent,
+    FreezeAccPopupFormComponent,
+    ChooseLevelFormComponent,
+    UpdateQuizFormComponent,
+    WatchQuizFormComponent,
+    AddPhotoPopupFormComponent,
+    AvailableTestsListsFormComponent,
+    AvailableTestsStatsFormComponent,
+    ChooseFieldLevelFormComponent
   ],
   imports: [
     BrowserModule,
@@ -237,10 +294,24 @@ let routes: Route[] = [
         deps: [HttpClient]
       }
     }),
-    DataTablesModule
+    DataTablesModule,
+    GoogleSigninButtonModule
   ],
   providers: [AddNewCategoryPopupFormComponent, PlayerOptionsFormComponent, ChooseTypeOfQuizFormComponent, AddNewCategoryPopupFormComponent,
-    CreatingQuizOptionFormComponent, SpecifyNameOfTestComponent, RegisterFormComponent],
+    CreatingQuizOptionFormComponent, SpecifyNameOfTestComponent, RegisterFormComponent, PlayerSurveyChoosingFormComponent, NavbarFormComponent,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider('802998642536-vaupvsiqm0s1jeq8ppme9oblhckam8in.apps.googleusercontent.com')
+          }
+        ]
+      } as SocialAuthServiceConfig,
+    }
+    ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -24,6 +24,12 @@ namespace KahootWebApi.Controllers.v1
             _manager = manager;
         }
 
+        [HttpPost("AddSocialUser")]
+        public async Task AddSocialUser(SocialUser socialUser)
+        {
+            await _manager.AddSocialUser(socialUser);
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginModel model)
         {
@@ -123,6 +129,36 @@ namespace KahootWebApi.Controllers.v1
         {
             await _manager.DeleteAccAsync(userId, deletedAccount);
         }
+
+        [HttpPost("FreezeAcc")]
+        public async Task FreezeAcc(int userId, string reason)
+        {
+            await _manager.FreezeAccAsync(userId, reason);
+        }
+
+        [HttpPost("UnfreezeAcc")]
+        public async Task UnfreezeAcc(int userId)
+        {
+            await _manager.UnfreezeAccAsync(userId);
+        }
+
+        [HttpGet("CheckStatusOfAcc")]
+        public async Task<bool> CheckStatusOfAcc(string username)
+        {
+            return await _manager.CheckStatusOfAccAsync(username);
+        }
+
+        [HttpGet("PasswordsMatching")]
+        public async Task<bool> PasswordsMatching(int userId, string password)
+        {
+            return await _manager.PasswordsMatching(userId, password);
+        }
+
+        //[HttpPost("SendingNotification")]
+        //public async Task SendingNotification(string username, string email)
+        //{
+        //    await _manager.SendingNotificationAsync(username, email);
+        //}
 
         private async Task AuthenticateAsync(string userName)
         {

@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
+import {RegisterFormComponent} from "../register-form/register-form.component";
 
 @Component({
   selector: 'app-choose-account-type-form',
@@ -10,7 +11,7 @@ export class ChooseAccountTypeFormComponent {
   @ViewChild("Teacher") Teacher!: ElementRef;
   @ViewChild("Student") Student!: ElementRef;
 
-  constructor(private el: ElementRef, private router: Router) {
+  constructor(private el: ElementRef, private router: Router, private variable: RegisterFormComponent) {
     localStorage.removeItem("Role");
   }
 
@@ -19,19 +20,40 @@ export class ChooseAccountTypeFormComponent {
 
     let elementId = element.id;
 
-    switch (elementId) {
-      case "teacher":
-        localStorage.setItem("Role",this.Teacher.nativeElement.innerText);
-        break;
-      case "student":
-        localStorage.setItem("Role",this.Student.nativeElement.innerText);
-        break;
+    if (localStorage.getItem("SocialUserFlag") !== null) {
+      switch (elementId) {
+        case "teacher":
+          localStorage.setItem("Role", this.Teacher.nativeElement.innerText);
+          this.variable.RegisterSocialUser();
+          localStorage.removeItem("SocialUserFlag");
+          this.router.navigate(['/app/player-options-form']);
+          break;
+        case "student":
+          localStorage.setItem("Role", this.Student.nativeElement.innerText);
+          this.variable.RegisterSocialUser();
+          localStorage.removeItem("SocialUserFlag");
+          this.router.navigate(['/app/player-options-form']);
+          break;
+      }
     }
+    else
+    {
+      switch (elementId) {
+        case "teacher":
+          localStorage.setItem("Role",this.Teacher.nativeElement.innerText);
+          localStorage.removeItem("SocialUserFlag");
+          break;
+        case "student":
+          localStorage.setItem("Role",this.Student.nativeElement.innerText);
+          localStorage.removeItem("SocialUserFlag");
+          break;
+      }
 
-    this.router.navigate(['/app/register-form']);
+      this.router.navigate(['/app/register-form']);
+    }
   }
 
-  public ToLoginForm()
+  public ToLoginForm(): void
   {
     this.router.navigate(['/app/auth-form']);
   }

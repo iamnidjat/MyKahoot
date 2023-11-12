@@ -1,7 +1,9 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {RegisterModel} from "../RegisterModel";
 import Swal from "sweetalert2";
 import {Router} from "@angular/router";
+import {SocialUser} from "../SocialUser";
+import {SocialAuthService} from "@abacritt/angularx-social-login";
 
 @Component({
   selector: 'app-register-form',
@@ -9,7 +11,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./register-form.component.css']
 })
 
-export class RegisterFormComponent {
+export class RegisterFormComponent implements OnInit{
   public Visibility1: boolean = false;
   public Visibility2: boolean = false;
   @ViewChild('newLogin') nameKey2!: ElementRef;
@@ -20,8 +22,9 @@ export class RegisterFormComponent {
 
   private url: string = "https://localhost:7176/api/v1/Account/";
   private url2: string = "https://localhost:7176/api/v1/MailConfirmation/";
+  private url3: string = "https://localhost:7176/api/v1/UserInfo/";
 
-  constructor(private el: ElementRef, private router: Router) {
+  constructor(private el: ElementRef, private router: Router, private socialAuthService: SocialAuthService) {
     localStorage.removeItem("newLogin");
     localStorage.removeItem("RandomLogin");
   }
@@ -36,14 +39,14 @@ export class RegisterFormComponent {
     })
   }
 
-  public Register(e: any, login: string, password: string, cPassword: string, email: string, birthday: string): void{
+  public async Register(e: any, login: string, password: string, cPassword: string, email: string, birthday: string): Promise<void>{
     e.preventDefault();
 
     let registerModel: RegisterModel = new RegisterModel(login, password, cPassword, email, new Date(birthday), localStorage.getItem("Role")!);
 
     if (password === cPassword && password.length >= 5 && login.length >= 5 && localStorage.getItem("Role") !== "undefined")
     {
-      fetch(this.url + "Register", {
+      await fetch(this.url + "Register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -67,7 +70,9 @@ export class RegisterFormComponent {
       }).then((data) => {
         let userid = JSON.parse(JSON.stringify(data));
         localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
-        localStorage.setItem("Role", JSON.stringify(Object.values(userid)[11]));
+        localStorage.setItem("userMail", JSON.stringify(Object.values(userid)[8]));
+        localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
+        localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
         this.SentConfirmationMail(email, parseInt(localStorage.getItem("userId")!));
       });
     }
@@ -78,6 +83,18 @@ export class RegisterFormComponent {
       this.Visibility1 ? this.Visibility1 = !this.Visibility1 : this.Visibility1;
       this.Visibility2 ? this.Visibility2 = !this.Visibility2 : this.Visibility2;
     }
+  }
+
+  private async AddSocialUser(username: string, name: string, email: string, role: string, provider: string): Promise<void>{
+    let user: SocialUser = new SocialUser(username, name, email, role, provider);
+
+    await fetch(this.url + "AddSocialUser", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(user)
+    });
   }
 
   private ClearRegisterInputs(): any
@@ -103,13 +120,27 @@ export class RegisterFormComponent {
     }
   }
 
-  public GetRandomLogin(): any {
-    fetch(this.url + 'GetRandomLogin', {
+  public async GetRandomLogin(): Promise<any> {
+    await fetch(this.url + 'GetRandomLogin', {
       method: 'GET'
     }).then(text => text.text()).then(data => {
       localStorage.setItem("RandomLogin", data);
     });
 
     this.nameKey2.nativeElement.value = localStorage.getItem("RandomLogin");
+  }
+
+  ngOnInit(): void {
+    this.RegisterSocialUser(); // !
+  }
+
+  public RegisterSocialUser(): void{
+    this.socialAuthService.authState.subscribe((user) => {
+      localStorage.setItem("Login", user.name);
+      localStorage.setItem("SocialUser", "true");
+      this.AddSocialUser(user.name, user.firstName, user.email, localStorage.getItem("Role")!, user.provider);
+      Swal.fire("You registered successfully!"); // !
+      this.router.navigate(['/app/player-options-form']);
+    });
   }
 }

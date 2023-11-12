@@ -7,9 +7,11 @@ namespace KahootWebApi.Models
         [Key]
         public int Id { get; set; }
 
-        public string? QuizName { get; set; }
-
+        [Required]
         public string? CategoryName { get; set; }
+
+        [Required]
+        public string? QuizName { get; set; }
 
         public int UserId { get; set; }
 

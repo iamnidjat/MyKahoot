@@ -14,6 +14,9 @@ namespace KahootWebApi.Models
         public string? QuizName { get; set; }
 
         [Required]
+        public string? TestFormat { get; set; }
+
+        [Required]
         public string? Question { get; set; }
 
        // public string? ImageName { get; set; }
@@ -24,17 +27,14 @@ namespace KahootWebApi.Models
         [Required]
         public string? Option2 { get; set; }
 
-      //  [Required]
         public string? Option3 { get; set; }
 
-      //  [Required]
         public string? Option4 { get; set; }
 
         [Required]
         public int Answer { get; set; }
 
-        public int UserId { get; set; }
-
-        public User? User { get; set; }
+        [Required]
+        public int QuestionNumber { get; set; }
     }
 }

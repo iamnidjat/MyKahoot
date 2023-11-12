@@ -1,13 +1,15 @@
 using KahootWebApi.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddCors(); //
+builder.Services.AddCors(); // !
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles); // !
 
@@ -23,6 +25,9 @@ builder.Services.AddTransient<IBarChartStatsManager, BarChartStatsManager>();
 builder.Services.AddTransient<ICredentialsChangingManager, CredentialsChangingManager>();
 builder.Services.AddTransient<IMailConfirmationManager, MailConfirmationManager>();
 builder.Services.AddTransient<IUserInfoManager, UserInfoManager>();
+builder.Services.AddTransient<INewsLetter, NewsLetter>();
+builder.Services.AddTransient<IPhotoService, PhotoService>();
+builder.Services.AddTransient<IAdminManager, AdminManager>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");
@@ -37,6 +42,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = new PathString("/Account/Login");
         options.LogoutPath = new PathString("/Account/Logout");
     });
+
+builder.Services.Configure<FormOptions>(o =>
+{
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
 
 
 var app = builder.Build();
@@ -55,7 +67,14 @@ app.UseCors(options =>
     options.AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader();
-}); //!
+});
+
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+    RequestPath = new PathString("/Resources")
+});
 
 app.UseAuthentication();
 

@@ -58,7 +58,7 @@ namespace WebApiUnitTests
         //{
         //    //arrange
         //    var stats = GetStats();
-        //    _mock.Setup(x => x.UploadResultAsync(stats![1])).Returns(stats![1]);
+        //    _mock.Setup(x => x.UploadResultAsync(stats![1]));
         //    var controller = new StatisticsController(_mock.Object);
 
         //    //act

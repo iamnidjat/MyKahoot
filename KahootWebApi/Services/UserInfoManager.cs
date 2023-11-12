@@ -13,6 +13,25 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
+        public async Task<bool> DoesUserExist(string username)
+        {
+            try
+            {
+                var result = await _context.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
+
+                if (result == null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
         public async Task<User> GetUserInfoAsync(int id)
         {
             try
@@ -27,13 +46,13 @@ namespace KahootWebApi.Services
             }
         }
 
-        public bool IsUsernameChanged(int id)
+        public async Task<User> GetUserInfoByUsernameAsync(string username)
         {
             try
             {
-                var result = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+                var result = await _context.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
 
-                return result!.IsUsernameChanged;
+                return result!;
             }
             catch (ArgumentNullException ex)
             {
@@ -41,11 +60,47 @@ namespace KahootWebApi.Services
             }
         }
 
-        public bool IsEmailChanged(int id)
+        public async Task<int> GetNextDeadlineForChangingName(int id)
         {
             try
             {
-                var result = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+
+                return 90 - (DateTime.Now.Subtract((DateTime)result.DateOfChangingUsername).Days);
+                
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> IsUsernameChanged(int id)
+        {
+            try
+            {              
+                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+
+                if (DateTime.Now.Subtract((DateTime)result.DateOfChangingUsername).Days > result.DeadlineForChangingName)
+                {
+                    result.IsUsernameChanged = false;
+
+                    return false;
+                }
+
+                return true;
+            }
+            catch (ArgumentNullException ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> IsEmailChanged(int id)
+        {
+            try
+            {
+                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
 
                 return result!.IsEmailChanged;
             }
@@ -55,11 +110,11 @@ namespace KahootWebApi.Services
             }
         }
 
-        public bool IsEmailConfirmed(int id)
+        public async Task<bool> IsEmailConfirmed(string mail)
         {
             try
             {
-                var result = _context.Users.Where(u => u.Id == id).FirstOrDefault();
+                var result = await _context.Users.Where(u => u.Email == mail).FirstOrDefaultAsync();
 
                 return result!.IsEmailConfirmed;
   

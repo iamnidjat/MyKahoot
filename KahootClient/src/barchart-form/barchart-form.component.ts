@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -7,7 +7,7 @@ import Chart from 'chart.js/auto';
   styleUrls: ['./barchart-form.component.css']
 })
 
-export class BarchartFormComponent implements OnInit{
+export class BarchartFormComponent implements OnInit, OnDestroy{
   public chart: any;
   private url: string = "https://localhost:7176/api/v1/BarChartStats/";
   private results: string[] = [];
@@ -16,47 +16,43 @@ export class BarchartFormComponent implements OnInit{
   constructor() {
   }
 
-  private DownloadResults(): void{
-    fetch(this.url + `DownloadResult?quizType=Programming`, {
+  ngOnDestroy(): void {
+    localStorage.removeItem("categoryNameB");
+    localStorage.removeItem("BTestName");
+    localStorage.removeItem("BLevel");
+  }
+
+  private async DownloadResults(): Promise<void>{
+    await fetch(this.url + `DownloadResult?catType=${localStorage.getItem("categoryNameB")}
+    &quizType=${localStorage.getItem("BTestName")}&level=${localStorage.getItem("BLevel")}`, {
       method: "GET",
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      // Object.keys(data).forEach((key) =>
-      // {
-      //   this.results.push(data[key]["score"]);
-      //   this.dates.push(data[key]["passedDate"].substring(0, 10));
-      // });
-      localStorage.setItem("score1", JSON.stringify(Object.values(data[0]["score"])));
-      localStorage.setItem("score2", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[1]["score"])))));
-      localStorage.setItem("score3", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[2]["score"])))));
-      localStorage.setItem("score4", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[3]["score"])))));
-      localStorage.setItem("score5", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[4]["score"])))));
-      localStorage.setItem("date1", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[0]["passedDate"])))));
-      localStorage.setItem("date2", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[1]["passedDate"])))));
-      localStorage.setItem("date3", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[2]["passedDate"])))));
-      localStorage.setItem("date4", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[3]["passedDate"])))));
-      localStorage.setItem("date5", JSON.stringify(Object.values(JSON.parse(JSON.stringify(data[4]["passedDate"])))));
+      Object.keys(data).forEach((key) =>
+      {
+        this.results.push(data[key]["score"]);
+        this.dates.push(data[key]["passedDate"].substring(0, 10));
+      });
+
+      localStorage.setItem("results", JSON.stringify(this.results));
+      localStorage.setItem("dates", JSON.stringify(this.dates));
     });
   }
 
   private createChart(): void{
+    let results = JSON.parse(localStorage.getItem("results")!);
+    let dates = JSON.parse(localStorage.getItem("dates")!);
+
     this.chart = new Chart("MyChart", {
       type: 'bar',
 
       data: {
-        // labels: ['2022-05-10', '2022-05-11', '2022-05-12','2022-05-13',
-        //   '2022-05-14', '2022-05-15', '2022-05-16','2022-05-17'],
-        // labels: [this.dates[0], this.dates[1], this.dates[2], this.dates[3], this.dates[4]],
-        labels: [localStorage.getItem("score1"), localStorage.getItem("score2"), localStorage.getItem("score3"), localStorage.getItem("score4"),
-          localStorage.getItem("score5")],
+        labels: [dates[0], dates[1], dates[2], dates[3], dates[4]],
         datasets: [
           {
             label: "Profit",
-            // data: ['542', '542', '536', '327', '17',
-            //   '0.00', '538', '541'],
-            data: [localStorage.getItem("date1"), localStorage.getItem("date2"), localStorage.getItem("date3"), localStorage.getItem("date4"),
-      localStorage.getItem("date5")],
+            data: [results[0], results[1], results[2], results[3], results[4]],
             backgroundColor: 'limegreen'
           }
         ]
@@ -64,8 +60,11 @@ export class BarchartFormComponent implements OnInit{
       options: {
         maintainAspectRatio: false,
         scales: {
+          x: {
+          },
           y: {
-            beginAtZero: true
+            min: -200,
+            max: 200
           }
         }
       }

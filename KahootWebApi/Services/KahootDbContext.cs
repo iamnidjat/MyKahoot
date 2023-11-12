@@ -15,15 +15,6 @@ namespace KahootWebApi.Services
         public DbSet<Quiz> Questions { get; set; }
         public DbSet<CreatedQuiz> CreatedQuizzes { get; set; }
         public DbSet<DeletedAccount> DeletedAccounts { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            //modelBuilder.Entity<Quiz>().HasData(
-            //    new Quiz
-            //    {
-            //        
-            //    }
-            //);
-        }
+        public DbSet<SocialUser> SocialUsers { get; set; }
     }
 }

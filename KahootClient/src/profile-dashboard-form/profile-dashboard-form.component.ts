@@ -16,8 +16,10 @@ export class ProfileDashboardFormComponent implements OnInit{
   surname: string = "";
   mail: string = "";
   backUpMail: string = "";
+  provider: string = "";
   usernameLabel: string = "You can change your username only once!";
   mailLabel: string = "You can change your mail only once!";
+  nameLabel: string = "You can't change your name!";
   private url: string = "https://localhost:7176/api/v1/CredentialsChanging/";
   private url2: string = "https://localhost:7176/api/v1/UserInfo/";
   flag1: boolean = false;
@@ -27,28 +29,30 @@ export class ProfileDashboardFormComponent implements OnInit{
   flag5: boolean = false;
   flagHideButton1: boolean = true;
   flagHideButton2: boolean = true;
+  isSocialUser: boolean = JSON.parse(localStorage.getItem("SocialUser")!);
 
   constructor(private router: Router, private variable: RegisterFormComponent) {
   }
 
-  private getUserInfo(): void
+  private async getUserInfo(): Promise<void>
   {
-      fetch(this.url2 + `GetUserInfo?id=${parseInt(localStorage.getItem("userId")!)}`, {
+      await fetch(this.url2 + `GetUserInfo?id=${parseInt(localStorage.getItem("userId")!)}`, {
         method: "GET",
       }).then((response) => {
         return response.json();
       }).then((data) => {
         let userinfo = JSON.parse(JSON.stringify(data));
-        this.name = JSON.stringify(Object.values(userinfo)[3]).substring(1, JSON.stringify(Object.values(userinfo)[3]).length - 1);
-        this.surname = JSON.stringify(Object.values(userinfo)[4]).substring(1, JSON.stringify(Object.values(userinfo)[4]).length - 1);
-        this.mail = JSON.stringify(Object.values(userinfo)[6]).substring(1, JSON.stringify(Object.values(userinfo)[6]).length - 1);
-        this.backUpMail = JSON.stringify(Object.values(userinfo)[8]).substring(1, JSON.stringify(Object.values(userinfo)[8]).length - 1);
+        this.name = JSON.stringify(Object.values(userinfo)[5]).substring(1, JSON.stringify(Object.values(userinfo)[5]).length - 1);
+        this.surname = JSON.stringify(Object.values(userinfo)[6]).substring(1, JSON.stringify(Object.values(userinfo)[6]).length - 1);
+        this.mail = JSON.stringify(Object.values(userinfo)[8]).substring(1, JSON.stringify(Object.values(userinfo)[8]).length - 1);
+        this.backUpMail = JSON.stringify(Object.values(userinfo)[10]).substring(1, JSON.stringify(Object.values(userinfo)[10]).length - 1);
+        this.provider = JSON.stringify(Object.values(userinfo)[14]).substring(1, JSON.stringify(Object.values(userinfo)[14]).length - 1);
       });
   }
 
-  private changeUsernameChangingToTrue(): void
+  private async changeUsernameChangingToTrue(): Promise<void>
   {
-    fetch(this.url + `ChangeUsernameChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
+    await fetch(this.url + `ChangeUsernameChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -56,9 +60,9 @@ export class ProfileDashboardFormComponent implements OnInit{
     });
   }
 
-  private changeMailChangingToTrue(): void
+  private async changeMailChangingToTrue(): Promise<void>
   {
-    fetch(this.url + `ChangeEmailChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
+    await fetch(this.url + `ChangeEmailChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -142,12 +146,44 @@ export class ProfileDashboardFormComponent implements OnInit{
     }
   }
 
-  setName(e: any, name: string): void{
+  public changeFlag2(elemRef: any): void {
+    let element = elemRef;
+
+    let elementId = element.id;
+
+    switch (elementId)
+    {
+      case "flag32":
+        this.flag1 = true;
+        break;
+      case "flag52":
+        this.flag2 = true;
+        break;
+    }
+  }
+
+  back2(elemRef: any): void{
+    let element = elemRef;
+
+    let elementId = element.id;
+
+    switch (elementId)
+    {
+      case "flag312":
+        this.flag3 = false;
+        break;
+      case "flag512":
+        this.flag5 = false;
+        break;
+    }
+  }
+
+  public async setName(e: any, name: string): Promise<void>{
     e.preventDefault();
 
     if (name.length >= 2)
     {
-      fetch(this.url + `SetName?username=${this.username}&name=${name}`, {
+      await fetch(this.url + `SetName?username=${this.username}&name=${name}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -169,12 +205,12 @@ export class ProfileDashboardFormComponent implements OnInit{
     }
   }
 
-  setSurname(e: any, surname: string): void{
+  public async setSurname(e: any, surname: string): Promise<void>{
     e.preventDefault();
 
     if (surname.length >= 2)
     {
-      fetch(this.url + `SetSurname?username=${this.username}&surname=${surname}`, {
+      await fetch(this.url + `SetSurname?username=${this.username}&surname=${surname}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -196,12 +232,12 @@ export class ProfileDashboardFormComponent implements OnInit{
     }
   }
 
-  setUsername(e: any, username: string): void{
+  public async setUsername(e: any, username: string): Promise<void>{
     e.preventDefault();
 
     if (username.length >= 5 && !this.IsUsernameChanged())
     {
-      fetch(this.url + `SetUsername?oldUsername=${this.username}&newUsername=${username}`, {
+      await fetch(this.url + `SetUsername?oldUsername=${this.username}&newUsername=${username}&DateOfChangingUsername=${new Date()}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -227,12 +263,12 @@ export class ProfileDashboardFormComponent implements OnInit{
     }
   }
 
-  setMail(e: any, mail: string): void{
+  public async setMail(e: any, mail: string): Promise<void>{
     e.preventDefault();
 
     if (!this.IsMailChanged())
     {
-      fetch(this.url + `SetMail?username=${this.username}&mail=${mail}`, {
+      await fetch(this.url + `SetMail?username=${this.username}&mail=${mail}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -257,10 +293,10 @@ export class ProfileDashboardFormComponent implements OnInit{
     }
   }
 
-  setBackUpMail(e: any, bMail: string): void{
+  public async setBackUpMail(e: any, bMail: string): Promise<void>{
     e.preventDefault();
 
-    fetch(this.url + `SetBMail?username=${this.username}&bMail=${bMail}`, {
+    await fetch(this.url + `SetBMail?username=${this.username}&bMail=${bMail}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -285,19 +321,43 @@ export class ProfileDashboardFormComponent implements OnInit{
     this.router.navigate(['app/settings-form']);
   }
 
+  private async GetNextDeadlineForChangingName(): Promise<void> // !
+  {
+    fetch(this.url2 + `GetNextDeadlineForChangingName?id=${parseInt(localStorage.getItem("userId")!)}`, {
+      method: "GET",
+    }).then((response) => {
+      return response.json();
+    }).then((data) => {
+       localStorage.setItem("DeadlineForChangingName", JSON.parse(JSON.stringify(data)));
+    });
+  }
+
   ngOnInit(): void {
     this.getUserInfo();
 
-    if (this.IsUsernameChanged())
+    if (this.isSocialUser)
     {
-      this.flagHideButton1 = false;
-      this.usernameLabel = "You already changed your username!";
+      this.usernameLabel = "You can't change your username!";
+      this.mailLabel = "You can't change your mail!";
     }
+    else {
+      if (this.IsUsernameChanged())
+      {
+        this.flagHideButton1 = false;
 
-    if (this.IsMailChanged())
-    {
-      this.flagHideButton2 = false;
-      this.mailLabel = "You already changed your mail!";
+        let date: Date = new Date();
+
+        date.setDate(date.getDate() + parseInt(localStorage.getItem("DeadlineForChangingName")!));
+
+        this.usernameLabel = "You already changed your username less than 90 days ago!\n" +
+          `You can change your username in ${parseInt(localStorage.getItem("DeadlineForChangingName")!)} days (on ${date}) !`;
+      }
+
+      if (this.IsMailChanged())
+      {
+        this.flagHideButton2 = false;
+        this.mailLabel = "You already changed your mail!";
+      }
     }
   }
 }

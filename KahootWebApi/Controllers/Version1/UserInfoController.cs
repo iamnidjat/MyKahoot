@@ -22,22 +22,40 @@ namespace KahootWebApi.Controllers.Version1
             return await _manager.GetUserInfoAsync(id);
         }
 
-        [HttpGet("IsUsernameChanged")]
-        public bool IsUsernameChanged(int id)
+        [HttpGet("GetUserInfoByUsernameAsync")]
+        public async Task<User> GetUserInfoByUsernameAsync(string username)
         {
-            return _manager.IsUsernameChanged(id);
+            return await _manager.GetUserInfoByUsernameAsync(username);
+        }
+
+        [HttpGet("DoesUserExist")]
+        public async Task<bool> DoesUserExist(string username)
+        {
+            return await _manager.DoesUserExist(username);
+        }
+
+        [HttpGet("GetNextDeadlineForChangingName")]
+        public async Task<int> GetNextDeadlineForChangingName(int id)
+        {
+            return await _manager.GetNextDeadlineForChangingName(id);
+        }
+
+        [HttpGet("IsUsernameChanged")]
+        public async Task<bool> IsUsernameChanged(int id)
+        {
+            return await _manager.IsUsernameChanged(id);
         }
 
         [HttpGet("IsEmailChanged")]
-        public bool IsEmailChanged(int id)
+        public async Task<bool> IsEmailChanged(int id)
         {
-            return _manager.IsEmailChanged(id);
+            return await _manager.IsEmailChanged(id);
         }
 
         [HttpGet("IsEmailConfirmed")]
-        public bool IsEmailConfirmed(int id)
+        public async Task<bool> IsEmailConfirmed(string mail)
         {
-            return _manager.IsEmailConfirmed(id);
+            return await _manager.IsEmailConfirmed(mail);
         }
     }
 }

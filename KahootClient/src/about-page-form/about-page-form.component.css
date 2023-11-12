@@ -2,6 +2,13 @@
   font-family: Nunito, sans-serif;
 }
 
+.main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
 .text-blk {
   margin: 0;
   padding: 0;
@@ -36,6 +43,7 @@
   margin: 100px auto;
   background-color: white;
   border-radius: 10px;
+  box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
 }
 
 .text-blk.heading {

@@ -14,13 +14,18 @@ a{
 }
 .form {
   z-index: 15;
-  position: relative;
+  /*position: relative;*/
   background: #fff;
   width: 600px;
   border-radius: 4px;
+  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .1);
   box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  margin: 100px auto 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 .form-toggle {
   z-index: 10;
@@ -31,10 +36,16 @@ a{
   width: 60px;
   height: 60px;
   border-radius: 100%;
+  -webkit-transform-origin: center;
+  -ms-transform-origin: center;
   transform-origin: center;
+  -webkit-transform: translate(0, -25%) scale(0);
+  -ms-transform: translate(0, -25%) scale(0);
   transform: translate(0, -25%) scale(0);
   opacity: 0;
   cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 .form-toggle:before, .form-toggle:after {
@@ -46,21 +57,34 @@ a{
   width: 30px;
   height: 4px;
   background: #4285f4;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
 }
 .form-toggle:before {
+  -webkit-transform: translate(-50%, -50%) rotate(45deg);
+  -ms-transform: translate(-50%, -50%) rotate(45deg);
   transform: translate(-50%, -50%) rotate(45deg);
 }
 .form-toggle:after {
+  -webkit-transform: translate(-50%, -50%) rotate(-45deg);
+  -ms-transform: translate(-50%, -50%) rotate(-45deg);
   transform: translate(-50%, -50%) rotate(-45deg);
 }
 .form-toggle.visible {
+  -webkit-transform: translate(0, -25%) scale(1);
+  -ms-transform: translate(0, -25%) scale(1);
   transform: translate(0, -25%) scale(1);
   opacity: 1;
 }
 .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   margin: 0 0 20px;
 }
@@ -87,6 +111,7 @@ a{
   width: 100%;
   border: 0;
   border-radius: 4px;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   padding: 12px 20px;
   color: rgba(0, 0, 0, 0.6);
@@ -94,6 +119,8 @@ a{
   font-size: inherit;
   font-weight: 500;
   line-height: inherit;
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 .form-group input:focus {
@@ -146,6 +173,7 @@ a{
 }
 .form-panel {
   padding: 60px calc(5% + 60px) 60px 60px;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 .form-panel.one:before {
@@ -153,6 +181,8 @@ a{
   display: block;
   opacity: 0;
   visibility: hidden;
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 .form-panel.one.hidden:before {
@@ -169,6 +199,8 @@ a{
   width: 100%;
   min-height: 100%;
   padding: 60px calc(10% + 60px) 60px 60px;
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
   transition: 0.3s ease;
   cursor: pointer;
 }
@@ -181,6 +213,8 @@ a{
   background: rgba(255, 255, 255, 0.2);
   height: 30px;
   width: 2px;
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 .form-panel.two:after {
@@ -188,6 +222,7 @@ a{
 }
 .form-panel.two:hover {
   left: 93%;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 .form-panel.two:hover:before, .form-panel.two:hover:after {
@@ -195,6 +230,7 @@ a{
 }
 .form-panel.two.active {
   left: 10%;
+  -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   cursor: default;
 }
@@ -217,8 +253,15 @@ a{
   color: #fff;
 }
 .pen-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: row;
   flex-direction: row;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
   width: 600px;
   margin: 20px auto 100px;
@@ -260,14 +303,26 @@ a{
   opacity: .66;
 }
 
+h2 {
+  width: 150px;
+  text-align: center;
+  border-bottom: 1px solid #000;
+  line-height: 0.1em;
+  margin: 25px 0 25px;
+}
+
+h2 .line {
+  background: #fff;
+}
+
 @media screen and (max-width: 600px) and (min-width: 450px) {
   .form{
     width: 450px;
   }
 }
 
-@media screen and (max-width: 450px) and (min-width: 350px) {
+@media screen and (max-width: 450px) and (min-width: 300px) {
   .form{
-    width: 370px;
+    width: 350px;
   }
 }

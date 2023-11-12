@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using KahootWebApi.Models;
+using BCrypt.Net;
+using BC = BCrypt.Net.BCrypt;
 
 namespace KahootWebApi.Services
 {
@@ -18,15 +20,191 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
-        public async Task DeleteAccAsync(int userId, DeletedAccount deletedAccount)
+        public async Task AddSocialUser(SocialUser socialUser)
+        {
+            try
+            {
+                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == socialUser.Username); // !
+
+                if (user == null)
+                {
+                    await _context.SocialUsers.AddAsync(socialUser);
+
+                    await _context.Users.AddAsync(new User
+                    {
+                        Username = socialUser.Username,
+                        Name = socialUser.Name,
+                        Email = socialUser.Email,
+                        Role = socialUser.Role,
+                        Provider = socialUser.Provider
+                    });
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public async Task<bool> PasswordsMatching(int userId, string password)
+        {
+            try
+            {
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null && BC.EnhancedVerify(password, user.Password, HashType.SHA512))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or InvalidOperationException or ArgumentNullException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        //public async Task SendingNotificationAsync(string username, string email)
+        //{
+        //    var user = await GetFrozenAccAsync(username);
+
+        //    if (user != null)
+        //    {
+        //        if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days == 1)
+        //        {
+        //            NotifyingAboutDeletingAsync(email);
+        //        }
+        //    }
+        //}
+
+        //public async Task<IActionResult> NotifyingAboutDeletingAsync(string email) // !
+        //{
+        //    using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+        //    if (Validators.IsEmailValid(email))
+        //    {
+        //        try
+        //        {
+        //            smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
+        //            smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
+
+        //            var message = new MimeMessage();
+
+        //            message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
+        //            message.To.Add(new MailboxAddress("You", email));
+
+        //            message.Subject = "Notification about account";
+
+        //            var part = new TextPart("plain")
+        //            {
+        //                Text = $"Only 1 day left before your account will be deleted"
+        //            };
+
+        //            message.Body = part;
+
+        //            smtpClient.Send(message);
+        //        }
+        //        catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
+        //        {
+        //            return new StatusCodeResult(400);
+        //        }
+        //        finally
+        //        {
+        //            smtpClient.Disconnect(true);
+        //        }
+
+        //        return new StatusCodeResult(200);
+        //    }
+
+        //    return new StatusCodeResult(400);
+        //}
+
+        public async Task<bool> CheckStatusOfAccAsync(string username)
+        {
+            var user = await GetFrozenAccAsync(username);
+
+            if (user == null)
+            {
+                return false;
+            }
+
+            //if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days > user.FreezingDeadline)
+            //{
+            //    return true;
+            //}
+
+            return true;
+        }
+
+        public async Task FreezeAccAsync(int userId, string reason)
         {
             try
             {
                 var user = await GetAccByIdAsync(userId);
 
+                var stats = await GetQuizStatsByIdAsync(userId);
+
                 if (user != null)
                 {
-                    var removedUser = _context.Users.Remove(user!);
+                    user.IsFrozen = true;
+
+                    user.FreezingReason = reason;
+
+                    foreach (var stat in stats)
+                    {
+                        stat!.IsVisible = false;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public async Task UnfreezeAccAsync(int userId)
+        {
+            try
+            {
+                var user = await GetAccByIdAsync(userId);
+
+                var stats = await GetQuizStatsByIdAsync(userId);
+
+                if (user != null)
+                {
+                    user.IsFrozen = false;
+
+                    foreach(var stat in stats)
+                    {
+                        stat!.IsVisible = true;
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        public async Task DeleteAccAsync(int userId, DeletedAccount deletedAccount)
+        {
+            try
+            {
+                var user = await GetAccByIdAsync(userId);
+                var stats = await GetQuizStatsByIdAsync(userId);
+
+                if (user != null)
+                {
+                    _context.Users.Remove(user!);
+
+                    _context.Quizzes.RemoveRange(stats!);
 
                     await _context.DeletedAccounts.AddAsync(deletedAccount);
 
@@ -46,9 +224,44 @@ namespace KahootWebApi.Services
                 return null;
             }
 
-            return await _context.Users.SingleOrDefaultAsync(x => x.Id == userId);
+            try
+            {
+                return await _context.Users.SingleOrDefaultAsync(x => x.Id == userId);
+            }
+            catch (Exception ex) when(ex is ArgumentException or ArgumentNullException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
+        private async Task<IEnumerable<QuizStat?>> GetQuizStatsByIdAsync(int? userId)
+        {
+            if (userId == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return await _context.Quizzes.Where(x => x.UserId == userId).ToListAsync();
+            }
+            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
+
+        private async Task<User?> GetFrozenAccAsync(string username)
+        {
+            try
+            {
+                return await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.IsFrozen == true);
+            }
+            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or OperationCanceledException)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+        }
 
         private static string RandomPasswordGenerator(int length)
         {
@@ -137,9 +350,9 @@ namespace KahootWebApi.Services
         {
             try
             {
-                var password = await _context.Users.Where(x => x.Username == login && x.Password == oldPassword).FirstOrDefaultAsync();
+                var password = await _context.Users.Where(x => x.Username == login).FirstOrDefaultAsync();
 
-                if (password != null)
+                if (password != null && BC.EnhancedVerify(oldPassword, password.Password, HashType.SHA512))
                 {
                     password.Password = newPassword;
 
@@ -218,7 +431,6 @@ namespace KahootWebApi.Services
                 userName += vowels[rand.Next(vowels.Length)];
 
                 int counter = 2;
-
 
                 if (rand.Next(1, 3) == 1)
                 {

@@ -8,7 +8,9 @@ export class User{
               public email: string | undefined,
               public backUpEmail: string | undefined,
               public birthday: Date | undefined,
-              public role: string | undefined) {  }
+              public role: string | undefined,
+              public provider: string | undefined,
+              public photoURL: string | undefined) {  }
 
   public get Id() {
     return this.id;
@@ -44,6 +46,14 @@ export class User{
 
   public get Role() {
     return this.role;
+  }
+
+  public get Provider() {
+    return this.provider;
+  }
+
+  public get PhotoURL() {
+    return this.photoURL;
   }
 }
 

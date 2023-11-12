@@ -8,15 +8,24 @@ import {Router} from "@angular/router";
 })
 export class EmailConfirmedFormComponent implements OnInit{
   private url: string = "https://localhost:7176/api/v1/CredentialsChanging/";
-  constructor() {
+  public seconds: number = 5;
+  constructor(private router: Router) {
   }
 
   ngOnInit(): void {
     this.setFlagToTrue();
+
+    setInterval(() => {
+      this.seconds--;
+    }, 1000);
+
+    setTimeout(() => {
+      this.router.navigate(['/app/player-options-form']);
+    }, 5000);
   }
 
-  private setFlagToTrue(): void{
-    fetch(this.url + `ChangeEmailConfirmationChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
+  private async setFlagToTrue(): Promise<void>{
+    await fetch(this.url + `ChangeEmailConfirmationChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "POST",
         headers: {
         "Content-Type": "application/json"

@@ -16,24 +16,24 @@ export class ForgotPasswordFormComponent {
   constructor(private el: ElementRef, private router: Router) {
   }
 
-  private CheckStatus(): boolean{
-    fetch(this.url2 + `IsEmailConfirmed?id=${parseInt(localStorage.getItem("userId")!)}`, {
-      method: "GET",
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      localStorage.setItem("IsMailConfirmed", JSON.parse(JSON.stringify(data)));
-    });
+  // private CheckStatus(email: string): boolean{ // !
+  //   fetch(this.url2 + `IsEmailConfirmed?id=${email}`, {
+  //     method: "GET",
+  //   }).then((response) => {
+  //     return response.json();
+  //   }).then((data) => {
+  //     localStorage.setItem("IsMailConfirmed", JSON.parse(JSON.stringify(data)));
+  //   });
+  //
+  //   return JSON.parse(localStorage.getItem("IsMailConfirmed")!);
+  // }
 
-    return JSON.parse(localStorage.getItem("IsMailConfirmed")!);
-  }
-
-  public ResetPassword(e: any, email: string): void{
+  public async ResetPassword(e: any, email: string): Promise<void>{
     e.preventDefault();
 
-    if (email !== "" && this.CheckStatus())
+    if (email !== "")
     {
-      fetch(this.url + `ResetPassword?email=${email}`, {
+      await fetch(this.url + `ResetPassword?email=${email}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

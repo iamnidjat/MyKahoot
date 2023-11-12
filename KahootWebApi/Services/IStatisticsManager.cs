@@ -7,7 +7,7 @@ namespace KahootWebApi.Services
         //QuizStat UploadResultAsync(QuizStat item);
         //Task<QuizStat> UploadResultAsync(QuizStat item);
         Task UploadResultAsync(QuizStat item);
-        Task<IEnumerable<QuizStat>> DownloadResultAsync(int userId);
-        Task<IEnumerable<QuizStat>> DownloadResultAsync(string quizType);
+        Task<IEnumerable<QuizStat>> DownloadResultAsync(int userId, string catType, string quizType, string level);
+        Task<IEnumerable<QuizStat>> DownloadResultAsync(string catType, string quizType, string level);
     }
 }

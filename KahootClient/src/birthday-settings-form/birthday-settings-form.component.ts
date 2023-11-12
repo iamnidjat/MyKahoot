@@ -15,12 +15,12 @@ export class BirthdaySettingsFormComponent {
   constructor(private router: Router) {
   }
 
-  public changeBirthday(e:any, oldBirthday: string, newBirthday: string, cNewBirthday: string) {
+  public async changeBirthday(e:any, oldBirthday: string, newBirthday: string, cNewBirthday: string): Promise<void> {
     e.preventDefault();
 
     if (newBirthday === cNewBirthday)
     {
-      fetch(this.url + `ChangeBirthday?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldBirthday=${new Date(oldBirthday).toISOString()}&newBirthday=${new Date(newBirthday).toISOString()}`, {
+      await fetch(this.url + `ChangeBirthday?login=${localStorage.getItem("Login") || localStorage.getItem("newLogin")}&oldBirthday=${new Date(oldBirthday).toISOString()}&newBirthday=${new Date(newBirthday).toISOString()}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json"

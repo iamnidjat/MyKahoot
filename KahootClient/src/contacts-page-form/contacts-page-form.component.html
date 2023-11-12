@@ -1,53 +1,51 @@
 <app-navbar-form></app-navbar-form>
 
 <div id="page-container">
-<div class="new_home_web">
-  <div class="responsive-container-block big-container">
-    <img class="imgBG" src="https://workik-widget-assets.s3.amazonaws.com/widget-assets/images/aw65.png">
-    <div class="responsive-container-block textContainer">
-      <div class="topHead">
-        <p class="text-blk heading">
-          Get in
-          <span class="orangeText">
-            touch
-          </span>
-        </p>
-        <div class="orangeLine" id="w-c-s-bgc_p-2-dm-id">
+  <div class="new_home_web">
+    <div class="responsive-container-block big-container">
+      <div class="responsive-container-block textContainer">
+        <div class="topHead">
+          <p class="text-blk heading">
+            {{"GetIn" | translate}}
+            <span class="orangeText">
+              {{"Touch" | translate}}
+            </span>
+          </p>
+          <div style="width: 200px" class="orangeLine" id="w-c-s-bgc_p-2-dm-id">
+          </div>
         </div>
       </div>
-    </div>
-    <div class="responsive-container-block container">
-      <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-7 wk-ipadp-10 line" id="i69b">
-        <form class="form-box">
-          <div class="container-block form-wrapper">
-            <div class="responsive-container-block">
-              <div class="left4">
-                <div class="responsive-cell-block wk-ipadp-6 wk-tab-12 wk-mobile-12 wk-desk-6" id="i10mt-2">
-                  <input class="input" #FirstName id="ijowk-2" name="FirstName" placeholder="First Name">
+      <div class="responsive-container-block container">
+        <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-7 wk-ipadp-10 line" id="i69b">
+          <form class="form-box">
+            <div class="container-block form-wrapper">
+              <div class="responsive-container-block">
+                <div class="left4">
+                  <div class="responsive-cell-block wk-ipadp-6 wk-tab-12 wk-mobile-12 wk-desk-6" id="i10mt-2">
+                    <input class="input" #FirstName id="ijowk-2" name="FirstName" placeholder="{{'FirstNameP' | translate}}">
+                  </div>
+                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
+                    <input class="input" #LastName id="indfi-2" name="LastName" placeholder="{{'LastNameP' | translate}}">
+                  </div>
+                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
+                    <input class="input" #Email id="ipmgh-2" name="Email" placeholder="{{'EmailP' | translate}}">
+                  </div>
+                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 lastPhone">
+                    <input class="input" #PhoneNumber id="imgis-2" name="PhoneNumber" placeholder="{{'PhoneP' | translate}}">
+                  </div>
                 </div>
-                <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                  <input class="input" #LastName id="indfi-2" name="LastName" placeholder="Last Name">
-                </div>
-                <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                  <input class="input" #Email id="ipmgh-2" name="Email" placeholder="Email Address">
-                </div>
-                <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 lastPhone">
-                  <input class="input" #PhoneNumber id="imgis-2" name="PhoneNumber" placeholder="Phone Number">
+                <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12" id="i634i-2">
+                  <textarea class="textinput" #Message id="i5vyy-2" placeholder="{{'MessageP' | translate}}"></textarea>
                 </div>
               </div>
-              <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12" id="i634i-2">
-                <textarea class="textinput" #Message id="i5vyy-2" placeholder="Message"></textarea>
-              </div>
+              <input type="button" class="send" (click)="SendMessage($event, FirstName.value, LastName.value, Email.value, PhoneNumber.value, Message.value)"  id="w-c-s-bgc_p-1-dm-id" value="{{'Send' | translate}}">
             </div>
-            <input type="button" class="send" (click)="SendMessage($event, FirstName.value, LastName.value, Email.value, PhoneNumber.value, Message.value)"  id="w-c-s-bgc_p-1-dm-id" value="Send">
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <app-footer-form></app-footer-form>
-</div>
-
 <app-scroll-to-top-form></app-scroll-to-top-form>

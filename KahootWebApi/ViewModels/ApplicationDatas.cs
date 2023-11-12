@@ -2,5 +2,5 @@
 {
     public static string FirstMail { get; } = "gurbanli.nidjat001@gmail.com";
 
-    public static string Password { get; } = "cdnc egfg bvnc lvfj";
+    public static string Password { get; } = "cdnc egfg bvnc lvfj"; 
 }

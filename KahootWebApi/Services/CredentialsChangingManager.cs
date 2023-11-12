@@ -187,7 +187,7 @@ namespace KahootWebApi.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SetUsernameAsync(string oldUsername, string newUsername)
+        public async Task<HttpResponseMessage> SetUsernameAsync(string oldUsername, string newUsername, DateTime DateOfChangingUsername)
         {
             try
             {
@@ -196,6 +196,8 @@ namespace KahootWebApi.Services
                 if (user != null)
                 {
                     user.Username = newUsername;
+
+                    user.DateOfChangingUsername = DateOfChangingUsername;
 
                     await _context.SaveChangesAsync();
                 }

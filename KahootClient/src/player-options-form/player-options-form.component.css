@@ -1,119 +1,78 @@
-@import url(https://fonts.googleapis.com/css?family=Shadows+Into+Light);
+@import "src/creating-quiz-option-form/creating-quiz-option-form.component.css";
 
-.allthethings {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 7.5%;
-}
-
-/*//!*/
-.allthethings nav div{
-  height:50px;
-  width:750px;
-  background:#006680;
-  font-size:30px;
-  text-align:center;
-  font-family:shadows into light;
-  color:orange;
-  -webkit-transition:0.5s;
-  transition:0.5s;
-  cursor:pointer;
-  border-radius: 15px;
-  margin-top: 20px;
-}
-
-.allthethings nav div:not(:last-child):hover{
-  background:#7A0000;
-  color:white;
-  -webkit-transform:rotate(-2deg);
-  transform:rotate(-2deg);
-}
-
-.allthethings nav div:last-child:hover{
-  background:#7A0000;
-}
-
-.wrapper {
-  position: fixed;
+.wrapper{
+  position: absolute;
+  width: 100%;
+  max-width: 350px;
+  background-color: #fff;
+  border-radius: 8px;
   bottom: 30px;
   right: 30px;
-  max-width: 345px;
-  width: 100%;
-  background: #fff;
-  border-radius: 8px;
-  padding: 15px 25px 22px;
-  transition: right 0.3s ease;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  animation: animation 3s;
-  z-index: 999;
+  padding: 15px 25px 25px;
+  z-index: 99999;
+  animation-name: animation;
+  animation-duration: 5s;
 }
-.wrapper.show {
-  right: 20px;
-}
-.wrapper header {
+
+.wrapper header{
   display: flex;
   align-items: center;
   column-gap: 15px;
 }
-header i {
+
+header i{
   color: #4070f4;
   font-size: 32px;
 }
-header h2 {
+
+header h2{
   color: #4070f4;
   font-weight: 500;
 }
-.wrapper .data {
+
+.wrapper data {
   margin-top: 16px;
 }
-.wrapper .data p {
+
+.wrapper data p{
   color: #333;
   font-size: 16px;
 }
-.data p a {
+
+.data p a{
   color: #4070f4;
   text-decoration: none;
-}
-.data p a:hover {
-  text-decoration: underline;
   cursor: pointer;
 }
-.wrapper .buttons {
-  margin-top: 16px;
+
+.data p a:hover{
+  text-decoration: underline;
+}
+
+.wrapper .buttons{
+  margin-top: 20px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.buttons .button {
+
+.buttons .button{
   border: none;
+  width: calc(100% / 2 - 10px);
   color: #fff;
   padding: 8px 0;
   border-radius: 4px;
-  background: #4070f4;
-  cursor: pointer;
-  width: calc(100% / 2 - 10px);
-  transition: all 0.2s ease;
-}
-.buttons #acceptBtn:hover {
-  background-color: #034bf1;
-}
-#declineBtn {
-  border: 2px solid #4070f4;
-  background-color: #fff;
-  color: #4070f4;
-}
-#declineBtn:hover {
   background-color: #4070f4;
-  color: #fff;
+  cursor: pointer;
+}
+
+.buttons .button:hover{
+  background-color: #034bf1;
 }
 
 @keyframes animation {
-  from {right: -370px}
-  to {right: 30px}
-}
-
-@media screen and (max-width: 500px) and (min-width: 350px) {
-
+  0%   {right: -350px; bottom: 30px;}
+  50%  {right: 15px; bottom: 30px;}
+  100% {right: 30px; bottom: 30px;}
 }

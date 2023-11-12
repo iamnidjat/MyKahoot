@@ -1,5 +1,4 @@
 import {Component, ElementRef} from '@angular/core';
-import {AddNewCategoryPopupFormComponent} from "../add-new-category-popup-form/add-new-category-popup-form.component";
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 import {Router} from "@angular/router";
 
@@ -8,10 +7,11 @@ import {Router} from "@angular/router";
   templateUrl: './choose-type-of-quiz-form.component.html',
   styleUrls: ['./choose-type-of-quiz-form.component.css']
 })
+
 export class ChooseTypeOfQuizFormComponent {
   variable: CreatingQuizOptionFormComponent;
   flag: boolean = false;
-  constructor(private el: ElementRef, private router: Router, private  _variable: CreatingQuizOptionFormComponent,) {
+  constructor(private el: ElementRef, private router: Router, private  _variable: CreatingQuizOptionFormComponent) {
     this.variable = _variable;
   }
 
@@ -21,6 +21,7 @@ export class ChooseTypeOfQuizFormComponent {
     modal.style.display = "none";
 
     this.variable.flag = false;
+    this.variable.flag2 = false;
   }
 
   ToCreatingTestProcess(format: any): any{

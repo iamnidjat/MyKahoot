@@ -322,3 +322,4 @@ C:\Important Files\Kahoot Project\WebApiUnitTests\obj\Debug\net7.0\refint\WebApi
 C:\Important Files\Kahoot Project\WebApiUnitTests\obj\Debug\net7.0\WebApiUnitTests.pdb
 C:\Important Files\Kahoot Project\WebApiUnitTests\obj\Debug\net7.0\WebApiUnitTests.genruntimeconfig.cache
 C:\Important Files\Kahoot Project\WebApiUnitTests\obj\Debug\net7.0\ref\WebApiUnitTests.dll
+C:\Important Files\Kahoot Project\WebApiUnitTests\bin\Debug\net7.0\BCrypt.Net-Next.dll

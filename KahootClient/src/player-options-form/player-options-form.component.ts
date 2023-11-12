@@ -22,10 +22,6 @@ export class PlayerOptionsFormComponent implements OnInit{
     {
       this.role = 'Student';
     }
-    else if (localStorage.getItem('Role') === JSON.stringify("Personal"))
-    {
-      this.role = 'Personal';
-    }
 
     this.cookie = _cookie;
   }
@@ -90,16 +86,5 @@ export class PlayerOptionsFormComponent implements OnInit{
 
       wrapper.style.display = "none";
     }
-
-    // let wrapper = this.el.nativeElement.querySelector(".wrapper");
-    //
-    // if (localStorage.getItem("mode") === "dark") {
-    //   wrapper.style.backgroundColor = "red";
-    //   alert(5);
-    // }
-    // else {
-    //   wrapper.style.backgroundColor = "white";
-    //   alert(4);
-    // }
   }
 }

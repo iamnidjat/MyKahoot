@@ -1,29 +1,27 @@
 <app-navbar-form></app-navbar-form>
 
-<body style="height: 100vh; margin-top: -10%;">
 <ng-container *ngIf="role === 'Teacher'">
-  <div class="allthethings">
+  <div id="allthethings">
     <nav>
-      <div сlass="mixed-test"  (click)="ToStats()"><p>Stats</p></div>
-      <div сlass="programming" (click)="ToTopResults()"><p>Top-10 results</p></div>
-      <div сlass="math"  (click)="ToSettings()"><p>Settings</p></div>
-      <div сlass="yourQuizzes" ><p>Your Quizzes</p></div>
-      <div сlass="exit" (click)="BackOptions()"><p>Exit</p></div>
+      <div class="fields" (click)="ToStats()"><p>{{"Stats" | translate}}</p></div>
+      <div class="fields" (click)="ToTopResults()"><p>{{"Top10Results" | translate}}</p></div>
+      <div class="fields" (click)="ToSettings()"><p>{{"Settings" | translate}}</p></div>
+      <div class="fields" (click)="ToYourQuizzes()"><p>{{"YourQuizzes" | translate}}</p></div>
+      <div class="fields" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
     </nav>
   </div>
 </ng-container>
 
 <ng-container *ngIf="role === 'Student'">
-  <div class="allthethings">
+  <div id="allthethings2">
     <nav>
-      <div class="mixed-test"  (click)="ToStats()"><p>Stats</p></div>
-      <div class="programming" (click)="ToTopResults()"><p>Top-10 results</p></div>
-      <div class="math"  (click)="ToSettings()"><p>Settings</p></div>
-      <div class="exit" (click)="BackOptions()"><p>Exit</p></div>
+      <div class="fields"  (click)="ToStats()"><p>{{"Stats" | translate}}</p></div>
+      <div class="fields" (click)="ToTopResults()"><p>{{"Top10Results" | translate}}</p></div>
+      <div class="fields"  (click)="ToSettings()"><p>{{"Settings" | translate}}</p></div>
+      <div class="fields" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
     </nav>
   </div>
 </ng-container>
-</body>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

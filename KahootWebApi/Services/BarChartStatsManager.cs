@@ -12,11 +12,11 @@ namespace KahootWebApi.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<QuizStat>> DownloadResultAsync(string quizType)
+        public async Task<IEnumerable<QuizStat>> DownloadResultAsync(string catType, string quizType, string level)
         {
             try
             {
-                return await _context.Quizzes.OrderByDescending(x => x.Score).Take(5).Where(x => x.QuizName == quizType).ToListAsync();
+                return await _context.Quizzes.OrderByDescending(x => x.Score).Take(5).Where(x => x.CategoryName == catType && x.QuizName == quizType && x.Level == level).ToListAsync();
             }
             catch (ArgumentNullException ex)
             {

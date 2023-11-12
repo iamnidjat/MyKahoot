@@ -1,20 +1,25 @@
-import {User} from "./User";
-
 export class QuizModel{
   public id: number | undefined;
 
-  constructor(public quizName: string | undefined,
+  constructor(public categoryName: string | undefined,
+              public quizName: string | undefined,
               public score: number | undefined,
-              public userId: number | undefined,
               public userName: string | undefined,
-              public passedDate: Date) {  }
+              public passedDate: Date,
+              public isVisible: boolean | undefined,
+              public level: string | undefined,
+              public userId: number | undefined) {  }
 
   public get Id() {
     return this.id;
   }
 
+  public get CategoryName() {
+    return this.categoryName;
+  }
+
   public get QuizName() {
-    return this.quizName;
+      return this.quizName;
   }
 
   public get UserId() {
@@ -31,5 +36,13 @@ export class QuizModel{
 
   public get PassedDate() {
     return this.passedDate;
+  }
+
+  public get IsVisible() {
+    return this.isVisible;
+  }
+
+  public get Level() {
+    return this.level;
   }
 }

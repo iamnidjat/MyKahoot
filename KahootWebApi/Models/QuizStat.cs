@@ -9,6 +9,9 @@ namespace KahootWebApi.Models
         public int Id { get; set; }
 
         [Required]
+        public string? CategoryName { get; set; }
+
+        [Required]
         public string? QuizName { get; set; }
 
         [Required]
@@ -19,6 +22,11 @@ namespace KahootWebApi.Models
 
         [Required]
         public DateTime PassedDate { get; set; }
+
+        public bool IsVisible { get; set; } = true;
+
+        [Required]
+        public string? Level { get; set; }
 
         public int UserId { get; set; }
 

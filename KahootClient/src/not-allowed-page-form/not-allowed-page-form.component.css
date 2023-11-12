@@ -1,10 +1,14 @@
 .page_404{
   font-family: 'Arvo', serif;
-  height: 100vh;
+  height: 800px;
   width: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .page_404  img{ width:100%;}

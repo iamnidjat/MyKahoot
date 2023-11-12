@@ -7,6 +7,7 @@ import {PlayerOptionsFormComponent} from "../player-options-form/player-options-
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.css']
 })
+
 export class ProfileFormComponent {
   role: string = "";
     constructor(private router: Router, private _originalRole: PlayerOptionsFormComponent) {
@@ -18,15 +19,19 @@ export class ProfileFormComponent {
   }
 
   public ToStats(): void{
-    this.router.navigate(['/app/stats-form']);
+    localStorage.setItem("ToStats", "ToStats");
+    this.router.navigate(['/app/choose-field-form']);
   }
 
   public ToTopResults(): void{
     this.router.navigate(['/app/choose-field-form']);
   }
 
+  public ToYourQuizzes(): void{
+    this.router.navigate(['/app/my-quizzes-form']);
+  }
+
   public BackOptions(): void{
     this.router.navigate(['/app/player-options-form']);
   }
-
 }
