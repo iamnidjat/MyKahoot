@@ -248,3 +248,8 @@ C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.pdb
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.genruntimeconfig.cache
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\ref\KahootWebApi.dll
 C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\BCrypt.Net-Next.dll
+C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\reCAPTCHA.AspNetCore.dll
+C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Xceed.Document.NET5.dll
+C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Xceed.Words.NET5.dll
+C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\System.IO.Packaging.dll
+C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Newtonsoft.Json.dll

@@ -1,0 +1,11 @@
+<div  class="modal" style="display: block">
+  <div class="modal-content">
+    <span class="close" (click)="ClosePopUp()">&times;</span>
+    <div class="state">{{"ChooseATypeOfYourQuiz" | translate}}</div>
+    <input type="button" #id1 id="four-answers" (click)="ToCreatingTestProcess(id1)" class="createButton" value="4 {{'answers' | translate}}">
+    <input type="button" #id2 id="three-answers" (click)="ToCreatingTestProcess(id2)"  class="createButton" value="3 {{'answers' | translate}}">
+    <input type="button" #id3 id="true-false-answers" (click)="ToCreatingTestProcess(id3)"  class="createButton" value="{{'trueFalse' | translate}}">
+  </div>
+</div>
+
+<app-specify-name-of-test *ngIf="creatingTestProcessFlag"></app-specify-name-of-test>

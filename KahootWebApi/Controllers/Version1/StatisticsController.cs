@@ -17,32 +17,28 @@ namespace KahootWebApi.Controllers.v1
             _manager = manager;
         }
 
-        //[HttpPost("UploadResult")]
-        //public QuizStat UploadResult(QuizStat model)
-        //{
-        //    return _manager.UploadResultAsync(model);
-        //}
-
-        // Do not touch it !!!
-        //[HttpPost("UploadResult")]
-        //public async Task<QuizStat> UploadResult(QuizStat model)
-        //{
-        //    return await _manager.UploadResultAsync(model);
-        //}
-
         [HttpPost("UploadResult")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task UploadResult(QuizStat model)
         {
             await _manager.UploadResultAsync(model);
         }
 
         [HttpGet("DownloadResult/{userId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<QuizStat>> DownloadResult(int userId, string catType, string quizType, string level)
         {
             return await _manager.DownloadResultAsync(userId, catType, quizType, level);
         }
         
         [HttpGet("DownloadResults")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<QuizStat>> DownloadResult(string catType, string quizType, string level)
         {
             return await _manager.DownloadResultAsync(catType, quizType, level);

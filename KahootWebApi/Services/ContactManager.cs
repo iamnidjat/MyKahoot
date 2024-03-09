@@ -4,11 +4,19 @@ using MimeKit;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using KahootWebApi.Models;
 
 namespace KahootWebApi.Services
 {
     public class ContactManager : IContactManager
     {
+        private readonly ILogger<ContactManager> _logger;
+
+        public ContactManager(ILogger<ContactManager> logger)
+        {
+            _logger = logger;
+        }
+
         public async Task<IActionResult> SendFeedbackAsync(string firstName, string lastName, string email, string phoneNumber, string message)
         {
             using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
@@ -37,6 +45,7 @@ namespace KahootWebApi.Services
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
+                    _logger.LogError(ex, "An error occurred in the SendFeedbackAsync method.");
                     return new StatusCodeResult(400);
                 }
                 finally
@@ -47,6 +56,7 @@ namespace KahootWebApi.Services
                 return new StatusCodeResult(200);
             }
 
+            _logger.LogError("Mail is not valid.");
             return new StatusCodeResult(400);
         }
     }

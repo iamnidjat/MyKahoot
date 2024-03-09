@@ -1,0 +1,38 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="form">
+  <div class="form-panel one">
+    <div class="form-header" style="text-align: center; margin-top: -15px">
+      <h1>MyKahoot</h1>
+      <h1>ADMIN PANEL</h1>
+    </div>
+    <div class="form-content">
+      <form>
+        <div class="form-group">
+          <label>{{'Username' | translate}}</label>
+          <input type="text" #Login id="usernameLogin" name="username" required="required" (change)="IsLoginFieldEmpty()" (cut)="false" (copy)="false" (paste)="false"/>
+        </div>
+        <div class="form-group">
+          <label>{{"Password" | translate}}</label>
+          <input [type]="Visibility ? 'text' : 'password'" #Password id="passwordLogin" name="password" required="required" (cut)="false" (copy)="false" (paste)="false"/>
+          <button class="hidden-eye" (click)="ChangeVisibility()">
+            <span [class]="Visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+          </button>
+        </div>
+        <div class="form-group">
+          <label>{{'Email' | translate}}</label>
+          <input type="text" #Email id="emailLogin" name="username" required="required" (change)="IsLoginFieldEmpty()" (cut)="false" (copy)="false" (paste)="false"/>
+        </div>
+        <div>
+          <button type="submit" (click)="LogIn($event, Email.value, Login.value, Password.value)" style="width: 450px">{{"Login" | translate}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+
+
+

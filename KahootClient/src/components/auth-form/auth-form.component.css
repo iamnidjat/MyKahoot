@@ -1,0 +1,160 @@
+.alert {
+  color: red;
+  margin-top: 5px;
+}
+
+.form {
+  z-index: 15;
+  position: absolute;
+  background: #fff;
+  width: 600px;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+  box-shadow: 0 0 30px rgba(0, 0, 0, .1);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  margin: 0 0 20px;
+}
+
+.form-group label {
+  display: block;
+  margin: 0 0 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.form-group input {
+  outline: none;
+  display: block;
+  background: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  color: rgba(0, 0, 0, 0.6);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 500;
+  line-height: inherit;
+  -webkit-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
+.form-group button:hover {
+  opacity: .8;
+}
+
+.form-group button {
+  outline: none;
+  background: #4285f4;
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  padding: 12px 20px;
+  color: #fff;
+  font-weight: 500;
+  line-height: inherit;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.form-group .form-remember {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.form-group .form-remember input[type='checkbox'] {
+  display: inline-block;
+  width: auto;
+  margin: 0 10px 0 0;
+}
+.form-group .form-recovery {
+  color: #4285f4;
+  font-size: 12px;
+  text-decoration: none;
+}
+.form-panel {
+  padding: 60px calc(5% + 60px) 60px 60px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.form-header {
+  margin: 0 0 40px;
+}
+.form-header h1 {
+  padding: 4px 0;
+  color: #4285f4;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.two .form-header h1 {
+  position: relative;
+  z-index: 40;
+  color: #fff;
+}
+
+.hidden-eye{
+  width: 50px !important;
+  height: 47px;
+  position: relative;
+  top: -47px;
+  left: 400px;
+}
+
+.random-login,
+#hidden-eye1,
+#hidden-eye2{
+  width: 50px !important;
+  height: 47px;
+  position: relative;
+  top: -47px;
+  left: 370px;
+}
+
+.register-route:hover,
+#guest-sign:hover,
+#forgot-password:hover{
+  opacity: .66;
+}
+
+h2 {
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) and (min-width: 450px) {
+  .form{
+    width: 450px;
+  }
+}
+
+@media screen and (max-width: 450px) and (min-width: 300px) {
+  .form{
+    width: 350px;
+  }
+}

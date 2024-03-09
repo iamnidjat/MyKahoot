@@ -6,10 +6,12 @@ namespace KahootWebApi.Services
     public class StatisticsManager : IStatisticsManager
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<StatisticsManager> _logger;
 
-        public StatisticsManager(KahootDbContext context)
+        public StatisticsManager(KahootDbContext context, ILogger<StatisticsManager> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<QuizStat>> DownloadResultAsync(int userId, string catType, string quizType, string level)
@@ -20,7 +22,8 @@ namespace KahootWebApi.Services
             }
             catch (ArgumentNullException ex)
             {
-                throw new ArgumentNullException(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the DownloadResultAsync method.");
+                return Enumerable.Empty<QuizStat>();
             }
         }
 
@@ -28,29 +31,14 @@ namespace KahootWebApi.Services
         {
             try
             {
-                return await _context.Quizzes.OrderByDescending(x => x.Score).Take(10).Where(x => x.QuizName == quizType && x.CategoryName == catType && x.Level == level).ToListAsync();
+                return await _context.Quizzes.OrderByDescending(x => x.Score).Take(10).Where(x => x.QuizName == quizType && x.CategoryName == catType && x.Level == level && x.IsVisible).ToListAsync();
             }
             catch (ArgumentNullException ex)
             {
-                throw new ArgumentNullException(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the DownloadResultsAsync method.");
+                return Enumerable.Empty<QuizStat>();
             }
         }
-
-        //public QuizStat UploadResultAsync(QuizStat item)
-        //{
-        //    try
-        //    {
-        //        var result = _context.Quizzes.Add(item);
-
-        //        _context.SaveChangesAsync();
-
-        //        return result.Entity;
-        //    }
-        //    catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
-        //    {
-        //        throw new Exception(ex.Message, ex);
-        //    }
-        //}
 
         public async Task UploadResultAsync(QuizStat item)
         {
@@ -62,7 +50,7 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the UploadResultAsync method.");
             }
         }
     }

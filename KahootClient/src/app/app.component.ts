@@ -1,7 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {TranslateService} from "@ngx-translate/core";
-
+import {Component, HostListener} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,31 +6,19 @@ import {TranslateService} from "@ngx-translate/core";
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit{
-
-  constructor(private router: Router, private translate: TranslateService) {
-    translate.setDefaultLang('en');
-
-    if (localStorage.getItem("lang") === "en")
-    {
-      translate.use('en');
-    }
-    else if (localStorage.getItem("lang") === "ru")
-    {
-      translate.use('ru');
-    }
-    else if (localStorage.getItem("lang") === "az")
-    {
-      translate.use('az');
-    }
+export class AppComponent {
+  constructor() {
   }
 
-  ngOnInit(): void {
-
-  }
-
-  public switchLang(lang: string): void{
-    this.translate.use(lang);
-    localStorage.setItem("lang", lang);
-  }
+  // To clear local storages when the Angular app is closed,
+  // @HostListener('window:unload', ['$event'])
+  // clearLocalStorageOnExit(event: Event): void {
+  //   localStorage.removeItem('Login');
+  //   localStorage.removeItem('Role');
+  //   localStorage.removeItem('userId');
+  //   localStorage.removeItem('userMail');
+  //   localStorage.removeItem('photoURL');
+  //   localStorage.removeItem('Guest');
+  // }
 }
+

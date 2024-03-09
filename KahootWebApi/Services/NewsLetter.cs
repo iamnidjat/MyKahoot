@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using MimeKit;
-using System.Security.Cryptography.X509Certificates;
 
 namespace KahootWebApi.Services
 {
     public class NewsLetter : INewsLetter
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<NewsLetter> _logger;
 
-        public NewsLetter(KahootDbContext context)
+        public NewsLetter(KahootDbContext context, ILogger<NewsLetter> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IActionResult> SendingNewsAsync(string news)
@@ -47,6 +47,7 @@ namespace KahootWebApi.Services
                     }
                     catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                     {
+                        _logger.LogError(ex, "An error occurred in the SendingNewsAsync method.");
                         return new StatusCodeResult(400);
                     }
                     finally
@@ -57,9 +58,11 @@ namespace KahootWebApi.Services
                     return new StatusCodeResult(200);
                 }
 
+                _logger.LogError("Mail is not valid.");
                 return new StatusCodeResult(400);
             }
 
+            _logger.LogError("Mails are not valid."); //
             return new StatusCodeResult(400);
         }
 
@@ -71,7 +74,8 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException or InvalidOperationException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetAllEmails method.");
+                return Enumerable.Empty<string>();
             }
         }
     }

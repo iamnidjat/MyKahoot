@@ -8,11 +8,14 @@ namespace KahootWebApi.Services
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
+        private readonly ILogger<AdminManager> _logger;
 
-        public AdminManager(KahootDbContext context, IAccountManager manager)
+        public AdminManager(KahootDbContext context, IAccountManager manager,
+            ILogger<AdminManager> logger)
         {
             _context = context;
             _manager = manager;
+            _logger = logger;
         }
 
         public async Task<string[]> SendCredentialsAsync(string email)
@@ -48,7 +51,8 @@ namespace KahootWebApi.Services
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
-                    return credentials;
+                    _logger.LogError(ex, "An error occurred in the SendCredentialsAsync method.");
+                    return Array.Empty<string>();
                 }
                 finally
                 {
@@ -58,7 +62,8 @@ namespace KahootWebApi.Services
                 return credentials;
             }
 
-            return credentials;
+            _logger.LogError("Mail is not valid.");
+            return Array.Empty<string>(); ;
         }
 
         private static int RandomPasswordLength()
@@ -70,8 +75,8 @@ namespace KahootWebApi.Services
 
         private static string RandomPasswordGenerator(int length)
         {
-            try
-            {
+            //try
+            //{
                 byte[] result = new byte[length];
 
                 for (int index = 0; index < length; index++)
@@ -80,11 +85,11 @@ namespace KahootWebApi.Services
                 }
 
                 return System.Text.Encoding.ASCII.GetString(result);
-            }
-            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
-            {
-                throw new Exception(ex.Message, ex);
-            }
+            //}
+            //catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
+            //{
+            //    throw new Exception(ex.Message, ex);
+            //}
         }
     }
 }

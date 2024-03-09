@@ -11,5 +11,6 @@ namespace KahootWebApi.Services
         Task<bool> IsEmailConfirmed(string mail);
         Task<int> GetNextDeadlineForChangingName(int id);
         Task<bool> DoesUserExist(string username);
+        Task<bool> IsEmailUsed(string mail);
     }
 }

@@ -1,10 +1,6 @@
-﻿using System.Net;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MimeKit;
-using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using KahootWebApi.Models;
 using BCrypt.Net;
 using BC = BCrypt.Net.BCrypt;
@@ -14,17 +10,19 @@ namespace KahootWebApi.Services
     public class AccountManager : IAccountManager
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<AccountManager> _logger;
 
-        public AccountManager(KahootDbContext context) 
+        public AccountManager(KahootDbContext context, ILogger<AccountManager> logger) 
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task AddSocialUser(SocialUser socialUser)
         {
             try
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == socialUser.Username); // !
+                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == socialUser.Username);
 
                 if (user == null)
                 {
@@ -44,7 +42,7 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the AddSocialUser method.");
             }
         }
 
@@ -63,7 +61,8 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is OperationCanceledException or InvalidOperationException or ArgumentNullException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the PasswordsMatching method.");
+                return false;
             }
         }
 
@@ -122,21 +121,29 @@ namespace KahootWebApi.Services
         //    return new StatusCodeResult(400);
         //}
 
-        public async Task<bool> CheckStatusOfAccAsync(string username)
+        public async Task<bool> CheckStatusOfAccAsync(int userId)
         {
-            var user = await GetFrozenAccAsync(username);
-
-            if (user == null)
+            try
             {
+                var user = await GetFrozenAccAsync(userId);
+
+                if (user == null)
+                {
+                    return false;
+                }
+
+                //if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days > user.FreezingDeadline)
+                //{
+                //    return true;
+                //}
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the CheckStatusOfAccAsync method.");
                 return false;
             }
-
-            //if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days > user.FreezingDeadline)
-            //{
-            //    return true;
-            //}
-
-            return true;
         }
 
         public async Task FreezeAccAsync(int userId, string reason)
@@ -163,7 +170,7 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the FreezeAccAsync method.");
             }
         }
 
@@ -189,7 +196,7 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the UnfreezeAccAsync method.");
             }
         }
 
@@ -198,6 +205,7 @@ namespace KahootWebApi.Services
             try
             {
                 var user = await GetAccByIdAsync(userId);
+
                 var stats = await GetQuizStatsByIdAsync(userId);
 
                 if (user != null)
@@ -213,7 +221,7 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is DbUpdateConcurrencyException or DbUpdateException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the DeleteAccAsync method.");
             }
         }
 
@@ -228,9 +236,10 @@ namespace KahootWebApi.Services
             {
                 return await _context.Users.SingleOrDefaultAsync(x => x.Id == userId);
             }
-            catch (Exception ex) when(ex is ArgumentException or ArgumentNullException or OperationCanceledException)
+            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetAccByIdAsync method.");
+                return null;
             }
         }
 
@@ -238,7 +247,7 @@ namespace KahootWebApi.Services
         {
             if (userId == null)
             {
-                return null;
+                return Enumerable.Empty<QuizStat>();
             }
 
             try
@@ -247,26 +256,28 @@ namespace KahootWebApi.Services
             }
             catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetQuizStatsByIdAsync method.");
+                return Enumerable.Empty<QuizStat>();
             }
         }
 
-        private async Task<User?> GetFrozenAccAsync(string username)
+        private async Task<User?> GetFrozenAccAsync(int userId)
         {
             try
             {
-                return await _context.Users.SingleOrDefaultAsync(x => x.Username == username && x.IsFrozen == true);
+                return await _context.Users.FirstOrDefaultAsync(x => x.Id == userId && x.IsFrozen == true);
             }
             catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or OperationCanceledException)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetFrozenAccAsync method.");
+                return null;
             }
         }
 
         private static string RandomPasswordGenerator(int length)
         {
-            try
-            {
+            //try
+            //{
                 byte[] result = new byte[length];
 
                 for (int index = 0; index < length; index++)
@@ -275,14 +286,14 @@ namespace KahootWebApi.Services
                 }
 
                 return System.Text.Encoding.ASCII.GetString(result);
-            }
-            catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
-            {
-                throw new Exception(ex.Message, ex);
-            }
+            //}
+            //catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
+            //{
+            //    throw new Exception(ex.Message, ex);
+            //}
         }
 
-        private static int RandomPasswordLength()
+        private static int RandomPasswordLength() // No need for try catch here
         {
             var number = new Random().Next(5, 10);
 
@@ -292,7 +303,7 @@ namespace KahootWebApi.Services
         public async Task<IActionResult> ResetPasswordAsync(string email)
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
-
+           
             using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
 
             if (Validators.IsEmailValid(email))
@@ -322,7 +333,7 @@ namespace KahootWebApi.Services
 
                     if (user != null)
                     {
-                        user.Password = newPassword;
+                        user.Password = BC.EnhancedHashPassword(newPassword, 13, HashType.SHA512);
 
                         await _context.SaveChangesAsync();
                     }
@@ -333,7 +344,8 @@ namespace KahootWebApi.Services
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
-                    return new StatusCodeResult(400);
+                    _logger.LogError(ex, "An error occurred in the ResetPasswordAsync method.");
+                    return new StatusCodeResult(500);
                 }
                 finally
                 {
@@ -343,10 +355,11 @@ namespace KahootWebApi.Services
                 return new StatusCodeResult(200);
             }
 
+            _logger.LogError("Mail is not valid.");
             return new StatusCodeResult(400);
         }
 
-        public async Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword)
+        public async Task<IActionResult> ChangePasswordAsync(string login, string oldPassword, string newPassword)
         {
             try
             {
@@ -354,38 +367,30 @@ namespace KahootWebApi.Services
 
                 if (password != null && BC.EnhancedVerify(oldPassword, password.Password, HashType.SHA512))
                 {
-                    password.Password = newPassword;
+                    password.Password = BC.EnhancedHashPassword(newPassword, 13, HashType.SHA512); ;
 
                     await _context.SaveChangesAsync();
                 }
 
                 else
                 {
-                    return new HttpResponseMessage()
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
+                    return new StatusCodeResult(400);
                 }
 
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
+                return new StatusCodeResult(200);
             }
-            catch (ArgumentNullException)
+            catch (Exception ex)
             {
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                _logger.LogError(ex, "An error occurred in the ChangePasswordAsync method.");
+                return new StatusCodeResult(500);
             }
         }
 
-        public async Task<HttpResponseMessage> ChangeBirthdayAsync(string login, DateTime oldBirthday, DateTime newBirthday)
+        public async Task<IActionResult> ChangeBirthdayAsync(string login, DateTime newBirthday)
         {
             try
             {
-                var birthday = await _context.Users.Where(x => x.Username == login && x.Birthday == oldBirthday).FirstOrDefaultAsync();
+                var birthday = await _context.Users.Where(x => x.Username == login).FirstOrDefaultAsync();
 
                 if (birthday != null)
                 {
@@ -396,23 +401,15 @@ namespace KahootWebApi.Services
 
                 else
                 {
-                    return new HttpResponseMessage()
-                    {
-                        StatusCode = HttpStatusCode.BadRequest
-                    };
+                    return new StatusCodeResult(400);
                 }
 
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.OK
-                };
+                return new StatusCodeResult(200);
             }
-            catch (ArgumentNullException)
+            catch (Exception ex)
             {
-                return new HttpResponseMessage()
-                {
-                    StatusCode = HttpStatusCode.BadRequest
-                };
+                _logger.LogError(ex, "An error occurred in the ChangeBirthdayAsync method.");
+                return new StatusCodeResult(500);
             }
         }
 
@@ -465,7 +462,8 @@ namespace KahootWebApi.Services
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                throw new ArgumentOutOfRangeException(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the RandomLoginGenerator method.");
+                return string.Empty;
             }
         }
     }

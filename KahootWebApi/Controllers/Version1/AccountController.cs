@@ -17,20 +17,29 @@ namespace KahootWebApi.Controllers.v1
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountManager manager, KahootDbContext context)
+        public AccountController(IAccountManager manager, 
+            KahootDbContext context, ILogger<AccountController> logger)
         {
             _context = context;
             _manager = manager;
+            _logger = logger;
         }
 
         [HttpPost("AddSocialUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task AddSocialUser(SocialUser socialUser)
         {
             await _manager.AddSocialUser(socialUser);
         }
 
         [HttpPost("Login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Login(LoginModel model)
         {
             User? user;
@@ -41,22 +50,26 @@ namespace KahootWebApi.Controllers.v1
 
                 if (user != null && BC.EnhancedVerify(model.Password, user!.Password, HashType.SHA512))
                 {
-                    await AuthenticateAsync(model.UserName!);                    
+                    await AuthenticateAsync(model.UserName!);                  
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(new { Message = "Invalid request. User does not exist." });
                 }
             }
-            catch (ArgumentNullException) 
+            catch (Exception ex) 
             {
-                return BadRequest();
+                _logger.LogError(ex, "An error occurred in the Post method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return Ok(user);
         }
 
         [HttpPost("Register")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Register(RegisterModel model)
         {
             User? newUser;
@@ -83,72 +96,111 @@ namespace KahootWebApi.Controllers.v1
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(new { Message = "Invalid request. User already exists." });
                 }
             }
-            catch (ArgumentNullException)
+            catch (Exception ex)
             {
-                return BadRequest();
+                _logger.LogError(ex, "An error occurred in the Post method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return Ok(newUser);
         }
 
         [HttpGet("Logout")]
-        public async Task Logout()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            try
+            {
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                return Ok("Succes");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the Get method.");
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpPost("ResetPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> ResetPassword(string email)
         {
             return await _manager.ResetPasswordAsync(email);
         }
 
         [HttpPatch("ChangePassword")]
-        public async Task<HttpResponseMessage> ChangePassword(string login, string oldPassword, string newPassword)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ChangePassword(string login, string oldPassword, string newPassword)
         {
             return await _manager.ChangePasswordAsync(login, oldPassword, newPassword);
         }
 
         [HttpPatch("ChangeBirthday")]
-        public async Task<HttpResponseMessage> ChangeBirthday(string login, DateTime oldBirthday, DateTime newBirthday)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> ChangeBirthday(string login, DateTime newBirthday)
         {
-            return await _manager.ChangeBirthdayAsync(login, oldBirthday, newBirthday);
+            return await _manager.ChangeBirthdayAsync(login, newBirthday);
         }
 
         [HttpGet("GetRandomLogin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public string GetRandomLogin()
         {
             return _manager.RandomLoginGenerator();
         }
 
         [HttpPost("DeleteAcc")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task DeleteAcc(int userId, DeletedAccount deletedAccount)
         {
             await _manager.DeleteAccAsync(userId, deletedAccount);
         }
 
         [HttpPost("FreezeAcc")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task FreezeAcc(int userId, string reason)
         {
             await _manager.FreezeAccAsync(userId, reason);
         }
 
         [HttpPost("UnfreezeAcc")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task UnfreezeAcc(int userId)
         {
             await _manager.UnfreezeAccAsync(userId);
         }
 
         [HttpGet("CheckStatusOfAcc")]
-        public async Task<bool> CheckStatusOfAcc(string username)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> CheckStatusOfAcc(int userId)
         {
-            return await _manager.CheckStatusOfAccAsync(username);
+            return await _manager.CheckStatusOfAccAsync(userId);
         }
 
         [HttpGet("PasswordsMatching")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<bool> PasswordsMatching(int userId, string password)
         {
             return await _manager.PasswordsMatching(userId, password);
@@ -173,9 +225,10 @@ namespace KahootWebApi.Controllers.v1
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex)
             {
-                throw new ArgumentNullException(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred during authentication.");
+                Response.StatusCode = StatusCodes.Status500InternalServerError;
             }
         }
     }

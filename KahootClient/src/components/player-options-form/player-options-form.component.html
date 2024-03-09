@@ -1,0 +1,29 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+  <ng-container *ngIf="role === 'Teacher'">
+    <div class="fields" (click)="onCreateQuizClick()"><p>{{'CreateAQuiz' | translate}}</p></div>
+  </ng-container>
+    <div class="fields" (click)="onSubjectsClick()"><p>{{'Play/Watch' | translate}}</p></div>
+    <div class="fields" (click)="onProfileClick()"><p>{{'Profile' | translate}}</p></div>
+    <div class="fields" (click)="backAuth($event)"><p>{{'Exit' | translate}}</p></div>
+</div>
+
+<div class="wrapper">
+  <header>
+    <i class="bx bx-cookie"></i>
+    <h2>{{'CookiesConsent' | translate}}</h2>
+  </header>
+  <div class="data">
+    <p>{{'CookiesDescription' | translate}}
+      <a (click)="onReadMoreClick()"> {{'ReadMore' | translate}}</a>
+    </p>
+  </div>
+  <div class="buttons">
+    <button class="button" id="acceptBtn" (click)="acceptCookiesClick()">{{'Accept' | translate}}</button>
+    <button class="button" id="declineBtn" (click)="declineCookiesClick()">{{'Decline' | translate}}</button>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

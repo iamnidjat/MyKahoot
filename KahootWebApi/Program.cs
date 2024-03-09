@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using reCAPTCHA.AspNetCore;
+using reCAPTCHA.AspNetCore.Versions;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +28,9 @@ builder.Services.AddTransient<ICredentialsChangingManager, CredentialsChangingMa
 builder.Services.AddTransient<IMailConfirmationManager, MailConfirmationManager>();
 builder.Services.AddTransient<IUserInfoManager, UserInfoManager>();
 builder.Services.AddTransient<INewsLetter, NewsLetter>();
-builder.Services.AddTransient<IPhotoService, PhotoService>();
 builder.Services.AddTransient<IAdminManager, AdminManager>();
+builder.Services.AddTransient<ICaptchaVerificationService, CaptchaVerificationService>();
+builder.Services.AddTransient<IDownloadQuizService, DownloadQuizService>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");
@@ -35,6 +38,14 @@ builder.Services.AddDbContext<KahootDbContext>(options => {
     options.UseSqlServer(connectionString);
 });
 
+var recaptchaSettings = builder.Configuration.GetSection("RecaptchaSettings");
+builder.Services.Configure<RecaptchaSettings>(recaptchaSettings);
+
+builder.Services.AddRecaptcha(options =>
+{
+    options.SiteKey = recaptchaSettings["SiteKey"];
+    options.SecretKey = recaptchaSettings["SecretKey"];
+});
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options => //CookieAuthenticationOptions
@@ -69,12 +80,12 @@ app.UseCors(options =>
     .AllowAnyHeader();
 });
 
-app.UseStaticFiles();
-app.UseStaticFiles(new StaticFileOptions()
-{
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-    RequestPath = new PathString("/Resources")
-});
+//app.UseStaticFiles();
+//app.UseStaticFiles(new StaticFileOptions()
+//{
+//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
+//    RequestPath = new PathString("/Resources")
+//});
 
 app.UseAuthentication();
 

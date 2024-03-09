@@ -67,6 +67,7 @@
   "Old Birthday": "Köhnə ad günü",
   "Continue": "Davat et",
   "Choose a field to view top-10 stats": "Top-10 statistikanı görmək üçün sahəni seçin:",
+  "Choose a field to view your own stats": "Oz statistikanızı görmək üçün sahəni seçin:",
   "ChooseATypeOfYourQuiz": "Viktorina növünü seçin:",
   "answers:": "cavab",
   "trueFalse:": "doğru/yanlış",
@@ -154,14 +155,13 @@
   "Finish": "Bitirin",
   "Shuffle": "Qarışdırın",
   "Creating a(n)": "Yaratmaq",
+  "Updating a(n)": "Yenilemek",
   "Enter your question here": "Sualınızı buraya daxil edin...",
   "Enter your answer here": "Cavabınızı buraya daxil edin...",
   "Register an account": "Akkaunt registrasiya etmək",
   "Email Address": "Elektron ünvan",
   "Welcome to the": "Xoş gəlmişsiniz",
-
   "This quiz contains total 20 questions.Each question holds 10 points": "Bu viktorina cəmi 20 sualdan ibarətdir. Hər sual 10 xaldan ibarətdir",
-
   "Rules": "Qaydalar",
   "Correct question gives you 10 points": "Düzgün sual sizə 10 xal verir",
   "Incorrect question gives you - 10 points": "Səhv sual sizə verir - 10 bal",
@@ -173,5 +173,15 @@
   "Break a leg:)": "Uğurlar:)",
   "Back to the menu": "Menüya geri qayıt",
   "Start the quiz": "Viktorinaya başıa",
-  "You can watch your stats in barchart form": "Siz statistikanıza barqraf formasında baxa bilərsiniz"
+  "You can watch your stats in the barchart form": "Siz statistikanıza barqraf formasında baxa bilərsiniz",
+  "Watch": "Baxmaq",
+  "Play/Watch": "Oynamaq/Baxmaq",
+  "Watch the quiz": "Viktorinaya baxmaq",
+  "EnterCode": "Kodu daxil edin",
+  "Confirm": "Təsdiq etmək",
+  "Search by Category or Test": "Kateqoriya və ya Test üzrə axtarın",
+  "Search by Category": "Kateqoriya üzrə axtarın",
+  "Search by Quiz": "Test üzrə axtarın",
+  "Test Mode": "Test modu",
+  "It is not case sensitive": "Böyük hərflərə həssas deyil"
 }

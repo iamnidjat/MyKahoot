@@ -16,6 +16,8 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SendFeedback")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> SendFeedback(string firstName, string lastName, string email, string phoneNumber, string message)
         {
             return await _manager.SendFeedbackAsync(firstName, lastName, email, phoneNumber, message);

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 namespace KahootWebApi.Models
 {
     [Index("Username", IsUnique = true)]
+    [Index("Email", IsUnique = true)]
     public class User
     {
         [Key]

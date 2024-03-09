@@ -16,6 +16,8 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("ConfirmEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> EmailConfirmationAsync(string email, int userId)
         {
             return await _manager.EmailConfirmationAsync(email, userId);

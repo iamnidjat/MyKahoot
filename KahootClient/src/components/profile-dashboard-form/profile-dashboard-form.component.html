@@ -1,0 +1,184 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="responsive-container-block bigContainer">
+  <div class="responsive-container-block Container">
+    <div class="text-blk.heading">
+      {{"Your Credentials" | translate}}
+    </div>
+
+    <ng-container *ngIf="!isSocialUser">
+      <div class="username" *ngIf="!flag1; else changeUsername">
+        <label>{{"Username" | translate}}: </label>
+        <input type="text" class="inputbox" value="{{username}}" [disabled]="flag1" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag1 id="flag1" type="button" class="changeButton" *ngIf="flagHideButton1" value="Change" (click)="changeFlag(flag1)">
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{usernameLabel}}</label>
+      </div>
+
+      <ng-template #changeUsername>
+        <div class="username">
+          <label>{{"Username" | translate}}: </label>
+          <input #Username type="text" class="inputbox" value="{{username}}" [disabled]="!flag1" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag1 id="flag11" type="button" class="changeButton"  value="back" (click)="back(flag1)">
+          <input type="button" value="confirm" (click)="setUsername($event, Username.value)">
+        </div>
+      </ng-template>
+
+      <div class="name" *ngIf="!flag2; else changeName">
+        <label>{{"Name" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag2" value="{{name}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag2 id="flag2" type="button" class="changeButton"  value="Change" (click)="changeFlag(flag2)">
+      </div>
+
+      <ng-template #changeName>
+        <div class="name">
+          <label>{{"Name" | translate}}: </label>
+          <input #Name type="text" class="inputbox" [disabled]="!flag2" value="{{name}}" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag2 id="flag21" type="button" class="changeButton"  value="back" (click)="back(flag2)">
+          <input type="button" value="confirm" (click)="setName($event, Name.value)">
+        </div>
+      </ng-template>
+
+      <div class="surname" *ngIf="!flag3; else changeSurname">
+        <label>{{"Surname" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag3" value="{{surname}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag3 id="flag3" type="button" class="changeButton"  value="Change" (click)="changeFlag(flag3)">
+      </div>
+
+      <ng-template #changeSurname>
+        <div class="surname">
+          <label>{{"Surname" | translate}}: </label>
+          <input #Surname type="text" class="inputbox" [disabled]="!flag3" value="{{surname}}" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag3 id="flag31" type="button" class="changeButton"  value="back" (click)="back(flag3)">
+          <input type="button" value="confirm" (click)="setSurname($event, Surname.value)">
+        </div>
+      </ng-template>
+
+      <div class="email" *ngIf="!flag4; else changeMail">
+        <label>{{"Mail" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag4" value="{{mail}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag4 id="flag4" type="button" class="changeButton" *ngIf="flagHideButton2" value="Change" (click)="changeFlag(flag4)">
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{mailLabel}}</label>
+      </div>
+
+      <ng-template #changeMail>
+        <div class="email">
+          <label>{{"Mail" | translate}}: </label>
+          <input #Mail type="text" class="inputbox" [disabled]="!flag4" value="{{mail}}" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag4 id="flag41" type="button" class="changeButton"  value="back" (click)="back(flag4)">
+          <input type="button" value="confirm" (click)="setMail($event, Mail.value)">
+        </div>
+      </ng-template>
+
+      <div class="email" *ngIf="!flag5; else changeBMail">
+        <label>{{"Backup Mail" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag5" value="{{backUpMail}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag5 id="flag5" type="button" class="changeButton"  value="Change" (click)="changeFlag(flag5)">
+      </div>
+
+      <ng-template #changeBMail>
+        <div class="email">
+          <label>{{"Backup Mail" | translate}}: </label>
+          <input #BMail type="text" class="inputbox" value="{{backUpMail}}" [disabled]="!flag5" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag5 id="flag51" type="button" class="changeButton"  value="back" (click)="back(flag5)">
+          <input type="button" value="confirm" (click)="setBackUpMail($event, BMail.value)">
+        </div>
+      </ng-template>
+
+      <div class="birthday">
+        <label>{{"Birthday" | translate}}: </label>
+        <label style="font-size: 20px; color: green">{{'If you want to change birthday just tap this' | translate}}</label>
+        <input type="button" class="changeButton2"  value="Change" (click)="ToBirthdayChanging()">
+        <label>{{"button" | translate}}</label>
+      </div>
+
+      <div class="password">
+        <label>{{"Password" | translate}}: </label>
+        <label style="font-size: 20px; color: green">{{"If you want to change password just tap this" | translate}}</label>
+        <input type="button" class="changeButton2"  value="Change" (click)="ToPasswordChanging()">
+        <label>{{"button" | translate}}</label>
+      </div>
+
+      <div class="role">
+        <label>{{"Role" | translate}}: </label>
+        <input type="text" class="inputbox" value="{{role}}" readonly>
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{"You cannot change your role" | translate}}:(</label>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isSocialUser">
+      <div class="username">
+        <label>{{"Username" | translate}}: </label>
+        <input type="text" class="inputbox" readonly value="{{username}}">
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{usernameLabel}}</label>
+      </div>
+
+      <div class="name">
+        <label>{{"Name" | translate}}: </label>
+        <input type="text" class="inputbox" readonly value="{{name}}">
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{nameLabel}}</label>
+      </div>
+
+      <div class="surname" *ngIf="!flag3; else changeSurname">
+        <label>{{"Surname" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag3" value="{{surname}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag3 id="flag32" type="button" class="changeButton"  value="Change" (click)="changeFlag2(flag3)">
+      </div>
+
+      <ng-template #changeSurname>
+        <div class="surname">
+          <label>{{"Surname" | translate}}: </label>
+          <input #Surname type="text" class="inputbox" [disabled]="!flag3" value="{{surname}}" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag3 id="flag312" type="button" class="changeButton"  value="back" (click)="back2(flag3)">
+          <input type="button" value="confirm" (click)="setSurname($event, Surname.value)">
+        </div>
+      </ng-template>
+
+      <div class="email">
+        <label>{{"Mail" | translate}}: </label>
+        <input type="text" class="inputbox" readonly value="{{mail}}">
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{mailLabel}}</label>
+      </div>
+
+      <div class="email" *ngIf="!flag5; else changeBMail">
+        <label>{{"Backup Mail" | translate}}: </label>
+        <input type="text" class="inputbox" [disabled]="flag5" value="{{backUpMail}}" (cut)="false" (copy)="false" (paste)="false">
+        <input #flag5 id="flag52" type="button" class="changeButton"  value="Change" (click)="changeFlag2(flag5)">
+      </div>
+
+      <ng-template #changeBMail>
+        <div class="email">
+          <label>{{"Backup Mail" | translate}}: </label>
+          <input #BMail type="text" class="inputbox" value="{{backUpMail}}" [disabled]="!flag5" (cut)="false" (copy)="false" (paste)="false">
+          <input #flag5 id="flag512" type="button" class="changeButton"  value="back" (click)="back2(flag5)">
+          <input type="button" value="confirm" (click)="setBackUpMail($event, BMail.value)">
+        </div>
+      </ng-template>
+
+      <div class="birthday">
+        <label>{{"Birthday" | translate}}: </label>
+        <label style="font-size: 20px; color: red">{{"You can't change your birthday" | translate}}!</label>
+      </div>
+
+      <div class="password">
+        <label>{{"Password" | translate}}: </label>
+        <label style="font-size: 20px; color: red">{{"You can't change your password" | translate}}!</label>
+      </div>
+
+      <div class="role">
+        <label>{{"Role" | translate}}: </label>
+        <input type="text" class="inputbox" value="{{role}}" readonly>
+        <br/>
+        <label style="font-size: 15px; color: red; margin-left: 55px;">{{"You cannot change your role" | translate}}:(</label>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

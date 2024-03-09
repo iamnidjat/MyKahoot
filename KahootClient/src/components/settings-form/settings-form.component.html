@@ -1,0 +1,38 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="row">
+  <h1>{{"Change Password" | translate}}</h1>
+  <div class="form-group">
+    <input [type]="visibility1 ? 'text' : 'password'" name="oldPassword" id="oldPassword" required [(ngModel)]="oldPassword" #oldpassword="ngModel" (cut)="false" (copy)="false" (paste)="false">
+    <button id="hidden-eye1" (click)="ChangeVisibilityOfPasswordField(oldPassword, 'visibility1')">
+      <span [class]="visibility1 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+    </button>
+    <p><label>{{"Old password" | translate}}</label></p>
+    <div [hidden]="oldpassword.valid || oldpassword.untouched" class="alert">
+      Email is not specified
+    </div>
+
+    <input [type]="visibility2 ? 'text' : 'password'" name="newPassword" id="newPassword" required [(ngModel)]="newPassword" #newpassword="ngModel" (cut)="false" (copy)="false" (paste)="false">
+    <button id="hidden-eye2" (click)="ChangeVisibilityOfPasswordField(newPassword, 'visibility2')">
+      <span [class]="visibility2 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+    </button>
+    <p><label>{{"New password" | translate}}</label></p>
+    <div [hidden]="newpassword.valid || newpassword.untouched" class="alert">
+      Email is not specified
+    </div>
+
+    <input [type]="visibility3 ? 'text' : 'password'" name="cNewPassword" id="confirmPassword" required [(ngModel)]="cNewPassword" #cnewpassword="ngModel" (cut)="false" (copy)="false" (paste)="false">
+    <button id="hidden-eye3" (click)="ChangeVisibilityOfPasswordField(cNewPassword, 'visibility3')">
+      <span [class]="visibility3 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+    </button>
+    <p><label>{{"Confirm password" | translate}}</label></p>
+    <div [hidden]="cnewpassword.valid || cnewpassword.untouched" class="alert">
+      Email is not specified
+    </div>
+
+    <button class="continue-button" [disabled]="oldpassword.invalid || newpassword.invalid || cnewpassword.invalid" (click)="changePassword($event, oldPassword, newPassword, cNewPassword)">{{"Continue" | translate}}</button>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

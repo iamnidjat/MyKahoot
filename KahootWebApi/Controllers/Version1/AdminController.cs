@@ -16,6 +16,8 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SendCredentials")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<string[]> SendCredentials(string email)
         {
             return await _manager.SendCredentialsAsync(email);

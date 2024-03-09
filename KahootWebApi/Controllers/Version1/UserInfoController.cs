@@ -1,6 +1,5 @@
 ﻿using KahootWebApi.Models;
 using KahootWebApi.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KahootWebApi.Controllers.Version1
@@ -17,43 +16,74 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpGet("GetUserInfo")]
-        public async Task<User> GetUserInfo(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<User> GetUserInfo([FromQuery] int id)
+        // [FromQuery] explicitly specifies that the mail parameter is expected from the query string.
         {
             return await _manager.GetUserInfoAsync(id);
         }
 
         [HttpGet("GetUserInfoByUsernameAsync")]
-        public async Task<User> GetUserInfoByUsernameAsync(string username)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<User> GetUserInfoByUsernameAsync([FromQuery] string username)
         {
             return await _manager.GetUserInfoByUsernameAsync(username);
         }
 
         [HttpGet("DoesUserExist")]
-        public async Task<bool> DoesUserExist(string username)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> DoesUserExist([FromQuery] string username)
         {
             return await _manager.DoesUserExist(username);
         }
 
+        [HttpGet("IsEmailUsed")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> IsEmailUsed([FromQuery] string mail)
+        {
+            return await _manager.IsEmailUsed(mail);
+        }
+
         [HttpGet("GetNextDeadlineForChangingName")]
-        public async Task<int> GetNextDeadlineForChangingName(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<int> GetNextDeadlineForChangingName([FromQuery] int id)
         {
             return await _manager.GetNextDeadlineForChangingName(id);
         }
 
         [HttpGet("IsUsernameChanged")]
-        public async Task<bool> IsUsernameChanged(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> IsUsernameChanged([FromQuery] int id)
         {
             return await _manager.IsUsernameChanged(id);
         }
 
         [HttpGet("IsEmailChanged")]
-        public async Task<bool> IsEmailChanged(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> IsEmailChanged([FromQuery] int id)
         {
             return await _manager.IsEmailChanged(id);
         }
 
         [HttpGet("IsEmailConfirmed")]
-        public async Task<bool> IsEmailConfirmed(string mail)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<bool> IsEmailConfirmed([FromQuery] string mail)
         {
             return await _manager.IsEmailConfirmed(mail);
         }

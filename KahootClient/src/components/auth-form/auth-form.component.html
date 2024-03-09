@@ -1,0 +1,54 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="form">
+  <div class="form-panel one">
+    <div class="form-header" style="text-align: center; margin-top: -15px">
+      <h1>MyKahoot</h1>
+    </div>
+    <div class="form-content">
+      <form #userForm="ngForm" novalidate>
+        <div class="form-group">
+          <label>{{'Username' | translate}}</label>
+          <input type="text" id="usernameLogin" name="username" required [(ngModel)]="userLogin"  #username="ngModel" (change)="IsLoginFieldEmpty()" (cut)="false" (copy)="false" (paste)="false"/>
+          <div [hidden]="username.valid || username.untouched" class="alert">
+            Username is not specified
+          </div>
+        </div>
+        <div class="form-group">
+          <label>{{"Password" | translate}}</label>
+            <input [type]="visibility ? 'text' : 'password'" id="passwordLogin" name="password" required [(ngModel)]="userPassword" #password="ngModel" (cut)="false" (copy)="false" (paste)="false"/>
+            <button class="hidden-eye" (click)="ChangeVisibility()">
+              <span [class]="visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+            </button>
+          <div [hidden]="password.valid || password.untouched" class="alert">
+            Password is not specified
+          </div>
+        </div>
+        <div class="form-group" style="position: relative; top: -40px;">
+          <label class="form-remember" style="cursor: pointer">
+            <input type="checkbox" [disabled]="isDisabled" (change)="RememberMe(userLogin)" style="cursor: pointer"/>{{"RememberMe" | translate}}</label>
+          <span class="form-recovery" id="forgot-password" (click)="ToForgotPassword()" style="cursor: pointer">{{"ForgotPassword" | translate}}</span>
+        </div>
+        <div class="form-group" style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin: -50px">
+          <button type="submit" style="width: 450px" (click)="LogIn($event)" [disabled]="userForm.invalid">{{"Login" | translate}}</button>
+          <div style="margin-top: 10px">
+            <asl-google-signin-button></asl-google-signin-button>
+          </div>
+          <div class="form-recovery" style="margin-top: 10px;">
+            <span style="color: black">{{"DontHaveAnAccount" | translate}} </span>
+            <span (click)="ToRegisterForm()" class="register-route" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer;">{{"Here" | translate}}</span>
+          </div>
+          <div class="form-recovery" style="margin-top: 10px;">
+            <span style="color: black"> {{"OR Sign in as a" | translate}} </span>
+            <span id="guest-sign" (click)="SignInAsAGuest()" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer; ">{{"Guest" | translate}}</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+
+

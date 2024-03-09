@@ -7,10 +7,12 @@ namespace KahootWebApi.Services
     public class MailConfirmationManager : IMailConfirmationManager
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<MailConfirmationManager> _logger;
 
-        public MailConfirmationManager(KahootDbContext context)
+        public MailConfirmationManager(KahootDbContext context, ILogger<MailConfirmationManager> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<IActionResult> EmailConfirmationAsync(string email, int userId)
@@ -42,6 +44,7 @@ namespace KahootWebApi.Services
                 }
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
+                    _logger.LogError(ex, "An error occurred in the EmailConfirmationAsync method.");
                     return new StatusCodeResult(400);
                 }
                 finally
@@ -51,7 +54,7 @@ namespace KahootWebApi.Services
 
                 return new StatusCodeResult(200);
             }
-
+            _logger.LogError("Mail is not valid.");
             return new StatusCodeResult(400);
         }
     }

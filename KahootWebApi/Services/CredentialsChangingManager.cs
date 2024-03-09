@@ -6,10 +6,12 @@ namespace KahootWebApi.Services
     public class CredentialsChangingManager : ICredentialsChangingManager
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<ContactManager> _logger;
 
-        public CredentialsChangingManager(KahootDbContext context)
+        public CredentialsChangingManager(KahootDbContext context, ILogger<ContactManager> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<HttpResponseMessage> ChangeUsernameChangingToTrueAsync(int id)
@@ -27,6 +29,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -38,8 +41,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the ChangeUsernameChangingToTrueAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -62,6 +66,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -73,8 +78,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the ChangeEmailChangingToTrueAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -97,6 +103,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -108,8 +115,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the ChangeEmailConfirmationChangingToTrueAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -132,6 +140,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -143,8 +152,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the SetNameAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -167,6 +177,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -178,8 +189,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the SetSurnameAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -187,7 +199,7 @@ namespace KahootWebApi.Services
             }
         }
 
-        public async Task<HttpResponseMessage> SetUsernameAsync(string oldUsername, string newUsername, DateTime DateOfChangingUsername)
+        public async Task<HttpResponseMessage> SetUsernameAsync(string oldUsername, string newUsername)
         {
             try
             {
@@ -197,13 +209,14 @@ namespace KahootWebApi.Services
                 {
                     user.Username = newUsername;
 
-                    user.DateOfChangingUsername = DateOfChangingUsername;
+                   // user.DateOfChangingUsername = DateOfChangingUsername;
 
                     await _context.SaveChangesAsync();
                 }
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -215,8 +228,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the SetUsernameAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -241,6 +255,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -252,8 +267,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the SetMailAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest
@@ -276,6 +292,7 @@ namespace KahootWebApi.Services
 
                 else
                 {
+                    _logger.LogError("User not found");
                     return new HttpResponseMessage()
                     {
                         StatusCode = HttpStatusCode.BadRequest
@@ -287,8 +304,9 @@ namespace KahootWebApi.Services
                     StatusCode = HttpStatusCode.OK
                 };
             }
-            catch (ArgumentNullException)
+            catch (ArgumentNullException ex)
             {
+                _logger.LogError(ex, "An error occurred in the SetBackUpMailAsync method.");
                 return new HttpResponseMessage()
                 {
                     StatusCode = HttpStatusCode.BadRequest

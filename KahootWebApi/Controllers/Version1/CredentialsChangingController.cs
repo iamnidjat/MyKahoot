@@ -16,51 +16,75 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SetName")]
-        public Task<HttpResponseMessage> SetName(string username, string name)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> SetNameAsync(string username, string name)
         {
-            return _manager.SetNameAsync(username, name);
+            return await _manager.SetNameAsync(username, name);
         }
 
         [HttpPost("SetSurname")]
-        public Task<HttpResponseMessage> SetSurname(string username, string surname)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> SetSurnameAsync(string username, string surname)
         {
-            return _manager.SetSurnameAsync(username, surname);
+            return await _manager.SetSurnameAsync(username, surname);
         }
 
         [HttpPost("SetUsername")]
-        public Task<HttpResponseMessage> SetUsername(string oldUsername, string newUsername, DateTime DateOfChangingUsername)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> SetUsernameAsync(string oldUsername, string newUsername)
         {
-            return _manager.SetUsernameAsync(oldUsername, newUsername, DateOfChangingUsername);
+            return await _manager.SetUsernameAsync(oldUsername, newUsername);
         }
 
         [HttpPost("SetMail")]
-        public Task<HttpResponseMessage> SetMail(string username, string mail)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> SetMailAsync(string username, string mail)
         {
-            return _manager.SetMailAsync(username, mail);
+            return await _manager.SetMailAsync(username, mail);
         }
 
         [HttpPost("SetBMail")]
-        public Task<HttpResponseMessage> SetBMail(string username, string bMail)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> SetBMailAsync(string username, string bMail)
         {
-            return _manager.SetBackUpMailAsync(username, bMail);
+            return await _manager.SetBackUpMailAsync(username, bMail);
         }
 
         [HttpPost("ChangeUsernameChangingToTrue")]
-        public Task<HttpResponseMessage> ChangeUsernameChangingToTrue(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> ChangeUsernameChangingToTrueAsync(int id)
         {
-            return _manager.ChangeUsernameChangingToTrueAsync(id);
+            return await _manager.ChangeUsernameChangingToTrueAsync(id);
         }
 
         [HttpPost("ChangeEmailChangingToTrue")]
-        public Task<HttpResponseMessage> ChangeEmailChangingToTrue(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> ChangeEmailChangingToTrueAsync(int id)
         {
-            return _manager.ChangeEmailChangingToTrueAsync(id);
+            return await _manager.ChangeEmailChangingToTrueAsync(id);
         }
 
         [HttpPost("ChangeEmailConfirmationChangingToTrue")]
-        public Task<HttpResponseMessage> ChangeEmailConfirmationChangingToTrue(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<HttpResponseMessage> ChangeEmailConfirmationChangingToTrueAsync(int id)
         {
-            return _manager.ChangeEmailConfirmationChangingToTrueAsync(id);
+            return await _manager.ChangeEmailConfirmationChangingToTrueAsync(id);
         }
     }
 }

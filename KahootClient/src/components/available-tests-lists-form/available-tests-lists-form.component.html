@@ -1,0 +1,26 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; width: 800px">
+      <div (click)="downloadQuizzes()" class="choice-button">Public quizzes</div>
+      <div (click)="downloadPrivateQuizzes()" class="choice-button">Private quizzes</div>
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: space-between">
+      <div class="statement">{{"Choose a quiz to pass" | translate}}</div>
+      <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Quiz' | translate}}" />
+    </div>
+     <div class="main-container">
+       <div *ngFor="let category of filterQuizzes()">
+         <div class="fields" id="{{category.quizName}}" #div (click)="ToRulesForm(div)">
+           <p>{{category.quizName}} Created by the {{category.userName}} user</p>
+         </div>
+       </div>
+     </div>
+
+    <div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-enter-private-test-code-popup-form *ngIf="flagForCodeChecking"></app-enter-private-test-code-popup-form>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

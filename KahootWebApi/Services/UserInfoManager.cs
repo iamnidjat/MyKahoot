@@ -1,16 +1,17 @@
 ﻿using KahootWebApi.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace KahootWebApi.Services
 {
     public class UserInfoManager : IUserInfoManager
     {
         private readonly KahootDbContext _context;
+        private readonly ILogger<StatisticsManager> _logger;
 
-        public UserInfoManager(KahootDbContext context)
+        public UserInfoManager(KahootDbContext context, ILogger<StatisticsManager> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<bool> DoesUserExist(string username)
@@ -21,14 +22,31 @@ namespace KahootWebApi.Services
 
                 if (result == null)
                 {
+                    _logger.LogWarning($"User does not exist.");
                     return false;
                 }
 
-                return true;
+                return true;               
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the DoesUserExist method.");
+                return false;
+            }
+        }
+
+        public async Task<bool> IsEmailUsed(string mail)
+        {
+            try
+            {
+                bool emailExists = await _context.Users.AnyAsync(u => u.Email == mail);
+
+                return emailExists;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the IsEmailUsed method.");
+                return false;
             }
         }
 
@@ -42,7 +60,8 @@ namespace KahootWebApi.Services
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetUserInfoAsync method.");
+                return null;
             }
         }
 
@@ -56,7 +75,8 @@ namespace KahootWebApi.Services
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetUserInfoByUsernameAsync method.");
+                return null;
             }
         }
 
@@ -71,42 +91,54 @@ namespace KahootWebApi.Services
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the GetNextDeadlineForChangingName method.");
+                return -1;
             }
         }
 
         public async Task<bool> IsUsernameChanged(int id)
         {
             try
-            {              
-                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            {                             
+                var result = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-                if (DateTime.Now.Subtract((DateTime)result.DateOfChangingUsername).Days > result.DeadlineForChangingName)
+                if (result != null)
                 {
-                    result.IsUsernameChanged = false;
-
+                    return result.IsUsernameChanged;
+                }
+                else
+                {
+                    _logger.LogWarning($"User not found.");
                     return false;
                 }
-
-                return true;
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the IsUsernameChanged method.");
+                return false;
             }
         }
 
         public async Task<bool> IsEmailChanged(int id)
         {
             try
-            {
-                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            {                
+                var result = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-                return result!.IsEmailChanged;
+                if (result != null)
+                {
+                    return result.IsEmailChanged;
+                }
+                else
+                {
+                    _logger.LogWarning($"User not found.");
+                    return false;
+                }
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the IsEmailChanged method.");
+                return false;
             }
         }
 
@@ -114,14 +146,22 @@ namespace KahootWebApi.Services
         {
             try
             {
-                var result = await _context.Users.Where(u => u.Email == mail).FirstOrDefaultAsync();
+                var result = await _context.Users.FirstOrDefaultAsync(u => u.Email == mail);
 
-                return result!.IsEmailConfirmed;
-  
+                if (result != null)
+                {
+                    return result.IsEmailConfirmed;
+                }
+                else
+                {
+                    _logger.LogWarning($"User with email {mail} not found.");
+                    return false;
+                }
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.Message, ex);
+                _logger.LogError(ex, "An error occurred in the IsEmailConfirmed method.");
+                return false;
             }
         }
     }

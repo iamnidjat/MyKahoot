@@ -9,13 +9,13 @@ namespace KahootWebApi.Services
     {
         Task AddSocialUser(SocialUser socialUser);
         Task<IActionResult> ResetPasswordAsync(string email);
-        Task<HttpResponseMessage> ChangePasswordAsync(string login, string oldPassword, string newPassword);
-        Task<HttpResponseMessage> ChangeBirthdayAsync(string login, DateTime oldBirthday, DateTime newBirthday);
+        Task<IActionResult> ChangePasswordAsync(string login, string oldPassword, string newPassword);
+        Task<IActionResult> ChangeBirthdayAsync(string login, DateTime newBirthday);
         string RandomLoginGenerator();
         Task DeleteAccAsync(int userId, DeletedAccount deletedAccount);
         Task FreezeAccAsync(int userId, string reason);
         Task UnfreezeAccAsync(int userId);
-        Task<bool> CheckStatusOfAccAsync(string username);
+        Task<bool> CheckStatusOfAccAsync(int userId);
         Task<bool> PasswordsMatching(int userId, string password);
         //Task<IActionResult> NotifyingAboutDeletingAsync(string email);
         //Task SendingNotificationAsync(string username, string email);

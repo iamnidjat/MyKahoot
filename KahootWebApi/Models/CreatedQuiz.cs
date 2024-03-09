@@ -13,6 +13,14 @@ namespace KahootWebApi.Models
         [Required]
         public string? QuizName { get; set; }
 
+        [Required]
+        public string? UserName { get; set; }
+
+        [Required]
+        public bool IsPrivate { get; set; } 
+
+        public string? QuizCode { get; set; }
+
         public int UserId { get; set; }
 
         public User? User { get; set; }

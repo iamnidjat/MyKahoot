@@ -1,0 +1,27 @@
+<app-navbar-form></app-navbar-form>
+
+<ng-container *ngIf="userRole === 'Teacher'">
+  <div id="allthethings">
+    <nav>
+      <div class="fields" (click)="ToStats()"><p>{{"Stats" | translate}}</p></div>
+      <div class="fields" (click)="ToTopResults()"><p>{{"Top10Results" | translate}}</p></div>
+      <div class="fields" (click)="ToSettings()"><p>{{"Settings" | translate}}</p></div>
+      <div class="fields" (click)="ToYourQuizzes()"><p>{{"YourQuizzes" | translate}}</p></div>
+      <div class="fields" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+    </nav>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="userRole === 'Student'">
+  <div id="allthethings2">
+    <nav>
+      <div class="fields"  (click)="ToStats()"><p>{{"Stats" | translate}}</p></div>
+      <div class="fields" (click)="ToTopResults()"><p>{{"Top10Results" | translate}}</p></div>
+      <div class="fields"  (click)="ToSettings()"><p>{{"Settings" | translate}}</p></div>
+      <div class="fields" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+    </nav>
+  </div>
+</ng-container>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
