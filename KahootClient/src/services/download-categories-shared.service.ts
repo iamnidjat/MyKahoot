@@ -13,6 +13,7 @@ export class DownloadCategoriesSharedService{
     }).then((response) => {
       return response.json();
     }).then((data) => {
+      console.log(data);
       Object.keys(data).forEach((key) =>
       {
         if (!['Mixed Test', 'Programming', 'Math', 'Logics'].includes(data[key]['categoryName'])) {

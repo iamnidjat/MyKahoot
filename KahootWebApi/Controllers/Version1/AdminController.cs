@@ -1,4 +1,4 @@
-﻿using KahootWebApi.Services;
+﻿using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

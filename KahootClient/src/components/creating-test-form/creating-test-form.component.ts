@@ -21,25 +21,27 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   public correctAnswer: number = 0;
   public value: any;
   public flag: boolean = false;
+  @ViewChild('Points') Points!: ElementRef;
+  @ViewChild('Time') Time!: ElementRef;
   @ViewChild('Question') Question!: ElementRef;
-  @ViewChild('Answer1') Answer1!: ElementRef;
-  @ViewChild('Answer2') Answer2!: ElementRef;
-  @ViewChild('Answer3') Answer3!: ElementRef;
-  @ViewChild('Answer4') Answer4!: ElementRef;
-  @ViewChild('Answer11') Answer11!: ElementRef;
-  @ViewChild('Answer21') Answer21!: ElementRef;
-  @ViewChild('Answer31') Answer31!: ElementRef;
-  @ViewChild('Answer12') Answer12!: ElementRef;
-  @ViewChild('Answer22') Answer22!: ElementRef;
-  @ViewChild('RadioOption1') RadioOption1!: ElementRef;
-  @ViewChild('RadioOption2') RadioOption2!: ElementRef;
-  @ViewChild('RadioOption3') RadioOption3!: ElementRef;
-  @ViewChild('RadioOption4') RadioOption4!: ElementRef;
-  @ViewChild('RadioOption11') RadioOption11!: ElementRef;
-  @ViewChild('RadioOption21') RadioOption21!: ElementRef;
-  @ViewChild('RadioOption31') RadioOption31!: ElementRef;
-  @ViewChild('RadioOption12') RadioOption12!: ElementRef;
-  @ViewChild('RadioOption22') RadioOption22!: ElementRef;
+  @ViewChild('Answer1') Answer1!: ElementRef; // When 4 answers, first answer
+  @ViewChild('Answer2') Answer2!: ElementRef; // When 4 answers, second answer
+  @ViewChild('Answer3') Answer3!: ElementRef; // When 4 answers, third answer
+  @ViewChild('Answer4') Answer4!: ElementRef; // When 4 answers, fourth answer
+  @ViewChild('Answer11') Answer11!: ElementRef; // When 3 answers, first answer
+  @ViewChild('Answer21') Answer21!: ElementRef; // When 3 answers, second answer
+  @ViewChild('Answer31') Answer31!: ElementRef; // When 3 answers, third answer
+  @ViewChild('Answer12') Answer12!: ElementRef; // When 2 answers, first answer
+  @ViewChild('Answer22') Answer22!: ElementRef; // When 2 answers, second answer
+  @ViewChild('RadioOption1') RadioOption1!: ElementRef; // When 4 answers, first option
+  @ViewChild('RadioOption2') RadioOption2!: ElementRef; // When 4 answers, second option
+  @ViewChild('RadioOption3') RadioOption3!: ElementRef; // When 4 answers, third option
+  @ViewChild('RadioOption4') RadioOption4!: ElementRef; // When 4 answers, fourth option
+  @ViewChild('RadioOption11') RadioOption11!: ElementRef; // When 3 answers, first option
+  @ViewChild('RadioOption21') RadioOption21!: ElementRef; // When 3 answers, second option
+  @ViewChild('RadioOption31') RadioOption31!: ElementRef; // When 3 answers, third option
+  @ViewChild('RadioOption12') RadioOption12!: ElementRef; // When 2 answers, first option
+  @ViewChild('RadioOption22') RadioOption22!: ElementRef; // When 2 answers, second option
 
   constructor(private router: Router) {}
 
@@ -86,6 +88,17 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     this.Answer22.nativeElement.value = temp;
   }
 
+  private checkConditions(question: string, correctAnswer: number, ...answers: string[]): boolean {
+    // Check if question is not empty, correctAnswer is not 0, and answers array is not empty
+    if (question !== "" && correctAnswer !== 0 && answers.length > 0) {
+      // Check if all answers are not empty strings and each is unique
+      if (answers.every((answer, index) => answer !== "" && answers.indexOf(answer) === index)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public async nextQuestion(): Promise<void> {
     this.currentQuestion++; // !
 
@@ -93,12 +106,14 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     {
       if (this.testFormat === "three-answers")
       {
-        if (this.Question.nativeElement.value != "" && this.Answer11.nativeElement.value != "" &&
-          this.Answer21.nativeElement.value != "" && this.Answer31.nativeElement.value != "" && this.correctAnswer != 0) {
-          let question: Question = {quizType: this.quizType, quizName: this.testType,
+        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer11.nativeElement.value,
+            this.Answer21.nativeElement.value, this.Answer31.nativeElement.value)) {
+          let question: Question = { quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
-            option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
+            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+            timeToAnswer: this.Time.nativeElement.value }
 
           await fetch(API_URL + "AddQuestion", {
             method: "POST",
@@ -124,7 +139,8 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
           let question: Question = {quizType: this.quizType, quizName: this.testType ,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer12.nativeElement.value, option2: this.Answer22.nativeElement.value,
-            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
+            points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
         await fetch(API_URL + "AddQuestion", {
           method: "POST",
@@ -144,13 +160,15 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
       }
       }
       else {
-        if (this.Question.nativeElement.value != "" && this.Answer1.nativeElement.value != "" &&
-          this.Answer2.nativeElement.value != "" && this.Answer3.nativeElement.value != "" && this.Answer4.nativeElement.value != "" && this.correctAnswer != 0)
+        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer1.nativeElement.value,
+          this.Answer2.nativeElement.value, this.Answer3.nativeElement.value, this.Answer4.nativeElement.value))
         {
           let question: Question = {quizType: this.quizType, quizName: this.testType ,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer1.nativeElement.value, option2: this.Answer2.nativeElement.value,
-            option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value, answer: this.correctAnswer,
+            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+            timeToAnswer: this.Time.nativeElement.value}
 
           await fetch(API_URL + "AddQuestion", {
             method: "POST",
@@ -176,13 +194,15 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     {
       if (this.testFormat === "three-answers")
       {
-        if (this.Question.nativeElement.value != "" && this.Answer11.nativeElement.value != "" &&
-          this.Answer21.nativeElement.value != "" && this.Answer31.nativeElement.value != "" && this.correctAnswer != 0)
+        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer11.nativeElement.value,
+          this.Answer21.nativeElement.value, this.Answer31.nativeElement.value))
         {
           let question: Question = {quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
-            option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
+            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+            timeToAnswer: this.Time.nativeElement.value}
 
           await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
             method: "PATCH",
@@ -209,7 +229,8 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
           let question: Question = {quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer12.nativeElement.value, option2: this.Answer22.nativeElement.value,
-            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
+            points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
           await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
             method: "PATCH",
@@ -229,14 +250,15 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
         }
       }
       else {
-        if (this.Question.nativeElement.value != "" && this.Answer1.nativeElement.value != "" &&
-          this.Answer2.nativeElement.value != "" && this.Answer3.nativeElement.value != "" && this.Answer4.nativeElement.value != ""
-          && this.correctAnswer != 0)
+        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer1.nativeElement.value,
+          this.Answer2.nativeElement.value, this.Answer3.nativeElement.value, this.Answer4.nativeElement.value))
         {
           let question: Question = {quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer1.nativeElement.value, option2: this.Answer2.nativeElement.value,
-            option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+            option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value,
+            answer: this.correctAnswer, questionNumber: this.currentQuestion,
+            points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
           await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
             method: "PATCH",

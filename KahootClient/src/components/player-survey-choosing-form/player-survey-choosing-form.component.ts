@@ -10,10 +10,6 @@ import {FilterCollectionsService} from "../../services/filter-collections.servic
   styleUrls: ['./player-survey-choosing-form.component.css']
 })
 export class PlayerSurveyChoosingFormComponent implements AfterViewInit {
-  @ViewChild('MixedTest') MixedTest!: ElementRef;
-  @ViewChild('Programming') Programming!: ElementRef;
-  @ViewChild('Math') Math!: ElementRef;
-  @ViewChild('Logics') Logics!: ElementRef;
   public categories: CreatedQuiz[] = [];
   public flagOfAction: boolean = false;
   public searchText: string = '';

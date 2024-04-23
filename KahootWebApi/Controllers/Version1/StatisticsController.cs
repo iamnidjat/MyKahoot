@@ -1,11 +1,11 @@
 ﻿using KahootWebApi.Models;
-using KahootWebApi.Services;
+using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace KahootWebApi.Controllers.v1
-{ 
+{
     [ApiController]
     [Route("api/v1/Statistics/")]
     public class StatisticsController : ControllerBase

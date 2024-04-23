@@ -37,6 +37,7 @@ import {AvailableTestsStatsFormComponent} from "../components/available-tests-st
 import {ChooseFieldLevelFormComponent} from "../components/choose-field-level-form/choose-field-level-form.component";
 import {NgModule} from "@angular/core";
 import {exitTestProcessGuard} from "../guards/exit-test-process.guard";
+import {FeedbackPopupFormComponent} from "../components/feedback-popup-form/feedback-popup-form.component";
 
 let routes: Route[] = [
   {

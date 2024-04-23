@@ -8,6 +8,7 @@ using KahootWebApi.Services;
 using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 using BC = BCrypt.Net.BCrypt;
+using KahootWebApi.Services.Interfaces;
 
 namespace KahootWebApi.Controllers.v1
 {

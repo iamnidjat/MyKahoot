@@ -52,8 +52,16 @@ namespace KahootWebApi.Models
 
         //public int? FreezingDeadline { get; set; }
 
+        //public int Badges { get; set; }
+
+        //public int Level { get; set; }
+
         public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
 
         public ICollection<CreatedQuiz> CreatedQuizzes { get; set; } = new ObservableCollection<CreatedQuiz>();
+
+        public ICollection<Comment> Comments { get; set; } = new ObservableCollection<Comment>();
+
+        public ICollection<Like> Likes { get; set; } = new ObservableCollection<Like>();
     }
 }

@@ -1,5 +1,5 @@
 ﻿using KahootWebApi.Models;
-using KahootWebApi.Services;
+using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KahootWebApi.Controllers.Version1
@@ -20,7 +20,6 @@ namespace KahootWebApi.Controllers.Version1
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<User> GetUserInfo([FromQuery] int id)
-        // [FromQuery] explicitly specifies that the mail parameter is expected from the query string.
         {
             return await _manager.GetUserInfoAsync(id);
         }

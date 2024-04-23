@@ -1,6 +1,5 @@
-﻿using KahootWebApi.Services;
+﻿using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using reCAPTCHA.AspNetCore;
 
 namespace KahootWebApi.Controllers.Version1
 {

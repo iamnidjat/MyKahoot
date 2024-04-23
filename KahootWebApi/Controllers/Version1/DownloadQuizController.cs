@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using KahootWebApi.Services;
 using KahootWebApi.Models;
+using KahootWebApi.Services.Interfaces;
 
 namespace KahootWebApi.Controllers.Version1
 {

@@ -129,7 +129,6 @@ export class AuthFormComponent implements OnInit, OnDestroy{
   }
 
   private async CheckStatusOfAnAcc(): Promise<boolean> {
-    alert(localStorage.getItem("userId"));
     const response = await fetch(API_URL + `CheckStatusOfAcc?userId=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "GET",
     });
@@ -148,16 +147,23 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     });
   }
 
-  private DoesUserExist(username: string): boolean{
+  private async DoesUserExist(username: string): Promise<boolean>{
     fetch(API_URL2 + `DoesUserExist?username=${username}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
     }).then((data) => {
+      console.log('data', data);
       localStorage.setItem("DoesUserExist", JSON.parse(JSON.stringify(data)));
     });
-
-    return JSON.parse(localStorage.getItem("DoesUserExist")!);
+  // console.log(JSON.parse(localStorage.getItem("DoesUserExist")!));
+  //   return JSON.parse(localStorage.getItem("DoesUserExist")!);
+    const storedData = localStorage.getItem("DoesUserExist");
+    if (storedData) {
+      return JSON.parse(storedData);
+    } else {
+      return false; // or handle the case where data is not available
+    }
   }
 
   ngOnInit(): void {
@@ -178,7 +184,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     }
 
     this.socialAuthService.authState.subscribe(async (user) => {
-      if (!this.DoesUserExist(user.name))
+      if (await !this.DoesUserExist(user.name))
       {
         localStorage.setItem("SocialUserFlag", "false");
         Swal.fire('Oops', 'You do not have an account! Please choose the account type!', 'error');
@@ -208,4 +214,5 @@ export class AuthFormComponent implements OnInit, OnDestroy{
   //   }
   //   localStorage.removeItem("IsFrozen"); // Don't need anymore
   // }
+
 }

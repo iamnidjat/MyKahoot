@@ -60,5 +60,7 @@ export class PlayerOptionsFormComponent implements OnInit{
     if (storedUsername && this.cookiesService.checkCookie("username") === storedUsername) {
       this.hideCookieWrapper();
     }
+
+    localStorage.removeItem("ToStats"); // Don't need anymore
   }
 }

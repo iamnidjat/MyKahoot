@@ -168,6 +168,7 @@
       </ng-container>
 
       <ng-container *ngIf="isQuizCompleted">
+        <app-feedback-popup-form></app-feedback-popup-form>
         <div class="row d-flex justify-content-between">
           <img style="width: 50%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt="">
           <div class="result text-center col-md-6 col-sm-12">
@@ -181,8 +182,10 @@
               <p>{{'Total questions attempted' | translate}}: {{questions.length}} </p>
             </ng-container>
 
-            <p>{{'Total correct answered' | translate}}: {{correctAnswer}} </p>
-            <p>{{'Total wrong answered' | translate}}: {{inCorrectAnswer}} </p>
+            <p>{{'Total correct answered' | translate}}: {{correctAnswersCount}} </p>
+            <p>{{'Total wrong answered' | translate}}: {{inCorrectAnswersCount}} </p>
+            <p>{{'Skipped questions count' | translate}}: {{skippedQuestionsCount}} </p>
+            <p>{{'Average Response time' | translate}}: {{averageResponseTime}} </p>
             <p>{{'Your score' | translate}}: {{points}} {{"points" | translate}} </p>
             <p>{{feedback}}</p>
             <ng-container *ngIf="name !== 'Guest'">

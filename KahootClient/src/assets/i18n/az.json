@@ -183,5 +183,7 @@
   "Search by Category": "Kateqoriya üzrə axtarın",
   "Search by Quiz": "Test üzrə axtarın",
   "Test Mode": "Test modu",
-  "It is not case sensitive": "Böyük hərflərə həssas deyil"
+  "It is not case sensitive": "Böyük hərflərə həssas deyil",
+  "Skipped questions count": "Buraxılmış sualların sayı",
+  "Average Response time": "Orta cavab müddəti"
 }

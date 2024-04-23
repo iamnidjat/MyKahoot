@@ -183,5 +183,7 @@
   "Search by Category": "Искать по названию категории",
   "Search by Quiz": "Искать по названию викторины",
   "Test Mode": "Вид викторины",
-  "It is not case sensitive": "Регистро независимый"
+  "It is not case sensitive": "Регистро независимый",
+  "Skipped questions count": "Количество пропущенных вопросов",
+  "Average Response time": "Среднее время ответа"
 }

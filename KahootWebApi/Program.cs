@@ -1,4 +1,6 @@
 using KahootWebApi.Services;
+using KahootWebApi.Services.Implementations;
+using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
@@ -31,6 +33,8 @@ builder.Services.AddTransient<INewsLetter, NewsLetter>();
 builder.Services.AddTransient<IAdminManager, AdminManager>();
 builder.Services.AddTransient<ICaptchaVerificationService, CaptchaVerificationService>();
 builder.Services.AddTransient<IDownloadQuizService, DownloadQuizService>();
+builder.Services.AddTransient<IInteractionService, InteractionService>();
+builder.Services.AddTransient<IFeedbackService, FeedbackService>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");

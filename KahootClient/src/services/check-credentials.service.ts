@@ -15,8 +15,8 @@ export class CheckCredentialsService {
       console.log(data);
       localStorage.setItem("IsEmailUsed", JSON.parse(JSON.stringify(data)));
     });
-    alert(mail);
-    alert(localStorage.getItem("IsEmailUsed"));
+   // alert(mail);
+   // alert(localStorage.getItem("IsEmailUsed"));
     return JSON.parse(localStorage.getItem("IsEmailUsed")!);
   }
 }

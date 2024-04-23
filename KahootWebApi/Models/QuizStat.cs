@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KahootWebApi.Models
 {
@@ -28,6 +27,22 @@ namespace KahootWebApi.Models
         [Required]
         public string? Level { get; set; }
 
+        [Required]
+        public float AverageResponseTime { get; set; }
+
+        [Required]
+        public int CorrectAnswersCount { get; set; }
+
+        [Required]
+        public int WrongAnswersCount { get; set; }
+
+        [Required]
+        public int SkippedQuestionsCount { get; set; }
+
+        //[Required]
+        //public int OverallRanking { get; set; }
+
+        [Required]
         public int UserId { get; set; }
 
         public User? User { get; set; }

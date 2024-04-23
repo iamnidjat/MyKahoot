@@ -7,5 +7,9 @@ export type QuizModel = {
   passedDate: Date,
   isVisible: boolean;
   level: string;
+  averageResponseTime: number;
+  correctAnswersCount: number;
+  wrongAnswersCount: number;
+  skippedQuestionsCount: number;
   userId: number;
 }

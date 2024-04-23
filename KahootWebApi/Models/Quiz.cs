@@ -11,7 +11,7 @@ namespace KahootWebApi.Models
         public string? QuizType { get; set; } // Category
 
         [Required]
-        public string? QuizName { get; set; }
+        public string? QuizName { get; set; } // Test name
 
         [Required]
         public string? TestFormat { get; set; }
@@ -36,5 +36,11 @@ namespace KahootWebApi.Models
 
         [Required]
         public int QuestionNumber { get; set; }
+
+        [Required]
+        public int TimeToAnswer { get; set; }
+
+        [Required]
+        public int Points { get; set; }
     }
 }

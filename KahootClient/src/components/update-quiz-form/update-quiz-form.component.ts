@@ -17,6 +17,8 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
   public isQuizCompleted: boolean = false;
   public questions: any = [];
   private url: string = "https://localhost:7176/api/v1/Quiz/";
+  @ViewChild('Points') Points!: ElementRef;
+  @ViewChild('Time') Time!: ElementRef;
   @ViewChild('Question') Question!: ElementRef;
   @ViewChild('Answer1') Answer1!: ElementRef;
   @ViewChild('Answer2') Answer2!: ElementRef;
@@ -80,7 +82,9 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
         let question: Question = {quizType: this.catType, quizName: this.testType,
           testFormat: this.testFormat, question: this.Question.nativeElement.value,
           option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
-          option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+          option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
+          questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+          timeToAnswer: this.Time.nativeElement.value}
 
         await fetch(this.url + `UpdateQuestion?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion}`, {
           method: "PATCH",
@@ -106,7 +110,8 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
         let question: Question = {quizType: this.catType, quizName: this.testType,
           testFormat: this.testFormat, question: this.Question.nativeElement.value,
           option1: this.Answer12.nativeElement.value, option2: this.Answer22.nativeElement.value,
-          option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+          option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
+          points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
         await fetch(this.url + `UpdateQuestion?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion}`, {
           method: "PATCH",
@@ -132,7 +137,9 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
         let question: Question = {quizType: this.catType, quizName: this.testType,
           testFormat: this.testFormat, question: this.Question.nativeElement.value,
           option1: this.Answer1.nativeElement.value, option2: this.Answer2.nativeElement.value,
-          option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value, answer: this.correctAnswer, questionNumber: this.currentQuestion}
+          option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value,
+          answer: this.correctAnswer, questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+          timeToAnswer: this.Time.nativeElement.value}
 
         await fetch(this.url + `UpdateQuestion?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion}`, {
           method: "PATCH",

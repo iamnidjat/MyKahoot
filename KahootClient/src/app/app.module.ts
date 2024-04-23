@@ -77,6 +77,8 @@ import {
   EnterPrivateTestCodePopupFormComponent
 } from "../components/enter-private-test-code-popup-form/enter-private-test-code-popup-form.component";
 import {FilterCollectionsService} from "../services/filter-collections.service";
+import {FeedbackPopupFormComponent} from "../components/feedback-popup-form/feedback-popup-form.component";
+import {SendFeedbackService} from "../services/send-feedback.service";
 
 @NgModule({
   declarations: [
@@ -126,7 +128,8 @@ import {FilterCollectionsService} from "../services/filter-collections.service";
     DateDifferenceValidatorDirective,
     ChooseActionPopupFormComponent,
     PublicPrivateTypePopupFormComponent,
-    EnterPrivateTestCodePopupFormComponent
+    EnterPrivateTestCodePopupFormComponent,
+    FeedbackPopupFormComponent
   ],
   imports: [
     BrowserModule,
@@ -148,7 +151,7 @@ import {FilterCollectionsService} from "../services/filter-collections.service";
   ],
   providers: [QuestionService, ConfigService, CookiesService, DownloadCategoriesSharedService, DownloadQuizService,
     UserSharedService, SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
-    FilterCollectionsService, PlayerOptionsFormComponent, RegisterFormComponent, ChooseTypeOfQuizFormComponent,
+    FilterCollectionsService, SendFeedbackService, TestProcessComponent, PlayerOptionsFormComponent, RegisterFormComponent, ChooseTypeOfQuizFormComponent,
     CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent, ProfileFormComponent, AvailableTestsStatsFormComponent,
     {
       provide: 'SocialAuthServiceConfig',

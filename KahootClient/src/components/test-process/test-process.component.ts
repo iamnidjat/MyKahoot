@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {interval} from "rxjs";
 import {QuizModel} from "../../models/QuizModel";
@@ -15,15 +15,19 @@ const API_URL2: string = "https://localhost:7176/api/v1/Quiz/";
 })
 export class TestProcessComponent implements OnInit, OnDestroy{
   public name: string = "";
-  public testType: string = "";
-  public quizName: string = "";
+  @Input() public testType: string = "";
+  @Input() public quizName: string = "";
   public questionList: any = [];
   public questions: any = [];
   public currentQuestion: number = 0;
   public points: number = 0;
-  public counter: number = 60;
-  public correctAnswer: number = 0;
-  public inCorrectAnswer: number = 0;
+  public counter: number = 60; // timer
+  public correctAnswersCount: number = 0;
+  public inCorrectAnswersCount: number = 0;
+  public skippedQuestionsCount: number = 0; //
+  public averageResponseTime: number = 0; //
+  public questionStartTime: number = 0;
+  public responseTimes: number[] = [];
   public interval$: any;
   public progress: string = "0";
   public isQuizCompleted: boolean = false;
@@ -89,12 +93,13 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     });
   }
 
-  public async getAllQuestionsFromBack(): Promise<void>{
+  public async getAllQuestionsFromBack(): Promise<void>{ // !
     await fetch(API_URL2 + `ReadQuestions?catName=${this.testType}&quizName=${this.quizName}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
     }).then((data) => {
+      console.log(data);
       Object.keys(data).forEach((key) =>
       {
         this.questions.push(data[key]);
@@ -111,6 +116,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
 
   public nextQuestion(): void {
     this.currentQuestion++;
+    this.skippedQuestionsCount++;
   }
 
   public previousQuestion(): void {
@@ -118,15 +124,19 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public answer(currentQno: number, option: any): void {
+    this.questionStartTime = new Date().getTime();
+    console.log("this.questionStartTime: ", this.questionStartTime);
     this.isActive = true;
+
     if (currentQno === this.questionList.length){
       this.isQuizCompleted = true;
       this.stopCounter();
+      this.calculateAverageResponseTime();
       this.FeedbackGenerator();
     }
     if (option.correct) {
       this.points += 10;
-      this.correctAnswer++;
+      this.correctAnswersCount++;
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
@@ -137,13 +147,18 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     else {
       setTimeout(() => {
         this.currentQuestion++;
-        this.inCorrectAnswer++;
+        this.inCorrectAnswersCount++;
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
       }, 1000);
       this.points -= 10;
     }
+
+    const responseTime = new Date().getTime() - this.questionStartTime;
+    console.log("a: ", new Date().getTime() );
+    console.log("responseTime: ", responseTime);
+    this.responseTimes.push(responseTime);
   }
 
   public async answer2(currentQno: number, option: any): Promise<void> {
@@ -157,7 +172,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }
     if (option == localStorage.getItem("correctAnswer")) {
       this.points += 10;
-      this.correctAnswer++;
+      this.correctAnswersCount++;
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
@@ -168,7 +183,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     else {
       setTimeout(() => {
         this.currentQuestion++;
-        this.inCorrectAnswer++;
+        this.inCorrectAnswersCount++;
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
@@ -184,7 +199,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
         if (this.counter === 0) {
           this.currentQuestion++;
           this.counter = 60;
-          this.points -= 10;
+          this.skippedQuestionsCount++;
         }
       });
     setTimeout(() => {
@@ -235,24 +250,19 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     this.router.navigate(['/app/stats-form']);
   }
 
-  private FeedbackGenerator(): any { // !
-    if (this.correctAnswer > 0 && this.correctAnswer <= 8)
-    {
+  private FeedbackGenerator(): void {
+    const score: number = (this.correctAnswersCount / (this.questions.length || this.questionList.length)) * 100;
+
+    if (score <= 40) {
       this.feedback = "You have gaps in this field! Study better!";
     }
-
-    else if (this.correctAnswer > 8 && this.correctAnswer <= 12)
-    {
+    else if (score <= 60) {
       this.feedback = "You need to improve your knowledge in this field!";
     }
-
-    else if (this.correctAnswer > 12 && this.correctAnswer <= 16)
-    {
+    else if (score <= 80) {
       this.feedback = "Good result! You have an average score!";
     }
-
-    else if (this.correctAnswer > 16 && this.correctAnswer <= 20)
-    {
+    else {
       this.feedback = "Keep it up! You have great knowledge in this field!";
     }
   }
@@ -260,9 +270,11 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   private async SaveResult(e: any): Promise<void>{
     e.preventDefault();
 
-    let quizInfo: QuizModel = {categoryName: this.testType, quizName: this.quizName, score: this.points,
+    let quizInfo: QuizModel = { categoryName: this.testType, quizName: this.quizName, score: this.points,
       userName: localStorage.getItem("Login")!, passedDate: new Date(), isVisible: true,
-      level: this.level, userId: parseInt(localStorage.getItem("userId")!)}
+      level: this.level, userId: parseInt(localStorage.getItem("userId")!),
+      averageResponseTime: this.averageResponseTime, correctAnswersCount: this.correctAnswersCount,
+      wrongAnswersCount: this.inCorrectAnswersCount, skippedQuestionsCount: this.skippedQuestionsCount }
 
     await fetch(API_URL + "UploadResult", {
       method: "POST",
@@ -274,7 +286,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public downloadDocument(fileType: string): void {
-    const data = JSON.stringify(this.questionList.length !== 0 ? this.questionList : this.questions);
+    const data: string = JSON.stringify(this.questionList.length !== 0 ? this.questionList : this.questions);
 
     let downloadFunction;
 
@@ -301,6 +313,12 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     });
 
     this.showFileTypes = false;
+  }
+
+  private calculateAverageResponseTime(): number {
+    const totalResponseTime = this.responseTimes.reduce((acc, curr) => acc + curr, 0);
+    this.averageResponseTime = totalResponseTime / this.responseTimes.length;
+    return this.averageResponseTime;
   }
 
   ngOnDestroy(): void {

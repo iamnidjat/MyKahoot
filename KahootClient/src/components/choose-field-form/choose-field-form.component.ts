@@ -21,7 +21,7 @@ export class ChooseFieldFormComponent implements OnInit{
   }
 
   public BackOptions(): void{
-      this.router.navigate(['/app/profile-form']);
+    this.router.navigate(['/app/profile-form']);
   }
 
   public ToTestsForm(elemRef: any): void{

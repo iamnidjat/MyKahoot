@@ -1,7 +1,7 @@
 export type Question = {
   id?: number;
-  quizType: string;
-  quizName: string;
+  quizType: string; // Category
+  quizName: string; // Test name
   testFormat: string;
   question: string;
   option1: string;
@@ -10,4 +10,6 @@ export type Question = {
   option4: string | null;
   answer: number;
   questionNumber: number;
+  points: number;
+  timeToAnswer: number;
 }

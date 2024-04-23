@@ -18,6 +18,18 @@
           <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questions.length}}</span>
         </div>
       </div>
+      <div class="time-points" style="display: flex; flex-direction: row; justify-content: space-between">
+        <div class="points" style="display: flex; flex-direction: row">
+          <label>Points: </label>
+          <input type="number" min="5" max="50" value="5" #Points />
+          <label> (min: 5 points, max: 50 points)</label>
+        </div>
+        <div class="ime" style="display: flex; flex-direction: row">
+          <label>Time (seconds): </label>
+          <input type="number" min="15" max="180" value="60" #Time />
+          <label> (min: 15 seconds, max: 180 seconds)</label>
+        </div>
+      </div>
       <div class="question">
         <div class="card" style="text-align: center; margin: 5px">
           <input type="text" #Question value="{{questions[currentQuestion]?.question}}" placeholder="{{'Enter your question here' | translate}}"/>
