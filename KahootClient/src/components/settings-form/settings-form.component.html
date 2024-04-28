@@ -20,7 +20,6 @@
     <div [hidden]="newpassword.valid || newpassword.untouched" class="alert">
       Email is not specified
     </div>
-
     <input [type]="visibility3 ? 'text' : 'password'" name="cNewPassword" id="confirmPassword" required [(ngModel)]="cNewPassword" #cnewpassword="ngModel" (cut)="false" (copy)="false" (paste)="false">
     <button id="hidden-eye3" (click)="ChangeVisibilityOfPasswordField(cNewPassword, 'visibility3')">
       <span [class]="visibility3 ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>

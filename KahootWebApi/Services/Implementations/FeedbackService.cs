@@ -15,7 +15,7 @@ namespace KahootWebApi.Services.Implementations
             _logger = logger;
         }
 
-        public async Task SendQuizFeedback(Feedback feedback)
+        public async Task SendQuizFeedbackAsync(Feedback feedback)
         {
             try
             {

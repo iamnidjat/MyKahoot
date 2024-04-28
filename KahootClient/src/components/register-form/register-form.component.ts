@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import {Router} from "@angular/router";
 import {SharedService} from "../../services/shared.service";
 import {CheckCredentialsService} from "../../services/check-credentials.service";
+import {NgxSpinnerService} from "ngx-spinner";
 
 const API_URL: string = "https://localhost:7176/api/v1/Account/";
 
@@ -23,10 +24,12 @@ export class RegisterFormComponent implements OnInit{
   public mail: string = "";
 
   constructor(private el: ElementRef, private router: Router,
-              private sharedService: SharedService, private checkCredsService: CheckCredentialsService) {}
+              private sharedService: SharedService, private spinner: NgxSpinnerService,
+              private checkCredsService: CheckCredentialsService) {}
 
   public async Register(e: any): Promise<void>{
     e.preventDefault();
+    this.spinner.show();
 
     if (await this.checkCredsService.IsEmailUsed(this.mail)) {
         this.isEmailUsed = true;
@@ -66,6 +69,10 @@ export class RegisterFormComponent implements OnInit{
           localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
           localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
           this.sharedService.SentConfirmationMail(this.mail, parseInt(localStorage.getItem("userId")!));
+        }).catch(() => {
+
+        }).finally(() => {
+          this.spinner.hide();
         });
       }
       else

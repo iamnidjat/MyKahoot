@@ -6,6 +6,7 @@ import {SocialAuthService} from "@abacritt/angularx-social-login";
 import {SocialUser} from "../../models/SocialUser";
 import {SharedService} from "../../services/shared.service";
 import { ReCaptchaV3Service } from 'ng-recaptcha';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 const API_URL: string = "https://localhost:7176/api/v1/Account/";
 const API_URL2: string = "https://localhost:7176/api/v1/UserInfo/";
@@ -25,7 +26,8 @@ export class AuthFormComponent implements OnInit, OnDestroy{
   public userPassword: string = "";
 
   constructor(private el: ElementRef, private router: Router, private recaptchaV3Service: ReCaptchaV3Service,
-              private socialAuthService: SocialAuthService, private sharedService: SharedService) {}
+              private socialAuthService: SocialAuthService, private sharedService: SharedService,
+              private spinner: NgxSpinnerService) {}
 
   ngOnDestroy(): void {
     localStorage.removeItem("isUserBot"); // Don't need anymore
@@ -52,6 +54,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
 
   public async LogIn(e: any): Promise<void>{
     e.preventDefault();
+    this.spinner.show();
 
     if (await this.sendTokenToServer() === "false") {
       let user: LoginModel = {userName: this.userLogin, password: this.userPassword};
@@ -86,6 +89,10 @@ export class AuthFormComponent implements OnInit, OnDestroy{
           Swal.fire('Your account is unfrozen!');
         }
         localStorage.removeItem("IsFrozen"); // Don't need anymore
+      }).catch(() => {
+
+      }).finally(() => {
+        this.spinner.hide();
       });
     }
     else {

@@ -24,15 +24,15 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   @ViewChild('Points') Points!: ElementRef;
   @ViewChild('Time') Time!: ElementRef;
   @ViewChild('Question') Question!: ElementRef;
-  @ViewChild('Answer1') Answer1!: ElementRef; // When 4 answers, first answer
-  @ViewChild('Answer2') Answer2!: ElementRef; // When 4 answers, second answer
-  @ViewChild('Answer3') Answer3!: ElementRef; // When 4 answers, third answer
-  @ViewChild('Answer4') Answer4!: ElementRef; // When 4 answers, fourth answer
-  @ViewChild('Answer11') Answer11!: ElementRef; // When 3 answers, first answer
-  @ViewChild('Answer21') Answer21!: ElementRef; // When 3 answers, second answer
-  @ViewChild('Answer31') Answer31!: ElementRef; // When 3 answers, third answer
-  @ViewChild('Answer12') Answer12!: ElementRef; // When 2 answers, first answer
-  @ViewChild('Answer22') Answer22!: ElementRef; // When 2 answers, second answer
+  @ViewChild('Answer1') Answer1!: ElementRef; // When 4 answers, first option
+  @ViewChild('Answer2') Answer2!: ElementRef; // When 4 answers, second option
+  @ViewChild('Answer3') Answer3!: ElementRef; // When 4 answers, third option
+  @ViewChild('Answer4') Answer4!: ElementRef; // When 4 answers, fourth option
+  @ViewChild('Answer11') Answer11!: ElementRef; // When 3 answers, first option
+  @ViewChild('Answer21') Answer21!: ElementRef; // When 3 answers, second option
+  @ViewChild('Answer31') Answer31!: ElementRef; // When 3 answers, third option
+  @ViewChild('Answer12') Answer12!: ElementRef; // When 2 answers, first option
+  @ViewChild('Answer22') Answer22!: ElementRef; // When 2 answers, second option
   @ViewChild('RadioOption1') RadioOption1!: ElementRef; // When 4 answers, first option
   @ViewChild('RadioOption2') RadioOption2!: ElementRef; // When 4 answers, second option
   @ViewChild('RadioOption3') RadioOption3!: ElementRef; // When 4 answers, third option

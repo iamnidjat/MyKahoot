@@ -14,6 +14,9 @@ namespace KahootWebApi.Models
         public DateTime Date { get; set; }
 
         [Required]
+        public string? AuthorName { get; set; }
+
+        [Required]
         public int AuthorId { get; set; }
 
         public User? Author { get; set; }
@@ -21,6 +24,6 @@ namespace KahootWebApi.Models
         [Required]
         public int QuizId { get; set; }
 
-        public CreatedQuiz? Quiz { get; set; }
+        public CreatedQuizStats? Quiz { get; set; }
     }
 }

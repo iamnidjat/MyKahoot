@@ -95,9 +95,7 @@ nav .search-icon{
   left: 10px;
 }
 
-nav .UK,
-nav .Russia,
-nav .Azerbaijan {
+nav .lang {
   width: 30px;
   height: 30px;
   cursor: pointer;

@@ -13,6 +13,7 @@
           <th>Private</th>
           <th>Code for a test</th>
           <th></th>
+          <th></th>
         </tr>
         </thead>
         <tbody>
@@ -23,9 +24,10 @@
           <td>{{category.isPrivate ? "yes" : "no"}}</td>
           <td>{{category.quizCode}}</td>
           <div style="display: flex; flex-direction: row">
-            <td (click)="confirmDelete(category.categoryName!, category.quizName!)" style="cursor: pointer; color: red">Delete</td>
+            <td (click)="confirmDelete(category.categoryName!, category.quizName!)" style="cursor: pointer; color: red">{{"Delete" | translate}}</td>
             <td (click)="ToUpdateQuizForm(category.quizName!, category.categoryName!)" style="cursor: pointer; color: blue"><a>{{"Update" | translate}}</a></td>
           </div>
+          <td (click)="ToCreatedQuizStatsForm(category.quizName!, category.categoryName!)" style="cursor: pointer; color: green">{{"Your quiz stats" | translate}}</td>
         </tr>
         </tbody>
         <pagination-controls (pageChange)="p = $event" [id]="paginationId"></pagination-controls>

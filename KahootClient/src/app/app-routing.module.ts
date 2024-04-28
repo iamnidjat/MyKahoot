@@ -38,6 +38,8 @@ import {ChooseFieldLevelFormComponent} from "../components/choose-field-level-fo
 import {NgModule} from "@angular/core";
 import {exitTestProcessGuard} from "../guards/exit-test-process.guard";
 import {FeedbackPopupFormComponent} from "../components/feedback-popup-form/feedback-popup-form.component";
+import {CreatedQuizStatsFormComponent} from "../components/created-quiz-stats-form/created-quiz-stats-form.component";
+import {CommentsFormComponent} from "../components/comments-form/comments-form.component";
 
 let routes: Route[] = [
   {
@@ -201,8 +203,17 @@ let routes: Route[] = [
     component: ChooseFieldLevelFormComponent,
     canActivate: [AuthGuard]
   },
+  {
+    path: 'app/created-quiz-stats-form',
+    component: CreatedQuizStatsFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/comments',
+    component: CommentsFormComponent,
+    canActivate: [AuthGuard]
+  }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

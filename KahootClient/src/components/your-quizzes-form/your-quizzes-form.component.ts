@@ -1,7 +1,9 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {NavigationExtras, Router} from "@angular/router";
 import Swal from "sweetalert2";
+
+const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
 
 @Component({
   selector: 'app-your-quizzes-form',
@@ -10,7 +12,6 @@ import Swal from "sweetalert2";
 })
 export class YourQuizzesFormComponent implements OnInit{
   public categories: CreatedQuiz[] = [];
-  private url: string = "https://localhost:7176/api/v1/Quiz/";
   public p: number = 1;
   public paginationId: string = 'unique-pagination-id';
   public searchText: string = '';
@@ -34,7 +35,7 @@ export class YourQuizzesFormComponent implements OnInit{
   }
 
   private async downloadCategories(categories: CreatedQuiz[]): Promise<void>{
-    await fetch(this.url + `DownloadMyQuizzes?userId=${localStorage.getItem("userId")!}`, {
+    await fetch(API_URL + `DownloadMyQuizzes?userId=${localStorage.getItem("userId")!}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
@@ -47,7 +48,7 @@ export class YourQuizzesFormComponent implements OnInit{
   }
 
   private async deleteYourQuizzes(categoryName: string, testName: string): Promise<void>{
-    await fetch(this.url + `DeleteQuiz?categoryName=${categoryName}&testName=${testName}`, {
+    await fetch(API_URL + `DeleteQuiz?categoryName=${categoryName}&testName=${testName}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json"
@@ -100,5 +101,15 @@ export class YourQuizzesFormComponent implements OnInit{
       queryParams: { 'categoryName': categoryName, 'quizName': quizName }
     };
     this.router.navigate(['/app/watch-quiz-form'], navigationExtras);
+  }
+
+  public ToCreatedQuizStatsForm(quizName: string, categoryName: string): void{
+    // localStorage.setItem("TestNameForDisplayingStats", quizName);
+    // localStorage.setItem("CatNameForDisplayingStats", categoryName);
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'categoryName': categoryName, 'quizName': quizName }
+    };
+    this.router.navigate(['/app/created-quiz-stats-form'], navigationExtras);
   }
 }

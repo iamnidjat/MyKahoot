@@ -39,9 +39,6 @@ namespace KahootWebApi.Models
         [Required]
         public int SkippedQuestionsCount { get; set; }
 
-        //[Required]
-        //public int OverallRanking { get; set; }
-
         [Required]
         public int UserId { get; set; }
 

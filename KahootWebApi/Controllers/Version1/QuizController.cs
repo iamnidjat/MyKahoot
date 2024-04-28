@@ -201,5 +201,14 @@ namespace KahootWebApi.Controllers.Version1
         {
             return await _manager.GetCorrectAnswer(catName, quizName, questionNumber);
         }
+
+        [HttpGet("GetCreatedQuizStatsAsync")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<CreatedQuizStats> GetCreatedQuizStatsAsync(string catName, string quizName)
+        {
+            return await _manager.GetCreatedQuizStatsAsync(catName, quizName);
+        }
     }
 }

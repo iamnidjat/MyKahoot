@@ -50,7 +50,7 @@ namespace KahootWebApi.Models
 
         //public DateTime? DateOfFreezing { get; set; }
 
-        //public int? FreezingDeadline { get; set; }
+        //public int FreezingDeadline { get; set; }
 
         //public int Badges { get; set; }
 
@@ -63,5 +63,7 @@ namespace KahootWebApi.Models
         public ICollection<Comment> Comments { get; set; } = new ObservableCollection<Comment>();
 
         public ICollection<Like> Likes { get; set; } = new ObservableCollection<Like>();
+
+        public ICollection<Dislike> Dislikes { get; set; } = new ObservableCollection<Dislike>();
     }
 }

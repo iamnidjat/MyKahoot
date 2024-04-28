@@ -4,6 +4,6 @@ namespace KahootWebApi.Services.Interfaces
 {
     public interface IFeedbackService
     {
-        Task SendQuizFeedback(Feedback feedback);
+        Task SendQuizFeedbackAsync(Feedback feedback);
     }
 }

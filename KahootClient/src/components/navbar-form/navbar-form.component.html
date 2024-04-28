@@ -1,9 +1,9 @@
-<ng-container *ngIf="username !== null">
+<ng-container *ngIf="username !== ''">
   <nav>
     <div class="languages" >
-      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="UK" alt="en">
-      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="Russia" alt="ru">
-      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="Azerbaijan" alt="az">
+      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="lang" alt="en">
+      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="lang" alt="ru">
+      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="lang" alt="az">
     </div>
 
     <div class="menu-icon">
@@ -77,9 +77,9 @@
 <ng-container *ngIf="username == null">
   <nav style="width: 1525px">
     <div class="languages" >
-      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="UK" alt="en">
-      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="Russia" alt="ru">
-      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="Azerbaijan" alt="az">
+      <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="lang" alt="en">
+      <img #ru (click)="switchLang(ru.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330437.png" class="lang" alt="ru">
+      <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="lang" alt="az">
     </div>
 
     <div class="menu-icon">

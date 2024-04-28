@@ -7,7 +7,16 @@
   </div>
   <div class="main-container">
     <div *ngFor="let category of filterCategories()">
-      <div class="fields" id="{{category.categoryName}}" #div (click)="onQuizzesListClick(div)"><p>{{category.categoryName}}</p></div>
+      <div class="fields" id="{{category.categoryName}}" #div (click)="onQuizzesListClick(div)">
+        <p>{{category.categoryName}}</p>
+        <div style="display: flex; flex-direction: row">
+          <input type="button" value="Like">
+          <input type="button" value="Dislike">
+          <input type="button" value="Comments" routerLink="/app/comments">
+          <div>Average feedback: </div>
+          <div> times passed</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>

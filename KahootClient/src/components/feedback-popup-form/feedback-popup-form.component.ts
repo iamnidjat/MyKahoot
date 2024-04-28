@@ -20,7 +20,7 @@ export class FeedbackPopupFormComponent {
       if (star) {
         if (i <= starIndex) {
           star.classList.add('checked');
-        } 
+        }
         else {
           star.classList.remove('checked');
         }
@@ -33,6 +33,10 @@ export class FeedbackPopupFormComponent {
   public async SaveQuizFeedback(): Promise<void> {
     await this.sendFeedbackService.SaveQuizFeedback(this.childComponent.testType, this.childComponent.quizName,
       this.feedbackScore, this.feedbackComment.nativeElement.value);
+
+    let modal = this.el.nativeElement.querySelector(".modal");
+
+    modal.style.display = "none";
   }
 
   public async ClosePopUp(): Promise<void> {

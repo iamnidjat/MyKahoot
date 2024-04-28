@@ -79,6 +79,12 @@ import {
 import {FilterCollectionsService} from "../services/filter-collections.service";
 import {FeedbackPopupFormComponent} from "../components/feedback-popup-form/feedback-popup-form.component";
 import {SendFeedbackService} from "../services/send-feedback.service";
+import {CreatedQuizStatsFormComponent} from "../components/created-quiz-stats-form/created-quiz-stats-form.component";
+import {CommentsFormComponent} from "../components/comments-form/comments-form.component";
+import {InteractionService} from "../services/interaction.service";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
 @NgModule({
   declarations: [
@@ -129,7 +135,9 @@ import {SendFeedbackService} from "../services/send-feedback.service";
     ChooseActionPopupFormComponent,
     PublicPrivateTypePopupFormComponent,
     EnterPrivateTestCodePopupFormComponent,
-    FeedbackPopupFormComponent
+    FeedbackPopupFormComponent,
+    CreatedQuizStatsFormComponent,
+    CommentsFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -147,12 +155,16 @@ import {SendFeedbackService} from "../services/send-feedback.service";
     GoogleSigninButtonModule,
     NgOptimizedImage,
     NgxPaginationModule,
-    RecaptchaV3Module
+    RecaptchaV3Module,
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
+    MatProgressSpinnerModule,
   ],
   providers: [QuestionService, ConfigService, CookiesService, DownloadCategoriesSharedService, DownloadQuizService,
     UserSharedService, SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
-    FilterCollectionsService, SendFeedbackService, TestProcessComponent, PlayerOptionsFormComponent, RegisterFormComponent, ChooseTypeOfQuizFormComponent,
-    CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent, ProfileFormComponent, AvailableTestsStatsFormComponent,
+    FilterCollectionsService, SendFeedbackService, InteractionService, TestProcessComponent, PlayerOptionsFormComponent,
+    RegisterFormComponent, ChooseTypeOfQuizFormComponent, CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent,
+    ProfileFormComponent, AvailableTestsStatsFormComponent,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {
