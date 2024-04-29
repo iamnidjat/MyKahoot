@@ -85,6 +85,7 @@ import {InteractionService} from "../services/interaction.service";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
 
 @NgModule({
   declarations: [
@@ -138,6 +139,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
     FeedbackPopupFormComponent,
     CreatedQuizStatsFormComponent,
     CommentsFormComponent,
+    NotFoundFormComponent,
   ],
   imports: [
     BrowserModule,

@@ -37,9 +37,9 @@ import {AvailableTestsStatsFormComponent} from "../components/available-tests-st
 import {ChooseFieldLevelFormComponent} from "../components/choose-field-level-form/choose-field-level-form.component";
 import {NgModule} from "@angular/core";
 import {exitTestProcessGuard} from "../guards/exit-test-process.guard";
-import {FeedbackPopupFormComponent} from "../components/feedback-popup-form/feedback-popup-form.component";
 import {CreatedQuizStatsFormComponent} from "../components/created-quiz-stats-form/created-quiz-stats-form.component";
 import {CommentsFormComponent} from "../components/comments-form/comments-form.component";
+import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
 
 let routes: Route[] = [
   {
@@ -79,7 +79,7 @@ let routes: Route[] = [
     canDeactivate: [exitTestProcessGuard]
   },
   {
-    path: 'app/rules-form',
+    path: 'app/rules-form/:mode/:categoryName/:testName',
     component: RulesFormComponent,
     canActivate: [Specialguard, Novisitguard]
   },
@@ -212,7 +212,8 @@ let routes: Route[] = [
     path: 'app/comments',
     component: CommentsFormComponent,
     canActivate: [AuthGuard]
-  }
+  },
+  { path: '**', component: NotFoundFormComponent }
 ];
 
 @NgModule({
