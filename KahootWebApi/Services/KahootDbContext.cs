@@ -3,7 +3,7 @@ using KahootWebApi.Models;
 
 namespace KahootWebApi.Services
 {
-    public class KahootDbContext : DbContext
+    public class KahootDbContext: DbContext
     {
         public KahootDbContext(DbContextOptions<KahootDbContext> options) : base(options)
         {
@@ -14,7 +14,6 @@ namespace KahootWebApi.Services
         public DbSet<User> Users { get; set; }
         public DbSet<Quiz> Questions { get; set; }
         public DbSet<CreatedQuiz> CreatedQuizzes { get; set; }
-        public DbSet<CreatedQuizStats> CreatedQuizzesStats { get; set; }
         public DbSet<DeletedAccount> DeletedAccounts { get; set; }
         public DbSet<SocialUser> SocialUsers { get; set; }
         public DbSet<Comment> Comments { get; set; }
@@ -29,10 +28,10 @@ namespace KahootWebApi.Services
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull, DeleteBehavior.Cascade
 
-            modelBuilder.Entity<CreatedQuiz>()
-               .HasOne(cq => cq.CreatedQuizStats)
-               .WithOne(cqs => cqs.CreatedQuiz)
-               .HasForeignKey<CreatedQuizStats>(cqs => cqs.CreatedQuizId);
+            //modelBuilder.Entity<CreatedQuiz>()
+            //   .HasOne(cq => cq.CreatedQuizStats)
+            //   .WithOne(cqs => cqs.CreatedQuiz)
+            //   .HasForeignKey<CreatedQuizStats>(cqs => cqs.CreatedQuizId);
         }
     }
 }

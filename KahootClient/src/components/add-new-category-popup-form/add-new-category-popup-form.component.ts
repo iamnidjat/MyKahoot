@@ -24,7 +24,7 @@ export class AddNewCategoryPopupFormComponent{
     this.childComponent.flagOfCustomCategory = false;
   }
 
-  public async CreateNewCategory(): Promise<void> {
+  public async CreateNewCategoryAsync(): Promise<void> {
     if (this.categoryType.nativeElement.value !== "") {
       if (await this.checkService.IsCatNameUsed(this.categoryType.nativeElement.value)) {
         this.isCatNameUsed = true;

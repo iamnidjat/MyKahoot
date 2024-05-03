@@ -33,7 +33,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     localStorage.removeItem("isUserBot"); // Don't need anymore
   }
 
-  private async sendTokenToServer(): Promise<string> {
+  private async sendTokenToServerAsync(): Promise<string> {
       const token: string | undefined  = await this.recaptchaV3Service.execute('importantAction').toPromise();
       console.log("token => ", token);
 
@@ -52,11 +52,11 @@ export class AuthFormComponent implements OnInit, OnDestroy{
       return localStorage.getItem("isUserBot")!;
   }
 
-  public async LogIn(e: any): Promise<void>{
+  public async LogInAsync(e: any): Promise<void>{
     e.preventDefault();
     this.spinner.show();
 
-    if (await this.sendTokenToServer() === "false") {
+    if (await this.sendTokenToServerAsync() === "false") {
       let user: LoginModel = {userName: this.userLogin, password: this.userPassword};
 
       await fetch(API_URL + "Login", {
@@ -84,8 +84,8 @@ export class AuthFormComponent implements OnInit, OnDestroy{
         localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
         localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
 
-        if (await this.CheckStatusOfAnAcc()) {
-          await this.UnFreezeAnAcc();
+        if (await this.CheckStatusOfAnAccAsync()) {
+          await this.UnFreezeAnAccAsync();
           Swal.fire('Your account is unfrozen!');
         }
         localStorage.removeItem("IsFrozen"); // Don't need anymore
@@ -135,7 +135,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     }
   }
 
-  private async CheckStatusOfAnAcc(): Promise<boolean> {
+  private async CheckStatusOfAnAccAsync(): Promise<boolean> {
     const response = await fetch(API_URL + `CheckStatusOfAcc?userId=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "GET",
     });
@@ -145,7 +145,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     return JSON.parse(localStorage.getItem("IsFrozen")!);
   }
 
-  private async UnFreezeAnAcc(): Promise<void>{
+  private async UnFreezeAnAccAsync(): Promise<void>{
     await fetch(API_URL + `UnfreezeAcc?userId=${parseInt(localStorage.getItem("userId")!)}`, {
       method: "POST",
       headers: {
@@ -154,7 +154,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     });
   }
 
-  private async DoesUserExist(username: string): Promise<boolean>{
+  private async DoesUserExistAsync(username: string): Promise<boolean>{
     fetch(API_URL2 + `DoesUserExist?username=${username}`, {
       method: "GET"
     }).then((response) => {
@@ -191,7 +191,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     }
 
     this.socialAuthService.authState.subscribe(async (user) => {
-      if (await !this.DoesUserExist(user.name))
+      if (await !this.DoesUserExistAsync(user.name))
       {
         localStorage.setItem("SocialUserFlag", "false");
         Swal.fire('Oops', 'You do not have an account! Please choose the account type!', 'error');

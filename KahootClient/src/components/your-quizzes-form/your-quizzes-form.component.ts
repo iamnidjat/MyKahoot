@@ -103,12 +103,12 @@ export class YourQuizzesFormComponent implements OnInit{
     this.router.navigate(['/app/watch-quiz-form'], navigationExtras);
   }
 
-  public ToCreatedQuizStatsForm(quizName: string, categoryName: string): void{
+  public ToCreatedQuizStatsForm(categoryId: number, quizName: string, categoryName: string): void{
     // localStorage.setItem("TestNameForDisplayingStats", quizName);
     // localStorage.setItem("CatNameForDisplayingStats", categoryName);
 
     const navigationExtras: NavigationExtras = {
-      queryParams: { 'categoryName': categoryName, 'quizName': quizName }
+      queryParams: { 'id': categoryId, 'categoryName': categoryName, 'quizName': quizName }
     };
     this.router.navigate(['/app/created-quiz-stats-form'], navigationExtras);
   }

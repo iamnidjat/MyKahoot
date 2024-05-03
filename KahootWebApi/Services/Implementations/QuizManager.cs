@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KahootWebApi.Services.Implementations
 {
-    public class QuizManager : IQuizManager
+    public class QuizManager: IQuizManager
     {
         private readonly KahootDbContext _context;
         private readonly ILogger<QuizManager> _logger;
@@ -96,6 +96,10 @@ namespace KahootWebApi.Services.Implementations
                 {
                     _logger.LogError(ex, "An error occurred in the UpdateQuestionAsync method.");
                 }
+            }
+            else
+            {
+                _logger.LogError($"There is no question with the {catName} category, {questionNumber} quiz name and {questionNumber} question number.");
             }
         }
 
@@ -228,9 +232,8 @@ namespace KahootWebApi.Services.Implementations
             try
             {
                 var distinctCategories = await _context.CreatedQuizzes
-                     .Include(q => q.CreatedQuizStats)
                      .GroupBy(q => q.CategoryName)
-                     .Select(group => group.First())
+                     .Select(group => group.OrderByDescending(cq => cq.AverageFeedbackScore).First())
                      .ToListAsync();
 
                 return distinctCategories;
@@ -330,60 +333,6 @@ namespace KahootWebApi.Services.Implementations
 
             return false;
         }
-
-        public async Task<CreatedQuizStats> GetCreatedQuizStatsAsync(string catName, string quizName)
-        {
-            try
-            {
-                await UpdateAverageFeedbackScoreAsync(catName, quizName);
-
-                return await _context.CreatedQuizzesStats.Where(u => u.CategoryName == catName && u.QuizName == quizName).FirstOrDefaultAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogError(ex, "An error occurred in the GetCreatedQuizStats method.");
-                return null;
-            }
-        }
-
-        private async Task UpdateAverageFeedbackScoreAsync(string categoryName, string quizName)
-        {
-            try
-            {
-                // Retrieving all feedback entries for the specified quiz by category name and quiz name
-                var feedbackScores = await _context.Feedbacks
-                    .Where(f => f.CategoryName == categoryName && f.QuizName == quizName)
-                    .Select(f => f.FeedbackScore)
-                    .ToListAsync();
-
-                // Calculating the average of feedback scores and times passed 
-                double averageFeedbackScore = feedbackScores.Any() ? feedbackScores.Average() : 0;
-                int timesPassed = feedbackScores.Any() ? feedbackScores.Count() : 0;
-
-                // Finding the corresponding CreatedQuizStats entity
-                var quizToUpdate = await _context.CreatedQuizzesStats
-                    .FirstOrDefaultAsync(q => q.CategoryName == categoryName && q.QuizName == quizName);
-
-                if (quizToUpdate != null)
-                {
-                    // Update the AverageFeedbackScore and TimesPassed fields
-                    quizToUpdate.AverageFeedbackScore = averageFeedbackScore;
-                    quizToUpdate.TimesPassed = timesPassed;
-
-                    // Save changes to the database
-                    await _context.SaveChangesAsync();
-                }
-                else
-                {
-                    _logger.LogError($"There is no created quiz with the {categoryName} category name and {quizName} quiz name");
-                }
-            }
-            catch (Exception ex) when (ex is ArgumentNullException or OverflowException)
-            {
-                _logger.LogError(ex, "An error occurred in the UpdateAverageFeedbackScoreAsync method.");
-            }
-        }
-
 
         private async Task<CreatedQuiz?> GetQuizAsync(string categoryName, string testName)
         {

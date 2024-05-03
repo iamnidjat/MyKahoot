@@ -1,1 +1,25 @@
-<p>comments-form works!</p>
+<div class="container">
+  <div style="display: flex; flex-direction: column">
+    <label>{{userName}}:</label>
+    <textarea #Comment placeholder="Write your comment here..."></textarea>
+    <button (click)="addCommentAsync(Comment.value)">Publish</button>
+  </div>
+  <div class="mt-4">
+    <h4>Comments</h4>
+    <div *ngIf="comments.length === 0" class="text-muted">No comments yet.</div>
+    <div *ngFor="let comment of comments" class="card mb-2">
+      <div class="card-body">
+        <p class="card-text">{{ comment.content }}</p>
+        <p class="card-subtitle text-muted">Posted by {{ comment.authorName }} on {{ comment.date | date: 'medium' }}</p>
+      </div>
+    </div>
+    <hr>
+    <h4>Your Comments</h4>
+    <div *ngFor="let comment of myComments" class="card mb-2">
+      <div class="card-body">
+        <p class="card-text">{{ comment.content }}</p>
+        <p class="card-subtitle text-muted">Posted on {{ comment.date | date: 'medium' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

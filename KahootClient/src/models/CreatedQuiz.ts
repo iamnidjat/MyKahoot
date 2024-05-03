@@ -1,5 +1,3 @@
-import {CreatedQuizStats} from "./CreatedQuizStats";
-
 export type CreatedQuiz = {
   id?: number;
   categoryName: string;
@@ -7,6 +5,12 @@ export type CreatedQuiz = {
   userName: string;
   isPrivate: boolean;
   quizCode: string;
+  timesPassed?: number;
+  averageFeedbackScore?: number;
+  likesCount?: number;
+  dislikesCount?: number;
+  commentsCount?: number;
+  userLiked?: boolean;
+  userDisliked?: boolean;
   userId: number;
-  createdQuizStats?: CreatedQuizStats;
 }

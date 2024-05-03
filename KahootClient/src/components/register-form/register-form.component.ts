@@ -29,17 +29,21 @@ export class RegisterFormComponent implements OnInit{
 
   public async Register(e: any): Promise<void>{
     e.preventDefault();
-    this.spinner.show();
 
     if (await this.checkCredsService.IsEmailUsed(this.mail)) {
         this.isEmailUsed = true;
     }
+    else if (this.newLogin === "admin" ) {
+      Swal.fire('Oops', 'admin is a reserved login, you cannot use it!', 'error');
+    }
     else {
-      let registerModel: RegisterModel = {userName: this.newLogin, password: this.newPassword, confirmPassword: this.cNewPassword,
-        email: this.mail, birthday: new Date(this.mySelectedDate), role: localStorage.getItem("Role")!}
-
       if (this.newPassword === this.cNewPassword && this.newPassword.length >= 5 && this.newLogin.length >= 5 && localStorage.getItem("Role"))
       {
+        this.spinner.show();
+
+        let registerModel: RegisterModel = {userName: this.newLogin, password: this.newPassword, confirmPassword: this.cNewPassword,
+          email: this.mail, birthday: new Date(this.mySelectedDate), role: localStorage.getItem("Role")!}
+
         await fetch(API_URL + "Register", {
           method: "POST",
           headers: {
@@ -77,7 +81,7 @@ export class RegisterFormComponent implements OnInit{
       }
       else
       {
-        Swal.fire('Oops', 'Your passwords must match and your password and login must contain at least 5 chars!', 'error');
+        Swal.fire('Oops', 'Your passwords must match and your password and login must contain at least 5 characters!', 'error');
         this.ClearRegisterInputs();
         this.visibility1 ? this.visibility1 = !this.visibility1 : this.visibility1;
         this.visibility2 ? this.visibility2 = !this.visibility2 : this.visibility2;

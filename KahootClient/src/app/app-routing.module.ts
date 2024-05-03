@@ -79,7 +79,8 @@ let routes: Route[] = [
     canDeactivate: [exitTestProcessGuard]
   },
   {
-    path: 'app/rules-form/:mode/:categoryName/:testName',
+    // path: 'app/rules-form/:action/:mode/:categoryName/:testName/:level',
+    path: 'app/rules-form',
     component: RulesFormComponent,
     canActivate: [Specialguard, Novisitguard]
   },
@@ -173,6 +174,7 @@ let routes: Route[] = [
     canActivate: [AuthGuard]
   },
   {
+    // path: 'app/choose-level-form/:action/:mode/:categoryName/:testName',
     path: 'app/choose-level-form',
     component: ChooseLevelFormComponent,
     canActivate: [Specialguard]
@@ -209,11 +211,11 @@ let routes: Route[] = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'app/comments',
+    path: 'app/comments/:id/:categoryName/:quizName',
     component: CommentsFormComponent,
     canActivate: [AuthGuard]
   },
-  { path: '**', component: NotFoundFormComponent }
+   { path: '**', component: NotFoundFormComponent }
 ];
 
 @NgModule({

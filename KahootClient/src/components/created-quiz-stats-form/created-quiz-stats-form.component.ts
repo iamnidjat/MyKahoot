@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import {CreatedQuizStats} from "../../models/CreatedQuizStats";
-
-const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
+import { InteractionService } from "../../services/interaction.service";
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-created-quiz-stats-form',
@@ -10,30 +9,50 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
   styleUrls: ['./created-quiz-stats-form.component.css']
 })
 export class CreatedQuizStatsFormComponent {
-  public categories: CreatedQuizStats[] = [];
-  private catName: string = "";
-  private quizName: string = "";
+  public catName: string = "";
+  public quizName: string = "";
+  public categoryId: number = 0;
+  public averageFeedbackScore: number = 0;
+  public timesPassed: number = 0;
+  public likesCount: number = 0;
+  public dislikesCount: number = 0;
+  public commentsCount: number = 0;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private interactionService: InteractionService) {}
 
   ngOnInit(): void {
     // Access URL parameters using snapshot
-     this.catName = this.route.snapshot.params['categoryName'];
-     this.quizName = this.route.snapshot.params['quizName'];
+    this.catName = this.route.snapshot.queryParams['categoryName'];
+    this.quizName = this.route.snapshot.queryParams['quizName'];
+    this.categoryId = this.route.snapshot.queryParams['id'];
 
-     this.getCreatedQuizStats(); //
+    this.getCreatedQuizStats();
   }
 
-  private async getCreatedQuizStats(): Promise<void> {
-    await fetch(API_URL + `GetCreatedQuizStatsAsync?catName=${this.catName}&quizName=${this.quizName}`, {
-      method: "GET"
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      Object.keys(data).forEach((key) =>
-      {
-        this.categories.push(data[key]);
-      });
-    })
+  private getCreatedQuizStats(): void {
+    // Using forkJoin to execute multiple observables in parallel
+    forkJoin([
+      // Calling all the required methods to fetch statistics asynchronously
+      this.interactionService.getAverageFeedbackScoreAsync(this.categoryId),
+      this.interactionService.getTimesPassedAsync(this.categoryId),
+      this.interactionService.getLikesCountAsync(this.categoryId),
+      this.interactionService.getDislikesCountAsync(this.categoryId),
+      this.interactionService.getCommentsCountAsync(this.categoryId)
+    ]).subscribe({
+      // 'next' function receives the emitted values from the observables
+      next: ([averageFeedbackScore, timesPassed, likesCount, dislikesCount, commentsCount]) => {
+        // Assigning the received values to the component's properties
+        this.averageFeedbackScore = averageFeedbackScore;
+        this.timesPassed = timesPassed;
+        this.likesCount = likesCount;
+        this.dislikesCount = dislikesCount;
+        this.commentsCount = commentsCount;
+      },
+      // 'error' function handles any errors that occur during the observables' execution
+      error: error => {
+        console.error("Error fetching statistics:", error);
+      }
+    });
   }
 }
+

@@ -1,4 +1,5 @@
 export type Dislike = {
   id?: number;
-  authorName: string;
+  authorId: number;
+  createdQuizId: number;
 }

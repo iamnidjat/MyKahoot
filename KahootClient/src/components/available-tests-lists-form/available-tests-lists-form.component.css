@@ -24,3 +24,13 @@
   touch-action: manipulation;
   vertical-align: middle;
 }
+
+.liked {
+  background-color: green;
+  color: white;
+}
+
+.disliked {
+  background-color: red;
+  color: white;
+}

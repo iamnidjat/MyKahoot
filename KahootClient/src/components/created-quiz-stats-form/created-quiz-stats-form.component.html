@@ -1,1 +1,9 @@
-<p>created-quiz-stats-form works!</p>
+<div class="container">
+  <div>Category: {{catName}}</div>
+  <div>Quiz: {{quizName}}</div>
+  <div>Average feedback score: {{averageFeedbackScore}}</div>
+  <div>{{timesPassed}} times passed</div>
+  <div>Likes count: {{likesCount}}</div>
+  <div>Dislikes count: {{dislikesCount}}</div>
+  <div><a [routerLink]="['/app/comments/', categoryId, catName, quizName]">Comments</a> count: {{commentsCount}}</div>
+</div>

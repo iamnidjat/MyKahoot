@@ -7,8 +7,8 @@ namespace KahootWebApi.Models
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public string? AuthorName { get; set; }
+        //[Required]
+        //public string? AuthorName { get; set; }
 
         [Required]
         public int AuthorId { get; set; }
@@ -16,8 +16,8 @@ namespace KahootWebApi.Models
         public User? Author { get; set; }
 
         [Required]
-        public int QuizId { get; set; }
+        public int CreatedQuizId { get; set; }
 
-        public CreatedQuizStats? Quiz { get; set; }
+        public CreatedQuiz? CreatedQuiz { get; set; }
     }
 }

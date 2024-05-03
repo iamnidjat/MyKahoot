@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {NavigationExtras, Router} from "@angular/router";
 import {FilterCollectionsService} from "../../services/filter-collections.service";
@@ -8,7 +8,8 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
 @Component({
   selector: 'app-available-tests-stats-form',
   templateUrl: './available-tests-stats-form.component.html',
-  styleUrls: ['./available-tests-stats-form.component.css']
+  styleUrls: ['./available-tests-stats-form.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
   @ViewChild('MixedTest') MixedTest!: ElementRef;

@@ -27,7 +27,7 @@
             <td (click)="confirmDelete(category.categoryName!, category.quizName!)" style="cursor: pointer; color: red">{{"Delete" | translate}}</td>
             <td (click)="ToUpdateQuizForm(category.quizName!, category.categoryName!)" style="cursor: pointer; color: blue"><a>{{"Update" | translate}}</a></td>
           </div>
-          <td (click)="ToCreatedQuizStatsForm(category.quizName!, category.categoryName!)" style="cursor: pointer; color: green">{{"Your quiz stats" | translate}}</td>
+          <td (click)="ToCreatedQuizStatsForm(category.id!, category.quizName!, category.categoryName!)" style="cursor: pointer; color: green">{{"Your quiz stats" | translate}}</td>
         </tr>
         </tbody>
         <pagination-controls (pageChange)="p = $event" [id]="paginationId"></pagination-controls>

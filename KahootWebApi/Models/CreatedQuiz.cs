@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace KahootWebApi.Models
 {
@@ -26,6 +27,18 @@ namespace KahootWebApi.Models
 
         public User? User { get; set; }
 
-        public CreatedQuizStats? CreatedQuizStats { get; set; }
+       // [Required]
+        public int TimesPassed { get; set; } = 0;
+
+       // [Required]
+        public double AverageFeedbackScore { get; set; } = 0;
+
+        public ICollection<Like>? Likes { get; set; } = new ObservableCollection<Like>();
+
+        public ICollection<Dislike>? Dislikes { get; set; } = new ObservableCollection<Dislike>();
+
+        public ICollection<Comment>? Comments { get; set; } = new ObservableCollection<Comment>();
+
+        //public CreatedQuizStats? CreatedQuizStats { get; set; }
     }
 }
