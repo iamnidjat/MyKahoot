@@ -16,6 +16,11 @@
         <tr>
           <th class="header" style="width: 100px;">&#8470;</th>
           <th class="header" style="width: 150px;">{{'Points' | translate}}</th>
+          <th class="header" style="width: 150px;">{{'Points' | translate}}</th>
+          <th class="header" style="width: 150px;">{{'Correct answers' | translate}}</th> //
+          <th class="header" style="width: 150px;">{{'Incorrect answers' | translate}}</th>
+          <th class="header" style="width: 150px;">{{'Skipped questions' | translate}}</th>
+          <th class="header" style="width: 150px;">{{'Average response time' | translate}}</th>
         </tr>
         </thead>
         <tbody>
@@ -23,6 +28,10 @@
           <!--  <tr *ngFor="let entity of info; index as i">-->
           <td>{{ i + 1 }}</td>
           <td>{{ entity.score }}</td>
+          <td>{{ entity.correctAnswersCount }}</td>
+          <td>{{ entity.wrongAnswersCount }}</td>
+          <td>{{ entity.skippedQuestionsCount }}</td>
+          <td>{{ entity.averageResponseTime }}</td>
         </tr>
         </tbody>
       </table>

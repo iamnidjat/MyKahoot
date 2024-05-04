@@ -9,7 +9,6 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
   selector: 'app-available-tests-stats-form',
   templateUrl: './available-tests-stats-form.component.html',
   styleUrls: ['./available-tests-stats-form.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
   @ViewChild('MixedTest') MixedTest!: ElementRef;

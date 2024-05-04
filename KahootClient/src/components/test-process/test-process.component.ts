@@ -124,8 +124,6 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public answer(currentQno: number, option: any): void {
-    this.questionStartTime = new Date().getTime();
-    console.log("this.questionStartTime: ", this.questionStartTime);
     this.isActive = true;
 
     if (currentQno === this.questionList.length){
@@ -155,9 +153,8 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       this.points -= 10;
     }
 
-    const responseTime = new Date().getTime() - this.questionStartTime;
-    console.log("a: ", new Date().getTime() );
-    console.log("responseTime: ", responseTime);
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime; // Calculate response time after processing the answer
+    console.log("responseTime", responseTime);
     this.responseTimes.push(responseTime);
   }
 
@@ -168,6 +165,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     if (currentQno === this.questions.length){
       this.isQuizCompleted = true;
       this.stopCounter();
+      this.calculateAverageResponseTime();
       this.FeedbackGenerator();
     }
     if (option == localStorage.getItem("correctAnswer")) {
@@ -190,9 +188,15 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       }, 1000);
       this.points -= 10;
     }
+
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime; // Calculate response time after processing the answer
+    console.log("responseTime", responseTime);
+    this.responseTimes.push(responseTime);
   }
 
   public startCounter(): void {
+    this.questionStartTime = Math.floor(new Date().getTime() / 1000);
+    console.log("questionStartTime", this.questionStartTime);
     this.interval$ = interval(1000)
       .subscribe(val => {
         this.counter--;
@@ -304,21 +308,26 @@ export class TestProcessComponent implements OnInit, OnDestroy{
         return; // Invalid fileType
     }
 
-    downloadFunction(data, this.quizName).subscribe(blob => {
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = downloadUrl;
-      anchor.download = `${this.testType}/${this.quizName}.${fileType}`;
-      anchor.click();
+    downloadFunction(data, this.quizName).subscribe({
+      next: (blob) => {
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const anchor = document.createElement('a');
+        anchor.href = downloadUrl;
+        anchor.download = `${this.testType}/${this.quizName}.${fileType}`;
+        anchor.click();
+      },
+      error: (error) => {
+        console.error('Error downloading document:', error);
+        // Handle error if needed
+      }
     });
 
     this.showFileTypes = false;
   }
 
-  private calculateAverageResponseTime(): number {
+  private calculateAverageResponseTime(): void {
     const totalResponseTime = this.responseTimes.reduce((acc, curr) => acc + curr, 0);
     this.averageResponseTime = totalResponseTime / this.responseTimes.length;
-    return this.averageResponseTime;
   }
 
   ngOnDestroy(): void {
