@@ -32,6 +32,7 @@ export class StatsFormComponent implements OnInit, OnDestroy{
     await fetch(API_URL + `DownloadResult/${parseInt(localStorage.getItem("userId")!)}?userId=${parseInt(localStorage.getItem("userId")!)}&catType=${this.catType}&quizType=${this.quizType}&level=${this.level}`, {
       method: "GET"
     }).then(text => text.json()).then(data => {
+      console.log("data", data);
       Object.keys(data).forEach((key) =>
       {
         this.info.push(data[key]);
