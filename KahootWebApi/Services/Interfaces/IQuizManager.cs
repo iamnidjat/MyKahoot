@@ -14,7 +14,7 @@ namespace KahootWebApi.Services.Interfaces
         Task SaveCategoryAsync(CreatedQuiz createdQuiz);
         Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync();
         Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync(int userId);
-        Task<Quiz> GetTestDataAsync(string catName, string quizName);
+        Task<Quiz> GetTestDataAsync(string catName, string quizName, int questionNumber);
         Task<int> GetCorrectAnswer(string catName, string quizName, int questionNumber);
         Task RemoveQuestionAsync(string catName, string quizName, int questionNumber);
         Task<IEnumerable<CreatedQuiz>> GetTestsListAsync(string categoryName);
@@ -25,6 +25,5 @@ namespace KahootWebApi.Services.Interfaces
         Task<bool> CheckCodeAsync(string categoryName, string testName, string userCode);
         Task<bool> GetQuizModeAsync(string categoryName, string quizName);
         Task<bool> CheckOwnerOfPrivateTestAsync(string categoryName, string testName, string userName);
-       // Task<CreatedQuizStats> GetCreatedQuizStatsAsync(string catName, string quizName);
     }
 }

@@ -188,9 +188,9 @@ namespace KahootWebApi.Controllers.Version1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<Quiz> GetTestData(string catName, string quizName)
+        public async Task<Quiz> GetTestData(string catName, string quizName, int questionNumber)
         {
-            return await _manager.GetTestDataAsync(catName, quizName);
+            return await _manager.GetTestDataAsync(catName, quizName, questionNumber);
         }
 
         [HttpGet("GetCorrectAnswer")]

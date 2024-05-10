@@ -52,6 +52,17 @@ button:focus{
   background-color: #44b927;
 }
 
+.quiz-type{
+  display: flex;
+  flex-direction: row;
+}
+
+input[type="radio"] {
+  height: 30px;
+  width: 30px;
+  margin-top: 8px;
+}
+
 /*#backToMenuButton, #showStatsButton{*/
 /*  background-color: #007bff;*/
 /*  color: #fff;*/

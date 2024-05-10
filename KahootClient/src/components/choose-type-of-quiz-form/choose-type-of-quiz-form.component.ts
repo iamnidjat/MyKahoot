@@ -18,6 +18,7 @@ export class ChooseTypeOfQuizFormComponent {
 
     modal.style.display = "none";
 
+    localStorage.removeItem("MyCategory"); // Don't need anymore
     this.childComponent.flagOfCustomCategory = false;
     this.childComponent.flagOfExistingCategory = false;
   }

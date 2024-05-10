@@ -24,10 +24,24 @@
           <input type="number" min="5" max="50" value="5" #Points />
           <label> (min: 5 points, max: 50 points)</label>
         </div>
-        <div class="ime" style="display: flex; flex-direction: row">
+        <div class="time" style="display: flex; flex-direction: row">
           <label>Time (seconds): </label>
           <input type="number" min="15" max="180" value="60" #Time />
           <label> (min: 15 seconds, max: 180 seconds)</label>
+        </div>
+      </div>
+      <div class="quiz-type">
+        <div class="sub-quiz-type">
+          <label>2 answers</label>
+          <input type="radio" #TestFormatRadioOption1 value="true-false-answers" name="quizTypeAnswer" [checked]="isTrueFalseAnswersChecked" (change)="choosingTestFormat($event)"/>
+        </div>
+        <div class="sub-quiz-type">
+          <label>3 answers</label>
+          <input type="radio" #TestFormatRadioOption2 value="three-answers" name="quizTypeAnswer" [checked]="isThreeAnswersChecked" (change)="choosingTestFormat($event)"/>
+        </div>
+        <div class="sub-quiz-type">
+          <label>4 answers</label>
+          <input type="radio" #TestFormatRadioOption3 value="four-answers" name="quizTypeAnswer" [checked]="isFourAnswersChecked" (change)="choosingTestFormat($event)"/>
         </div>
       </div>
       <div class="question">
@@ -41,25 +55,25 @@
             <li style="cursor: pointer;">
               <div style="display: flex">
                 <input type="text" #Answer1 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                <input type="radio" #RadioOption1 value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption1 value="1" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
               <input type="text" #Answer2 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-              <input type="radio" #RadioOption2 value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              <input type="radio" #RadioOption2 value="2" name="radAnswer" (change)="onChange($event)">
             </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
                 <input type="text" #Answer3 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                <input type="radio" #RadioOption3 value="3" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption3 value="3" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
                 <input type="text" #Answer4 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                <input type="radio" #RadioOption4 value="4" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption4 value="4" name="radAnswer" (change)="onChange($event)"/>
               </div>
             </li>
           </ol>
@@ -71,19 +85,19 @@
               <li style="cursor: pointer;">
                 <div style="display: flex">
                   <input type="text" #Answer11 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                  <input type="radio" #RadioOption11 value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                  <input type="radio" #RadioOption11 value="1" name="radAnswer" (change)="onChange($event)">
                 </div>
               </li>
               <li style="cursor: pointer;">
                 <div style="display: flex">
                 <input type="text" #Answer21 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                <input type="radio" #RadioOption21 value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption21 value="2" name="radAnswer" (change)="onChange($event)">
               </div>
               </li>
               <li style="cursor: pointer;">
                 <div style="display: flex">
                   <input type="text" #Answer31 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
-                  <input type="radio" #RadioOption31 value="3" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                  <input type="radio" #RadioOption31 value="3" name="radAnswer" (change)="onChange($event)">
                 </div>
               </li>
             </ol>
@@ -95,13 +109,13 @@
             <li style="cursor: pointer;">
               <div style="display: flex">
                 <input type="text" #Answer12 value="TRUE" [readonly]="true"  style="display: inline-block; background-color: deepskyblue; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
-                <input type="radio" #RadioOption12 value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption12 value="1" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
                 <input type="text" #Answer22 value="FALSE" [readonly]="true" style="display: inline-block; background-color: red; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
-                <input type="radio" #RadioOption22 value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+                <input type="radio" #RadioOption22 value="2" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
           </ol>

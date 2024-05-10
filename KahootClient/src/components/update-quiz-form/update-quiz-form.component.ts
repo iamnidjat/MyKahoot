@@ -8,7 +8,6 @@ import { Question } from 'src/models/Question';
   templateUrl: './update-quiz-form.component.html',
   styleUrls: ['./update-quiz-form.component.css']
 })
-
 export class UpdateQuizFormComponent implements OnInit, OnDestroy{
   public name: string = "";
   public testType: string = "";
@@ -36,7 +35,7 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
   constructor(private router: Router) {}
 
   public async GetTestData(): Promise<void> {
-    await fetch(this.url + `GetTestData?catName=${this.catType}&quizName=${this.testType}`, {
+    await fetch(this.url + `GetTestData?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
@@ -72,6 +71,7 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
   }
 
   public async UpdateQuestion(): Promise<void> {
+    await this.GetTestData(); // Wait for GetTestData() to complete
     this.currentQuestion++;
 
     if (this.testFormat === "three-answers")
@@ -163,13 +163,16 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
 
   public async nextQuestion(): Promise<void> {
     this.currentQuestion++;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
   public FinishProcess(): void{
     this.isQuizCompleted = true;
   }
 
-  public previousQuestion(): void {
+  public async previousQuestion(): Promise<void> {
+    this.currentQuestion--;
+    await this.GetTestData(); // Wait for GetTestData() to complete
     if (this.testFormat === "three-answers") {
       this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion}`);
       this.Answer11.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion}`);
@@ -188,8 +191,6 @@ export class UpdateQuizFormComponent implements OnInit, OnDestroy{
       this.Answer3.nativeElement.value = localStorage.getItem(`answer3${this.currentQuestion}`);
       this.Answer4.nativeElement.value = localStorage.getItem(`answer4${this.currentQuestion}`);
     }
-
-    this.currentQuestion--;
   }
 
   public async deleteQuestion(): Promise<void>{

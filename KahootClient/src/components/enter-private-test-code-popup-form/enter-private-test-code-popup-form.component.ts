@@ -21,6 +21,9 @@ export class EnterPrivateTestCodePopupFormComponent {
 
     modal.style.display = "none";
 
+    localStorage.removeItem("MyCategory"); // Don't need anymore
+    localStorage.removeItem("testFormat"); // Don't need anymore
+    localStorage.removeItem("MyTestName"); // Don't need anymore
     this.flag.flagForCodeChecking = false;
   }
 
@@ -30,10 +33,8 @@ export class EnterPrivateTestCodePopupFormComponent {
       if (!await this.checkService.CheckCode(localStorage.getItem("categoryName")!,
         localStorage.getItem("TestName")!, this.Code.nativeElement.value)) {
         this.codesMatch = false;
-        alert(555);
       }
       else {
-        alert(666);
         if (localStorage.getItem("action") === "play") {
           const navigationExtras: NavigationExtras = {
             queryParams: { 'action': 'play',

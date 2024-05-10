@@ -42,6 +42,9 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   @ViewChild('RadioOption31') RadioOption31!: ElementRef; // When 3 answers, third option
   @ViewChild('RadioOption12') RadioOption12!: ElementRef; // When 2 answers, first option
   @ViewChild('RadioOption22') RadioOption22!: ElementRef; // When 2 answers, second option
+  public isFourAnswersChecked: boolean = false;
+  public isThreeAnswersChecked: boolean = false;
+  public isTrueFalseAnswersChecked: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -68,7 +71,12 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     this.testFormat = localStorage.getItem('testFormat')!;
     this.testType = localStorage.getItem("MyTestName")!;
 
-    const categoryKeys: string[] = ["CategoryType", "ManualCategory", "MyCategory"];
+    // Set boolean variables based on the value of testFormat
+    this.isFourAnswersChecked = this.testFormat === "four-answers";
+    this.isThreeAnswersChecked = this.testFormat === "three-answers";
+    this.isTrueFalseAnswersChecked = this.testFormat === "true-false-answers";
+
+    const categoryKeys: string[] = ["CategoryType", "ManualCategory", "MyCategory"]; //
 
     for (const key of categoryKeys) {
       this.quizType = localStorage.getItem(key)!;
@@ -80,6 +88,10 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
 
   public onChange(e: any): void {
     this.correctAnswer = e.target.value;
+  }
+
+  public choosingTestFormat(e: any): void {
+    this.testFormat = e.target.value;
   }
 
   public ShuffleAnswers(): void{

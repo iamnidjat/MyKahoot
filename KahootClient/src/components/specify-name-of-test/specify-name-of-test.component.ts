@@ -23,6 +23,8 @@ export class SpecifyNameOfTestComponent {
 
     modal.style.display = "none";
 
+    localStorage.removeItem("MyCategory"); // Don't need anymore
+    localStorage.removeItem("testFormat"); // Don't need anymore
     this.childComponent.flagOfCustomCategory = false;
     this.childComponent.flagOfExistingCategory = false;
   }

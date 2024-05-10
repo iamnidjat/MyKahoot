@@ -71,7 +71,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public async GetTestData(): Promise<void> {
-    await fetch(API_URL2 + `GetTestData?catName=${this.testType}&quizName=${this.quizName}`, {
+    await fetch(API_URL2 + `GetTestData?catName=${this.testType}&quizName=${this.quizName}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
@@ -114,13 +114,15 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       })
   }
 
-  public nextQuestion(): void {
+  public async nextQuestion(): Promise<void> {
     this.currentQuestion++;
     this.skippedQuestionsCount++;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
-  public previousQuestion(): void {
+  public async previousQuestion(): Promise<void> {
     this.currentQuestion--;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
   public answer(currentQno: number, option: any): void {
@@ -222,13 +224,14 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     this.startCounter();
   }
 
-  public resetQuiz(): void {
+  public async resetQuiz(): Promise<void> {
     this.resetCounter();
     this.getAllQuestions();
     this.points = 0;
     this.counter = 60;
     this.currentQuestion = 0;
     this.progress = "0";
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
   public getProgressPercent(): string {
@@ -254,7 +257,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     this.router.navigate(['/app/stats-form']);
   }
 
-  private FeedbackGenerator(): void {
+  private FeedbackGenerator(): void { // !
     const score: number = (this.correctAnswersCount / (this.questions.length || this.questionList.length)) * 100;
 
     if (score <= 40) {

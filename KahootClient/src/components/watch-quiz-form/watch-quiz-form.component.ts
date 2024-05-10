@@ -1,26 +1,27 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 
+const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
+
 @Component({
   selector: 'app-watch-quiz-form',
   templateUrl: './watch-quiz-form.component.html',
   styleUrls: ['./watch-quiz-form.component.css']
 })
-
 export class WatchQuizFormComponent implements OnInit, OnDestroy{
   public name: string = "";
   public testType: string = "";
   public catType: string = "";
   public questions: any = [];
   public currentQuestion: number = 0;
-  private url: string = "https://localhost:7176/api/v1/Quiz/";
   public testFormat: string = "";
 
   public async GetTestData(): Promise<void> {
-    await fetch(this.url + `GetTestData?catName=${this.catType}&quizName=${this.testType}`, {
+    await fetch(API_URL + `GetTestData?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
     }).then((data) => {
+      console.log(data);
       let testFormat = JSON.parse(JSON.stringify(data));
       localStorage.setItem("TestTypeForWatching", JSON.stringify(Object.values(testFormat)[3]));
     });
@@ -29,7 +30,7 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
   }
 
   public async getAllQuestionsFromBack(): Promise<void>{
-    await fetch(this.url + `ReadQuestions?catName=${this.catType}&quizName=${this.testType}`, {
+    await fetch(API_URL + `ReadQuestions?catName=${this.catType}&quizName=${this.testType}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
@@ -41,16 +42,19 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
     });
   }
 
-  public nextQuestion(): void {
+  public async nextQuestion(): Promise<void> {
     this.currentQuestion++;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
-  public previousQuestion(): void {
+  public async previousQuestion(): Promise<void> {
     this.currentQuestion--;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
-  public resetQuiz(): void {
+  public async resetQuiz(): Promise<void> {
     this.currentQuestion = 0;
+    await this.GetTestData(); // Wait for GetTestData() to complete
   }
 
   ngOnInit(): void {

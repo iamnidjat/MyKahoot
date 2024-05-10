@@ -258,11 +258,11 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<Quiz> GetTestDataAsync(string catName, string quizName)
+        public async Task<Quiz> GetTestDataAsync(string catName, string quizName, int questionNumber)
         {
             try
             {
-                return await _context.Questions.Where(u => u.QuizType == catName && u.QuizName == quizName).FirstOrDefaultAsync();
+                return await _context.Questions.Where(u => u.QuestionNumber == questionNumber && u.QuizType == catName && u.QuizName == quizName).FirstOrDefaultAsync();
             }
             catch (ArgumentNullException ex)
             {

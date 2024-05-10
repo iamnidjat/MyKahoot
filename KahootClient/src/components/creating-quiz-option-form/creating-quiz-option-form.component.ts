@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {DownloadCategoriesSharedService} from "../../services/download-categories-shared.service";
