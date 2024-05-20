@@ -6,35 +6,16 @@
 .img-container {
   background-color: rgb(232, 232, 232);
   height: 100vh;
-  width: 40vw;
-
   display: flex;
   align-items: center;
-  justify-content: center;
+  position:absolute;
+  bottom:0;
+  left:0;
 }
 
 .container {
-  /*z-index: 15;*/
-  /*position: absolute;*/
-  /*background: #fff;*/
-  /*width: 600px;*/
-  /*border-radius: 4px;*/
-  /*-webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .1);*/
-  /*box-shadow: 0 0 30px rgba(0, 0, 0, .1);*/
-  /*-webkit-box-sizing: border-box;*/
-  /*box-sizing: border-box;*/
-  /*top: 50%;*/
-  /*left: 50%;*/
-  /*-webkit-transform: translate(-50%, -50%);*/
-  /*-ms-transform: translate(-50%, -50%);*/
-  /*transform: translate(-50%, -50%);*/
   display: flex;
   flex-direction: row;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
 }
 
 .form-group {
@@ -74,6 +55,7 @@ form {
   padding: 10px 10px;
   color: rgba(0, 0, 0, 0.6);
   font-weight: 500;
+  margin-right: -60px !important;
 }
 
 .form-group button {
@@ -102,10 +84,14 @@ form {
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
 }
 
 .form-remember input[type='checkbox'] {
   margin: 0 10px 0 0;
+  cursor: pointer;
 }
 
 .form-group .form-recovery {
@@ -113,17 +99,23 @@ form {
   font-size: 12px;
   text-decoration: none;
 }
+
 .form-panel {
   padding: 60px calc(5% + 60px) 60px 60px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
 }
 
 .form-header {
   margin: 0 0 40px;
 }
+
 .form-header h1 {
   padding: 4px 0;
   color: #4285f4;
@@ -132,22 +124,17 @@ form {
   text-transform: uppercase;
 }
 
+.form-visibility {
+  display: flex;
+  flex-direction: row;
+}
+
 .hidden-eye{
   width: 50px !important;
   height: 47px;
-  position: relative;
-  top: -47px;
-  left: 400px;
-}
-
-.random-login,
-#hidden-eye1,
-#hidden-eye2{
-  width: 50px !important;
-  height: 47px;
-  position: relative;
-  top: -47px;
-  left: 370px;
+  /*position: relative;*/
+  /*top: -47px;*/
+  /*left: 400px;*/
 }
 
 .register-route:hover,

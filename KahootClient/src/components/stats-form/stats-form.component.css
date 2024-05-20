@@ -56,3 +56,6 @@ table th {
   transform: rotate(2deg);
 }
 
+.header {
+  width: 150px;
+}

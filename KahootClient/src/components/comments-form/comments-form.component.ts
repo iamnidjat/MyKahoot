@@ -28,15 +28,11 @@ export class CommentsFormComponent implements OnInit{
   }
 
   public async addCommentAsync(content: string): Promise<void> {
-    alert(777)
     await this.interactionService.toCommentAsync(content, new Date(),
       parseInt(localStorage.getItem("userId")!), this.id);
-    alert(778)
 
     await this.getAllCommentsAsync();
-    alert(779)
     await this.getMyCommentsAsync();
-    alert(780)
   }
 
   public async getAllCommentsAsync(): Promise<void> {

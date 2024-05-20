@@ -40,6 +40,7 @@ import {exitTestProcessGuard} from "../guards/exit-test-process.guard";
 import {CreatedQuizStatsFormComponent} from "../components/created-quiz-stats-form/created-quiz-stats-form.component";
 import {CommentsFormComponent} from "../components/comments-form/comments-form.component";
 import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
+import {QuizHistoryFormComponent} from "../components/quiz-history-form/quiz-history-form.component";
 
 let routes: Route[] = [
   {
@@ -215,7 +216,12 @@ let routes: Route[] = [
     component: CommentsFormComponent,
     canActivate: [AuthGuard]
   },
-   { path: '**', component: NotFoundFormComponent }
+  {
+    path: 'app/quizHistory',
+    component: QuizHistoryFormComponent,
+   // canActivate: [AuthGuard]
+  },
+  { path: '**', component: NotFoundFormComponent }
 ];
 
 @NgModule({

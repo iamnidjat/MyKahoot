@@ -3,7 +3,7 @@
 <div class="main-container">
   <h1>{{'Your latest results' | translate}}</h1>
   <div *ngIf="info && info.length > 0">
-    <div class="barchart-div" (click)="ToBarchartForm()">{{"You can watch your stats in the barchart form" | translate}}</div>
+    <div class="barchart-div" (click)="toBarchartForm()">{{"You can watch your stats in the barchart form" | translate}}</div>
 
     <div class="table-div">
       <div>{{"Category" | translate}}: {{catType}}</div>
@@ -14,12 +14,13 @@
       <table class="zigzag">
         <thead>
         <tr>
-          <th class="header" style="width: 100px;">&#8470;</th>
-          <th class="header" style="width: 150px;">{{'Points' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'Correct answers' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'Incorrect answers' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'Skipped questions' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'Average response time' | translate}}</th>
+          <th class="header" style="width: 100px !important;">&#8470;</th>
+          <th class="header">{{'Points' | translate}}</th>
+          <th class="header">{{'Correct answers' | translate}}</th>
+          <th class="header">{{'Incorrect answers' | translate}}</th>
+          <th class="header">{{'Skipped questions' | translate}}</th>
+          <th class="header">{{'Average response time' | translate}}</th>
+          <th class="header"></th>
         </tr>
         </thead>
         <tbody>
@@ -31,6 +32,7 @@
           <td>{{ entity.wrongAnswersCount }}</td>
           <td>{{ entity.skippedQuestionsCount }}</td>
           <td>{{ entity.averageResponseTime }}</td>
+          <td (click)="toQuizHistory()">Your answers</td>
         </tr>
         </tbody>
       </table>

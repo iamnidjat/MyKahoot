@@ -20,18 +20,20 @@
         </div>
         <div class="form-group">
           <label>{{"Password" | translate}}</label>
+          <div class="form-visibility">
             <input [type]="visibility ? 'text' : 'password'" id="passwordLogin" name="password" required [(ngModel)]="userPassword" #password="ngModel" (cut)="false" (copy)="false" (paste)="false"/>
             <button class="hidden-eye" (click)="ChangeVisibility()">
               <span [class]="visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
             </button>
+          </div>
           <div [hidden]="password.valid || password.untouched" class="alert">
             Password is not specified
           </div>
         </div>
         <div class="form-group auxiliary" style="position: relative; top: -40px;">
           <div class="form-remember">
-            <label class="form-remember label" style="cursor: pointer">
-            <input type="checkbox" [disabled]="isDisabled" (change)="RememberMe(userLogin)" style="cursor: pointer"/>{{"RememberMe" | translate}}</label>
+            <label class="form-remember label">
+            <input type="checkbox" [disabled]="isDisabled" (change)="RememberMe(userLogin)"/>{{"RememberMe" | translate}}</label>
           </div>
           <span class="form-recovery" id="forgot-password" (click)="ToForgotPassword()" style="cursor: pointer">{{"ForgotPassword" | translate}}</span>
         </div>

@@ -334,6 +334,65 @@ namespace KahootWebApi.Services.Implementations
             return false;
         }
 
+        public async Task AddQuizHistoryAsync(MyQuizAnswers myQuizAnswers)
+        {
+            try
+            {
+                await _context.MyQuizAnswers.AddAsync(myQuizAnswers);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            {
+                _logger.LogError(ex, "An error occurred in the AddQuizHistoryAsync method.");
+            }
+        }
+
+        public async Task RemoveUserAnswerAsync(string catName, string quizName, int questionNumber)
+        {
+            var answerToDelete = await FindUserAnswerAsync(catName, quizName, questionNumber);
+
+            try
+            {
+                _context.MyQuizAnswers.Remove(answerToDelete);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            {
+                _logger.LogError(ex, "An error occurred in the RemoveQuestionAsync method.");
+            }
+        }
+
+        public async Task RemoveUserAnswersAsync(string catName, string quizName)
+        {
+            var answersToDelete = await FindUserAnswersAsync(catName, quizName);
+
+            try
+            {
+                _context.MyQuizAnswers.RemoveRange(answersToDelete);
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            {
+                _logger.LogError(ex, "An error occurred in the RemoveQuestionsAsync method.");
+            }
+        }
+
+        public async Task<MyQuizAnswers> GetQuizHistoryAsync(string catName, string quizName, int questionNumber, int userId)
+        {
+            try
+            {
+                return await _context.MyQuizAnswers.Where(u => u.QuestionNumber == questionNumber && u.CategoryName == catName && u.QuizName == quizName && u.UserId == userId).FirstOrDefaultAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the GetQuizHistoryAsync method.");
+                return null;
+            }
+        }
+
         private async Task<CreatedQuiz?> GetQuizAsync(string categoryName, string testName)
         {
             try
@@ -382,6 +441,32 @@ namespace KahootWebApi.Services.Implementations
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, "An error occurred in the FindQuestion method.");
+                return null;
+            }
+        }
+
+        private async Task<IEnumerable<MyQuizAnswers>> FindUserAnswersAsync(string catName, string quizName)
+        {
+            try
+            {
+                return await _context.MyQuizAnswers.Where(x => x.CategoryName == catName && x.QuizName == quizName).ToListAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the FindUserAnswersAsync method.");
+                return Enumerable.Empty<MyQuizAnswers>();
+            }
+        }
+
+        private async Task<MyQuizAnswers> FindUserAnswerAsync(string catName, string quizName, int questionNumber)
+        {
+            try
+            {
+                return await _context.MyQuizAnswers.FirstAsync(x => x.CategoryName == catName && x.QuizName == quizName && x.QuestionNumber == questionNumber);
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the FindUserAnswerAsync method.");
                 return null;
             }
         }

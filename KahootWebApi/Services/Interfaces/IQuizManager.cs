@@ -25,5 +25,9 @@ namespace KahootWebApi.Services.Interfaces
         Task<bool> CheckCodeAsync(string categoryName, string testName, string userCode);
         Task<bool> GetQuizModeAsync(string categoryName, string quizName);
         Task<bool> CheckOwnerOfPrivateTestAsync(string categoryName, string testName, string userName);
+        Task AddQuizHistoryAsync(MyQuizAnswers myQuizAnswers);
+        Task RemoveUserAnswerAsync(string catName, string quizName, int questionNumber);
+        Task RemoveUserAnswersAsync(string catName, string quizName);
+        Task<MyQuizAnswers> GetQuizHistoryAsync(string catName, string quizName, int questionNumber, int userId);
     }
 }

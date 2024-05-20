@@ -65,5 +65,7 @@ namespace KahootWebApi.Models
         public ICollection<Like> Likes { get; set; } = new ObservableCollection<Like>();
 
         public ICollection<Dislike> Dislikes { get; set; } = new ObservableCollection<Dislike>();
+
+        public ICollection<MyQuizAnswers> MyQuizAnswers { get; set; } = new ObservableCollection<MyQuizAnswers>();
     }
 }

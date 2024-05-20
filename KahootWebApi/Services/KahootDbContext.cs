@@ -20,6 +20,7 @@ namespace KahootWebApi.Services
         public DbSet<Like> Likes { get; set; }
         public DbSet<Dislike> Dislikes { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<MyQuizAnswers> MyQuizAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

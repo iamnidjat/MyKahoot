@@ -86,6 +86,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
+import {QuizHistoryFormComponent} from "../components/quiz-history-form/quiz-history-form.component";
+import {QuizHistoryService} from "../services/quiz-history.service";
 
 @NgModule({
   declarations: [
@@ -140,6 +142,7 @@ import {NotFoundFormComponent} from "../components/not-found-form/not-found-form
     CreatedQuizStatsFormComponent,
     CommentsFormComponent,
     NotFoundFormComponent,
+    QuizHistoryFormComponent
   ],
   imports: [
     BrowserModule,
@@ -164,7 +167,7 @@ import {NotFoundFormComponent} from "../components/not-found-form/not-found-form
   ],
   providers: [QuestionService, ConfigService, CookiesService, DownloadCategoriesSharedService, DownloadQuizService,
     UserSharedService, SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
-    FilterCollectionsService, SendFeedbackService, InteractionService, TestProcessComponent, PlayerOptionsFormComponent,
+    FilterCollectionsService, SendFeedbackService, InteractionService, QuizHistoryService, TestProcessComponent, PlayerOptionsFormComponent,
     RegisterFormComponent, ChooseTypeOfQuizFormComponent, CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent,
     ProfileFormComponent, AvailableTestsStatsFormComponent,
     {

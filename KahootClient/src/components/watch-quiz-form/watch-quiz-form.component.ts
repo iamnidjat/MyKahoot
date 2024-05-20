@@ -21,7 +21,6 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      console.log(data);
       let testFormat = JSON.parse(JSON.stringify(data));
       localStorage.setItem("TestTypeForWatching", JSON.stringify(Object.values(testFormat)[3]));
     });

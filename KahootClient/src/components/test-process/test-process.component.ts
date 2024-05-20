@@ -4,6 +4,7 @@ import {interval} from "rxjs";
 import {QuizModel} from "../../models/QuizModel";
 import {QuestionService} from "../../services/question.service";
 import {DownloadQuizService} from "../../services/download-quiz.service";
+import {QuizHistoryService} from "../../services/quiz-history.service";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 const API_URL2: string = "https://localhost:7176/api/v1/Quiz/";
@@ -14,18 +15,21 @@ const API_URL2: string = "https://localhost:7176/api/v1/Quiz/";
   styleUrls: ['./test-process.component.css']
 })
 export class TestProcessComponent implements OnInit, OnDestroy{
-  public name: string = "";
-  @Input() public testType: string = "";
+  @Input() public testType: string = ""; // category
   @Input() public quizName: string = "";
-  public questionList: any = [];
-  public questions: any = [];
+  public name: string = ""; // username
+  public questionList: any = []; // questions from json file
+  public questions: any = []; // questions from backend
   public currentQuestion: number = 0;
   public points: number = 0;
   public counter: number = 60; // timer
   public correctAnswersCount: number = 0;
   public inCorrectAnswersCount: number = 0;
-  public skippedQuestionsCount: number = 0; //
-  public averageResponseTime: number = 0; //
+  public skippedQuestionsCount: number = 0;
+  public correctAnswersCountFlag: boolean = false;
+  public inCorrectAnswersCountFlag: boolean = false;
+  public skippedQuestionsCountFlag: boolean = false;
+  public averageResponseTime: number = 0;
   public questionStartTime: number = 0;
   public responseTimes: number[] = [];
   public interval$: any;
@@ -40,7 +44,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   public showFileTypes: boolean = false;
 
   constructor(private questionService: QuestionService, private router: Router,
-              private documentService: DownloadQuizService) {}
+              private documentService: DownloadQuizService, private quizHistoryService: QuizHistoryService) {}
 
   public ngOnInit(): void {
     localStorage.getItem("Guest") ? this.name = "Guest" : this.name = localStorage.getItem("Login")!;
@@ -54,7 +58,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     {
       this.flag = true;
       localStorage.removeItem("AnotherTest");
-      this.GetTestData();
+      this.getTestData();
     }
 
     this.flag ? this.getAllQuestionsFromBack() : this.getAllQuestions();
@@ -70,7 +74,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }
   }
 
-  public async GetTestData(): Promise<void> {
+  public async getTestData(): Promise<void> {
     await fetch(API_URL2 + `GetTestData?catName=${this.testType}&quizName=${this.quizName}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
@@ -83,7 +87,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     this.testFormat = localStorage.getItem("testType")!.slice(1, localStorage.getItem('testType')!.length - 1);
   }
 
-  public async GetCorrectAnswer(): Promise<void> {
+  public async getCorrectAnswer(): Promise<void> {
     await fetch(API_URL2+ `GetCorrectAnswer?catName=${this.testType}&quizName=${this.quizName}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
@@ -93,7 +97,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     });
   }
 
-  public async getAllQuestionsFromBack(): Promise<void>{ // !
+  public async getAllQuestionsFromBack(): Promise<void>{
     await fetch(API_URL2 + `ReadQuestions?catName=${this.testType}&quizName=${this.quizName}`, {
       method: "GET"
     }).then((response) => {
@@ -115,28 +119,57 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public async nextQuestion(): Promise<void> {
+    await this.getCorrectAnswer(); // for getting a correct answer when a user didn't answer a question
+    await this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
+      parseInt(localStorage.getItem("correctAnswer")!), -1, parseInt(localStorage.getItem("userId")!));
     this.currentQuestion++;
     this.skippedQuestionsCount++;
-    await this.GetTestData(); // Wait for GetTestData() to complete
+    this.skippedQuestionsCountFlag = true;
+    this.correctAnswersCountFlag = false;
+    this.inCorrectAnswersCountFlag = false;
+    this.resetCounter();
+    this.getProgressPercent();
+    await this.getTestData(); // for getting a test type for the next question
   }
 
   public async previousQuestion(): Promise<void> {
+    await this.quizHistoryService.RemoveUserAnswerAsync(this.testType, this.quizName, this.currentQuestion);
     this.currentQuestion--;
-    await this.GetTestData(); // Wait for GetTestData() to complete
+    this.resetCounter();
+    this.getProgressPercent();
+
+    if (this.correctAnswersCountFlag) {
+      this.correctAnswersCount--;
+      this.correctAnswersCountFlag = false;
+    }
+    else if (this.inCorrectAnswersCountFlag) {
+      this.inCorrectAnswersCount--;
+      this.inCorrectAnswersCountFlag = false;
+    }
+    else if (this.skippedQuestionsCountFlag) {
+      this.skippedQuestionsCount--;
+      this.skippedQuestionsCountFlag = false;
+    }
+
+    this.responseTimes.pop(); // for eliminating the last response time
+    await this.getTestData(); // for getting a test type for the previous question
   }
 
   public answer(currentQno: number, option: any): void {
     this.isActive = true;
 
-    if (currentQno === this.questionList.length){
+    if (currentQno === this.questionList.length) {
       this.isQuizCompleted = true;
       this.stopCounter();
       this.calculateAverageResponseTime();
-      this.FeedbackGenerator();
+      this.feedbackGenerator();
     }
     if (option.correct) {
       this.points += 10;
       this.correctAnswersCount++;
+      this.correctAnswersCountFlag = true;
+      this.inCorrectAnswersCountFlag = false;
+      this.skippedQuestionsCountFlag = false;
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
@@ -148,6 +181,9 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       setTimeout(() => {
         this.currentQuestion++;
         this.inCorrectAnswersCount++;
+        this.inCorrectAnswersCountFlag = true;
+        this.correctAnswersCountFlag = false;
+        this.skippedQuestionsCountFlag = false;
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
@@ -155,24 +191,29 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       this.points -= 10;
     }
 
-    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime; // Calculate response time after processing the answer
-    console.log("responseTime", responseTime);
+    this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
+      1, 2, parseInt(localStorage.getItem("userId")!));
+
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
     this.responseTimes.push(responseTime);
   }
 
   public async answer2(currentQno: number, option: any): Promise<void> {
-    await this.GetCorrectAnswer();
+    await this.getCorrectAnswer();
     this.isActive = true;
 
     if (currentQno === this.questions.length){
       this.isQuizCompleted = true;
       this.stopCounter();
       this.calculateAverageResponseTime();
-      this.FeedbackGenerator();
+      this.feedbackGenerator();
     }
     if (option == localStorage.getItem("correctAnswer")) {
       this.points += 10;
       this.correctAnswersCount++;
+      this.correctAnswersCountFlag = true;
+      this.inCorrectAnswersCountFlag = false;
+      this.skippedQuestionsCountFlag = false;
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
@@ -184,6 +225,9 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       setTimeout(() => {
         this.currentQuestion++;
         this.inCorrectAnswersCount++;
+        this.inCorrectAnswersCountFlag = true;
+        this.correctAnswersCountFlag = false;
+        this.skippedQuestionsCountFlag = false;
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
@@ -191,14 +235,15 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       this.points -= 10;
     }
 
-    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime; // Calculate response time after processing the answer
-    console.log("responseTime", responseTime);
+    await this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
+      parseInt(localStorage.getItem("correctAnswer")!), option, parseInt(localStorage.getItem("userId")!));
+
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
     this.responseTimes.push(responseTime);
   }
 
   public startCounter(): void {
     this.questionStartTime = Math.floor(new Date().getTime() / 1000);
-    console.log("questionStartTime", this.questionStartTime);
     this.interval$ = interval(1000)
       .subscribe(val => {
         this.counter--;
@@ -226,12 +271,20 @@ export class TestProcessComponent implements OnInit, OnDestroy{
 
   public async resetQuiz(): Promise<void> {
     this.resetCounter();
-    this.getAllQuestions();
+    this.flag ? this.getAllQuestionsFromBack() : this.getAllQuestions();
     this.points = 0;
-    this.counter = 60;
+   // this.counter = 60;
     this.currentQuestion = 0;
+    this.correctAnswersCount = 0;
+    this.inCorrectAnswersCount = 0;
+    this.skippedQuestionsCount = 0;
+    this.correctAnswersCountFlag = false;
+    this.inCorrectAnswersCountFlag = false;
+    this.skippedQuestionsCountFlag = false;
     this.progress = "0";
-    await this.GetTestData(); // Wait for GetTestData() to complete
+    this.responseTimes = [];
+    await this.quizHistoryService.RemoveUserAnswersAsync(this.testType, this.quizName);
+    await this.getTestData(); // for getting a test type for the first question
   }
 
   public getProgressPercent(): string {
@@ -241,7 +294,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
 
   public ToMenu(e: any): void{
     if (localStorage.getItem("Guest") === null) {
-      this.SaveResult(e);
+      this.saveResult(e);
       this.router.navigate(['/app/player-options-form']);
     }
     else {
@@ -250,14 +303,14 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public ToStats(e: any): void{
-    this.SaveResult(e);
+    this.saveResult(e);
     localStorage.setItem("SLevel", this.level);
     localStorage.setItem("categoryName", this.testType);
     localStorage.setItem("QuizType", this.quizName);
     this.router.navigate(['/app/stats-form']);
   }
 
-  private FeedbackGenerator(): void { // !
+  private feedbackGenerator(): void { // !
     const score: number = (this.correctAnswersCount / (this.questions.length || this.questionList.length)) * 100;
 
     if (score <= 40) {
@@ -274,7 +327,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }
   }
 
-  private async SaveResult(e: any): Promise<void>{
+  private async saveResult(e: any): Promise<void>{
     e.preventDefault();
 
     let quizInfo: QuizModel = { categoryName: this.testType, quizName: this.quizName, score: this.points,
@@ -329,7 +382,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   private calculateAverageResponseTime(): void {
-    const totalResponseTime = this.responseTimes.reduce((acc, curr) => acc + curr, 0);
+    const totalResponseTime: number = this.responseTimes.reduce((acc, curr) => acc + curr, 0);
     this.averageResponseTime = totalResponseTime / this.responseTimes.length;
   }
 

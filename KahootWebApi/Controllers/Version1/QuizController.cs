@@ -202,13 +202,40 @@ namespace KahootWebApi.Controllers.Version1
             return await _manager.GetCorrectAnswer(catName, quizName, questionNumber);
         }
 
-        //[HttpGet("GetCreatedQuizStatsAsync")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //public async Task<CreatedQuizStats> GetCreatedQuizStatsAsync(string catName, string quizName)
-        //{
-        //    return await _manager.GetCreatedQuizStatsAsync(catName, quizName);
-        //}
+        [HttpPost("AddQuizHistory")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task AddQuizHistoryAsync(MyQuizAnswers myQuizAnswers)
+        {
+            await _manager.AddQuizHistoryAsync(myQuizAnswers);
+        }
+
+        [HttpDelete("RemoveUserAnswer")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task RemoveUserAnswerAsync(string catName, string quizName, int questionNumber)
+        {
+            await _manager.RemoveUserAnswerAsync(catName, quizName, questionNumber);
+        }
+
+        [HttpDelete("RemoveUserAnswers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task RemoveUserAnswersAsync(string catName, string quizName)
+        {
+            await _manager.RemoveUserAnswersAsync(catName, quizName);
+        }
+
+        [HttpGet("GetQuizHistory")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<MyQuizAnswers> GetQuizHistoryAsync(string catName, string quizName, int questionNumber, int userId)
+        {
+            return await _manager.GetQuizHistoryAsync(catName, quizName, questionNumber, userId);
+        }
     }
 }

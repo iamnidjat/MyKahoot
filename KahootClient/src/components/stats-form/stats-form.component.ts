@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {QuizModel} from "../../models/QuizModel";
-import {Router} from "@angular/router";
+import {NavigationExtras, Router} from "@angular/router";
 import {CheckDataService} from "../../services/check-data.service";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
@@ -25,10 +25,10 @@ export class StatsFormComponent implements OnInit, OnDestroy{
     this.quizType = localStorage.getItem("QuizType")!;
     this.level = localStorage.getItem("SLevel")!
     this.mode = this.checkData.GetQuizMode(this.catType, this.quizType) ? 'private' : 'public';
-    this.DownloadResults();
+    this.downloadResultsAsync();
   }
 
-  public async DownloadResults(): Promise<void>{
+  public async downloadResultsAsync(): Promise<void>{
     await fetch(API_URL + `DownloadResult/${parseInt(localStorage.getItem("userId")!)}?userId=${parseInt(localStorage.getItem("userId")!)}&catType=${this.catType}&quizType=${this.quizType}&level=${this.level}`, {
       method: "GET"
     }).then(text => text.json()).then(data => {
@@ -40,9 +40,20 @@ export class StatsFormComponent implements OnInit, OnDestroy{
     });
   }
 
-  ToBarchartForm(): void{
+  public toBarchartForm(): void {
     this.counter++;
     this.router.navigate(['/app/barchart-form']);
+  }
+
+  public toQuizHistory(): void {
+    const navigationExtras: NavigationExtras  = {
+      queryParams: {
+        'categoryName': this.catType,
+        'quizName': this.quizType,
+      }
+    };
+
+    this.router.navigate(['/app/quizHistory'], navigationExtras);
   }
 
   ngOnDestroy(): void {
