@@ -1,0 +1,139 @@
+<app-navbar-form></app-navbar-form>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="container mt-5" style="width: 1000px !important;">
+  <div class="card">
+    <div class="d-flex justify-content-between p-3">
+      <div class="quiz-header">
+        <h4 style="font-family: cursive;">{{"Updating a(n)" | translate}} "{{testType}}" {{"Quiz" | translate}}!</h4>
+        <span style="font-style: italic;">{{"Welcome" | translate}} {{name}}!</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="!isQuizCompleted">
+      <div class="d-flex justify-content-around py-3">
+        <div class="question-remain">
+          <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questions.length}}</span>
+        </div>
+      </div>
+      <div class="time-points" style="display: flex; flex-direction: row; justify-content: space-between">
+        <div class="points" style="display: flex; flex-direction: row">
+          <label>Points: </label>
+          <input type="number" min="5" max="50" value="5" #Points />
+          <label> (min: 5 points, max: 50 points)</label>
+        </div>
+        <div class="ime" style="display: flex; flex-direction: row">
+          <label>Time (seconds): </label>
+          <input type="number" min="15" max="180" value="60" #Time />
+          <label> (min: 15 seconds, max: 180 seconds)</label>
+        </div>
+      </div>
+      <div class="question">
+        <div class="card" style="text-align: center; margin: 5px">
+          <input type="text" #Question value="{{questions[currentQuestion]?.question}}" placeholder="{{'Enter your question here' | translate}}"/>
+        </div>
+      </div>
+      <ng-container *ngIf="testFormat=='four-answers'">
+        <div class="options">
+          <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer1 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option1}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer2 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option2}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer3 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option3}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="3" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer4 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option4}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="4" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+          </ol>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="testFormat=='three-answers'">
+        <div class="options">
+          <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer11 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option1}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer21 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option2}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer31 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" value="{{questions[currentQuestion]?.option3}}" placeholder="{{'Enter your answer here' | translate}}">
+                <input type="radio" [(ngModel)]="value" value="3" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+          </ol>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="testFormat=='true-false-answers'">
+        <div class="options">
+          <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer12  value="{{questions[currentQuestion]?.option1}}" [readonly]="true"  style="display: inline-block; background-color: deepskyblue; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
+                <input type="radio" [(ngModel)]="value" value="1" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div style="display: flex">
+                <input type="text" #Answer22  value="{{questions[currentQuestion]?.option2}}" [readonly]="true" style="display: inline-block; background-color: red; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
+                <input type="radio" [(ngModel)]="value" value="2" name="radAnswer" (change)="onChange($event)" style="height: 30px; width: 30px; margin-top: 8px">
+              </div>
+            </li>
+          </ol>
+          <button class="btn" (click)="ShuffleAnswers()" style="background-color: #03cae4">{{'Shuffle' | translate}}</button>
+        </div>
+      </ng-container>
+      <div class="d-flex justify-content-between">
+        <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+        <button class="btn" (click)="deleteQuestion()"><i aria-hidden="true"></i></button>
+        <button [disabled]="currentQuestion === questions.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        <button class="btn" (click)="clearInputs()">{{"Clear" | translate}}</button>
+        <button class="btn" (click)="UpdateQuestion()">{{"Update" | translate}}</button>
+        <button class="btn" (click)="FinishProcess()" style="background-color: #03cae4">{{'Finish' | translate}}</button>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isQuizCompleted">
+      <div class="row d-flex justify-content-between">
+        <img style="width: 50%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt="">
+        <div class="result text-center col-md-6 col-sm-12">
+          <h3>{{'Congratulations! You updated your own quiz' | translate}}!</h3>
+          <div class="buttons">
+            <input type="button" class="backToMenuButton" name="backToMenuButton" value="{{'Menu' | translate}}" (click)="ToMenu()"/>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<!--<app-footer-form></app-footer-form>-->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

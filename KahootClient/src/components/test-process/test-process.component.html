@@ -1,0 +1,341 @@
+<app-navbar-form></app-navbar-form>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div class="wrapper">
+<div class="container mt-5" style="width: 1000px !important; flex: 1 1 auto">
+  <div class="card">
+    <div class="d-flex justify-content-between p-3">
+      <div class="quiz-header">
+        <h4 style="font-family: cursive;">"{{testType}}" {{"Category" | translate}}!</h4>
+        <h4 style="font-family: cursive;">"{{quizName}}" {{"Quiz"}}!</h4>
+        <span style="font-style: italic;">{{"Welcome" | translate}} "{{name}}"</span>
+      </div>
+    </div>
+
+    <ng-container *ngIf="action === 'play'">
+      <ng-container *ngIf="!isQuizCompleted && !flag">
+      <div class="d-flex justify-content-around py-3">
+        <div class="score">
+          <h5>{{points}} {{"Points" | translate}}</h5>
+        </div>
+        <div class="question-remain">
+          <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questionList.length}}</span>
+        </div>
+        <div class="timer">
+          <h5>{{counter}} {{"sec" | translate}} ⏱</h5>
+        </div>
+      </div>
+      <div class="progress mb-3">
+        <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [ngStyle]="{'width': progress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div class="question">
+        <div class="card" style="text-align: center">
+          <h3>{{questionList[currentQuestion]?.questionText}}</h3>
+        </div>
+      </div>
+      <div class="options" [ngClass]="{disabledDiv: isActive}">
+        <ol *ngFor="let option of questionList[currentQuestion]?.options" style="list-style: none;  margin-right: 4%; margin-top: 2%">
+          <li (click)="answer(currentQuestion + 1, option)" style="cursor: pointer;">
+            <div appChangeBg [isCorrect]="option.correct" class="card" style="cursor: pointer; padding: 5px">
+              {{option.text}}
+            </div>
+          </li>
+        </ol>
+      </div>
+      <ng-container *ngIf="level === 'easy'">
+        <div class="d-flex justify-content-between">
+          <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+          <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+          <button [disabled]="currentQuestion === questionList.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="level === 'medium'">
+        <div class="d-flex justify-content-between">
+          <button disabled class="btn"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+          <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+          <button [disabled]="currentQuestion === questionList.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="level === 'hard'">
+        <div class="d-flex justify-content-between">
+          <button disabled class="btn"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+          <button class="btn" disabled><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+          <button [disabled]="currentQuestion === questionList.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        </div>
+      </ng-container>
+    </ng-container>
+
+      <ng-container *ngIf="!isQuizCompleted && flag">
+        <div class="d-flex justify-content-around py-3">
+          <div class="score">
+            <h5>{{points}} {{"Points" | translate}}</h5>
+          </div>
+          <div class="question-remain">
+            <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questions.length}}</span>
+          </div>
+          <div class="timer">
+            <h5>{{counter}} {{"sec" | translate}} ⏱</h5>
+          </div>
+        </div>
+        <div class="progress mb-3">
+          <div class="progress-bar progress-bar-striped bg-success" role="progressbar" [ngStyle]="{'width': progress + '%'}" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="question">
+          <div class="card" style="text-align: center">
+            <h3>{{questions[currentQuestion]?.question}}</h3>
+          </div>
+        </div>
+        <div class="options" [ngClass]="{disabledDiv: isActive}">
+          <ng-container *ngIf="testFormat === 'four-answers'">
+            <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
+              <li style="cursor: pointer; background-color: red; margin: 5px" (click)="answer2(currentQuestion + 1, 1)" #1>
+                <div class="card" style="cursor: pointer; padding: 5px" >
+                  {{questions[currentQuestion]?.option1}}
+                </div>
+              </li>
+              <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 2)" #2>
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option2}}
+                </div>
+              </li>
+              <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 3)" #3>
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option3}}
+                </div>
+              </li>
+              <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 4)" #4>
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option4}}
+                </div>
+              </li>
+            </ol>
+          </ng-container>
+
+          <ng-container *ngIf="testFormat === 'three-answers'">
+            <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 1)" #1>
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option1}}
+              </div>
+            </li>
+            <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 2)" #2>
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option2}}
+              </div>
+            </li>
+            <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 3)" #3>
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option3}}
+              </div>
+            </li>
+          </ng-container>
+
+          <ng-container *ngIf="testFormat === 'true-false-answers'">
+            <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 1)" #1>
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option1}}
+              </div>
+            </li>
+            <li style="cursor: pointer;" (click)="answer2(currentQuestion + 1, 2)" #2>
+              <div class="card" style="cursor: pointer; padding: 5px" >
+                {{questions[currentQuestion]?.option2}}
+              </div>
+            </li>
+          </ng-container>
+        </div>
+        <ng-container *ngIf="level === 'easy'">
+          <div class="d-flex justify-content-between">
+            <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+            <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+            <button [disabled]="currentQuestion === questions.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="level === 'medium'">
+          <div class="d-flex justify-content-between">
+            <button disabled class="btn"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+            <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+            <button [disabled]="currentQuestion === questions.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="level === 'hard'">
+          <div class="d-flex justify-content-between">
+            <button disabled class="btn"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+            <button class="btn" disabled><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+            <button [disabled]="currentQuestion === questions.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="isQuizCompleted">
+        <ng-container *ngIf="quizName !== 'Default Mixed Test' && quizName !== 'Default Math' &&
+          quizName !== 'Default Programming' && quizName !== 'Default Logics'">
+          <app-feedback-popup-form></app-feedback-popup-form>
+        </ng-container>
+        <div class="row d-flex justify-content-between">
+          <img style="width: 50%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt="">
+          <div class="result text-center col-md-6 col-sm-12">
+            <h3>{{'Congratulations' | translate}}! <br>{{'You have completed the quiz' | translate}}! <br>{{'Below is your result' | translate}}:</h3>
+
+            <ng-container *ngIf="!flag">
+              <p>{{'Total questions attempted' | translate}}: {{questionList.length}} </p>
+            </ng-container>
+
+            <ng-container *ngIf="flag">
+              <p>{{'Total questions attempted' | translate}}: {{questions.length}} </p>
+            </ng-container>
+
+            <p>{{'Total correct answered' | translate}}: {{correctAnswersCount}} </p>
+            <p>{{'Total wrong answered' | translate}}: {{inCorrectAnswersCount}} </p>
+            <p>{{'Skipped questions count' | translate}}: {{skippedQuestionsCount}} </p>
+            <p>{{'Average Response time' | translate}}: {{averageResponseTime}} </p>
+            <p>{{'Your score' | translate}}: {{points}} {{"points" | translate}} </p>
+            <p>{{feedback}}</p>
+            <ng-container *ngIf="name !== 'Guest'">
+              <div class="buttons">
+                <input type="button" class="backToMenuButton" name="backToMenuButton" value="{{'Menu' | translate}}" (click)="ToMenu($event)"/>
+                <input type="button" class="showStatsButton" name="showStatsButton" value="{{'Stats' | translate}}" (click)="ToStats($event)"/>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="name === 'Guest'">
+              <div class="buttons">
+                <input type="button" class="backToMenuButton" name="backToMenuButton" value="{{'Menu' | translate}}" (click)="ToMenu($event)" style="width: 200px"/>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="action === 'watch'">
+      <ng-container *ngIf="!flag">
+        <div class="d-flex justify-content-around py-3">
+          <div class="question-remain">
+            <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questionList.length}}</span>
+          </div>
+        </div>
+        <div>
+          <button (click)="showFileTypes = true">Download</button>
+          <ng-container *ngIf="showFileTypes">
+            <div style="display: flex; flex-direction: row;">
+              <button (click)="downloadDocument('txt')">Download as TXT</button>
+              <button (click)="downloadDocument('docx')">Download as DOCX</button>
+              <button (click)="downloadDocument('json')">Download as JSON</button>
+            </div>
+          </ng-container>
+        </div>
+        <div class="question">
+          <div class="card" style="text-align: center">
+            <h3>{{questionList[currentQuestion]?.questionText}}</h3>
+          </div>
+        </div>
+        <div class="options" [ngClass]="{disabledDiv: isActive}">
+          <ol *ngFor="let option of questionList[currentQuestion]?.options" style="list-style: none;  margin-right: 4%; margin-top: 2%">
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{option.text}}
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+          <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+          <button [disabled]="currentQuestion === questionList.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="flag">
+        <div class="d-flex justify-content-around py-3">
+          <div class="question-remain">
+            <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} {{"of" | translate}} {{questions.length}}</span>
+          </div>
+        </div>
+        <div>
+          <button (click)="showFileTypes = true">Download</button>
+          <ng-container *ngIf="showFileTypes">
+            <div style="display: flex; flex-direction: row;">
+              <button (click)="downloadDocument('txt')">Download as TXT</button>
+              <button (click)="downloadDocument('docx')">Download as DOCX</button>
+              <button (click)="downloadDocument('json')">Download as JSON</button>
+            </div>
+          </ng-container>
+        </div>
+        <div class="question">
+          <div class="card" style="text-align: center">
+            <h3>{{questions[currentQuestion]?.question}}</h3>
+          </div>
+        </div>
+        <div class="options" [ngClass]="{disabledDiv: isActive}">
+          <ng-container *ngIf="testFormat === 'four-answers'">
+            <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
+              <li style="cursor: pointer; background-color: red; margin: 5px">
+                <div class="card" style="cursor: pointer; padding: 5px" >
+                  {{questions[currentQuestion]?.option1}}
+                </div>
+              </li>
+              <li style="cursor: pointer;">
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option2}}
+                </div>
+              </li>
+              <li style="cursor: pointer;">
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option3}}
+                </div>
+              </li>
+              <li style="cursor: pointer;">
+                <div class="card" style="cursor: pointer; padding: 5px">
+                  {{questions[currentQuestion]?.option4}}
+                </div>
+              </li>
+            </ol>
+          </ng-container>
+
+          <ng-container *ngIf="testFormat === 'three-answers'">
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option1}}
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option2}}
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option3}}
+              </div>
+            </li>
+          </ng-container>
+
+          <ng-container *ngIf="testFormat === 'true-false-answers'">
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px">
+                {{questions[currentQuestion]?.option1}}
+              </div>
+            </li>
+            <li style="cursor: pointer;">
+              <div class="card" style="cursor: pointer; padding: 5px" >
+                {{questions[currentQuestion]?.option2}}
+              </div>
+            </li>
+          </ng-container>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button [disabled]="currentQuestion === 0" class="btn" (click)="previousQuestion()"><i class="fa text-primary fa-chevron-left fa-3x" aria-hidden="true"></i></button>
+          <button class="btn" (click)="resetQuiz()"><i class="fa fa-refresh text-primary fa-3x" aria-hidden="true"></i></button>
+          <button [disabled]="currentQuestion === questions.length - 1" class="btn" (click)="nextQuestion()"><i class="fa text-primary fa-chevron-right fa-3x" aria-hidden="true"></i></button>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+

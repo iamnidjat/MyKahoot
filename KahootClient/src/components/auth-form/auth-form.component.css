@@ -1,0 +1,156 @@
+.alert {
+  color: red;
+  margin-top: 5px;
+}
+
+.img-container {
+  background-color: rgb(232, 232, 232);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  position:absolute;
+  bottom:0;
+  left:0;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px;
+}
+
+.form-group.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-group.auxiliary {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.form-group label {
+  display: block;
+  margin: 0 0 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+}
+
+.form-group input {
+  background: rgba(0, 0, 0, 0.1);
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 10px;
+  color: rgba(0, 0, 0, 0.6);
+  font-weight: 500;
+  margin-right: -60px !important;
+}
+
+.form-group button {
+  background: #4285f4;
+  width: 100%;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 10px;
+  color: #fff;
+  font-weight: 500;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.form-group button:hover {
+  opacity: .8;
+}
+
+.form-group.auxiliary.form-remember {
+  display: flex;
+  flex-direction: row;
+}
+
+.form-remember label {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+
+.form-remember input[type='checkbox'] {
+  margin: 0 10px 0 0;
+  cursor: pointer;
+}
+
+.form-group .form-recovery {
+  color: #4285f4;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.form-panel {
+  padding: 60px calc(5% + 60px) 60px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:50%;
+}
+
+.form-header {
+  margin: 0 0 40px;
+}
+
+.form-header h1 {
+  padding: 4px 0;
+  color: #4285f4;
+  font-size: 24px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.form-visibility {
+  display: flex;
+  flex-direction: row;
+}
+
+.hidden-eye{
+  width: 50px !important;
+  height: 47px;
+  /*position: relative;*/
+  /*top: -47px;*/
+  /*left: 400px;*/
+}
+
+.register-route:hover,
+#guest-sign:hover,
+#forgot-password:hover{
+  opacity: .66;
+}
+
+@media screen and (max-width: 600px) and (min-width: 450px) {
+  .form{
+    width: 450px;
+  }
+}
+
+@media screen and (max-width: 450px) and (min-width: 300px) {
+  .form{
+    width: 350px;
+  }
+}

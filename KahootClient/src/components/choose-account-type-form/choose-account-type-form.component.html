@@ -1,0 +1,30 @@
+<app-navbar-form></app-navbar-form>
+
+<body style="height: 100vh;">
+    <div class="container">
+      <h1>{{'AccType' | translate}}</h1>
+      <div class="form-container">
+        <div class="form" (click)="toRegisterProcess(Teacher)">
+          <div class="image">
+            <img src="../../assets/images/teacher.png">
+          </div>
+          <div class="title" id="teacher" #Teacher>{{'Teacher' | translate}}</div>
+        </div>
+
+        <div class="form" (click)="toRegisterProcess(Student)">
+          <div class="image">
+            <img src="../../assets/images/user.png">
+          </div>
+          <div class="title" id="student" #Student>{{'Student' | translate}}</div>
+        </div>
+      </div>
+
+      <div class="toLogin" style="margin-top: 20px;">
+        <span style="color: black">{{'AlreadyHaveAnAccount' | translate}}</span>
+        <span id="login" (click)="toLoginForm()" style="text-decoration: underline; text-underline-offset: 1px; cursor: pointer; color: #4285f4;">{{'Login' | translate}}</span>
+      </div>
+    </div>
+</body>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

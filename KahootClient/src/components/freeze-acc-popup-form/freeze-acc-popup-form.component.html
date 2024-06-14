@@ -1,0 +1,47 @@
+<body class="bg-gray-900">
+  <div class="modal" style="display: block">
+    <div class="mt-20 p-4 rounded bg-white max-w-sm text-center border-t-4 border-red-600 mx-auto text-gray-700 pt-0">
+      <p class="text-blk heading">
+        {{"Account Freezing" | translate}}
+      </p>
+      <div>{{"Choose reasons for your account freezing" | translate}}</div>
+      <div>
+        <div>
+          <input id="reason1" type="radio" value="Not interested" name="radAnswer" (change)="checkStatus($event);">
+          <label>{{"Not interested" | translate}}</label>
+        </div>
+        <div>
+          <input id="reason2" type="radio" value="Bad interface" name="radAnswer" (change)="checkStatus($event);">
+          <label>{{"Bad interface" | translate}}</label>
+        </div>
+        <div>
+          <input id="reason3" type="radio" value="Bad features" name="radAnswer" (change)="checkStatus($event);">
+          <label>{{"Bad features" | translate}}</label>
+        </div>
+        <div>
+          <input id="reason4" type="radio" value="Found new website" name="radAnswer" (change)="checkStatus($event);">
+          <label>{{"Found new website" | translate}}</label>
+        </div>
+        <div>
+          <input id="reason5" type="radio" value="Other" name="radAnswer" (change)="checkStatus($event);">
+          <label>{{"Other" | translate}}</label>
+        </div>
+        <div>
+          <textarea id="reason6" #WriteTheReason placeholder="{{'Write the reason' | translate}}"></textarea>
+        </div>
+        <div>
+          <input [type]="Visibility ? 'text' : 'password'"  #password type="password" placeholder="{{'Specify your password here' | translate}}" (cut)="false" (copy)="false" (paste)="false">
+          <button id="hidden-eye1" (click)="ChangeVisibilityPassword()">
+            <span [class]="Visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+          </button>
+        </div>
+      </div>
+      <div>
+        <button (click)="Cancel()" class="w-1/2 mr-1 bg-white border text-gray-600 border-gray-400 hover:bg-gray-300 py-2 px-4 rounded font-medium">
+          {{"Cancel" | translate}}</button>
+        <button (click)="Freeze($event)" class="w-1/2 ml-1 bg-red-600 border border-red-600 text-white border-gray-500 hover:bg-red-700 hover:border-red-700 py-2 px-4 rounded font-medium">
+          {{"Freeze Account"  | translate}}</button>
+      </div>
+    </div>
+  </div>
+</body>

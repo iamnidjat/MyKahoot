@@ -1,14 +1,13 @@
 ﻿using KahootWebApi.Models;
-using KahootWebApi.Services;
+using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 
 namespace KahootWebApi.Controllers.v1
-{ 
+{
     [ApiController]
     [Route("api/v1/Statistics/")]
-    //[Authorize]
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsManager _manager;
@@ -19,27 +18,30 @@ namespace KahootWebApi.Controllers.v1
         }
 
         [HttpPost("UploadResult")]
-        public QuizStat UploadResult(QuizStat model)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task UploadResult(QuizStat model)
         {
-             return _manager.UploadResultAsync(model);
+            await _manager.UploadResultAsync(model);
         }
-
-        //[HttpPost("UploadResult")]
-        //public async Task<QuizStat> UploadResult(QuizStat model)
-        //{
-        //    return await _manager.UploadResultAsync(model);
-        //}
 
         [HttpGet("DownloadResult/{userId:int}")]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(int userId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IEnumerable<QuizStat>> DownloadResult(int userId, string catType, string quizType, string level)
         {
-            return await _manager.DownloadResultAsync(userId);
+            return await _manager.DownloadResultAsync(userId, catType, quizType, level);
         }
-
-        [HttpGet("DownloadResult4")]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(string quizType)
+        
+        [HttpGet("DownloadResults")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IEnumerable<QuizStat>> DownloadResult(string catType, string quizType, string level)
         {
-            return await _manager.DownloadResultAsync(quizType);
+            return await _manager.DownloadResultAsync(catType, quizType, level);
         }
     }
 }

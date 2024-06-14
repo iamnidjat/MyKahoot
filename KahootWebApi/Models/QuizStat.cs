@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 
 namespace KahootWebApi.Models
 {
@@ -9,11 +8,38 @@ namespace KahootWebApi.Models
         public int Id { get; set; }
 
         [Required]
+        public string? CategoryName { get; set; }
+
+        [Required]
         public string? QuizName { get; set; }
 
         [Required]
         public int Score { get; set; }
 
+        [Required]
+        public string? UserName { get; set; }
+
+        [Required]
+        public DateTime PassedDate { get; set; }
+
+        public bool IsVisible { get; set; } = true;
+
+        [Required]
+        public string? Level { get; set; }
+
+        [Required]
+        public float AverageResponseTime { get; set; }
+
+        [Required]
+        public int CorrectAnswersCount { get; set; }
+
+        [Required]
+        public int WrongAnswersCount { get; set; }
+
+        [Required]
+        public int SkippedQuestionsCount { get; set; }
+
+        [Required]
         public int UserId { get; set; }
 
         public User? User { get; set; }

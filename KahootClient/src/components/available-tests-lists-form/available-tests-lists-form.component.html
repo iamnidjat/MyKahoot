@@ -1,0 +1,47 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+    <div style="display: flex; flex-direction: row; justify-content: space-between; width: 800px">
+      <div (click)="downloadQuizzesAsync()" class="choice-button">Public quizzes</div>
+      <div (click)="downloadPrivateQuizzesAsync()" class="choice-button">Private quizzes</div>
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: space-between">
+      <div class="statement">{{"Choose a quiz to pass" | translate}}</div>
+      <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Quiz' | translate}}" />
+    </div>
+     <div class="main-container">
+       <div *ngFor="let category of filterQuizzes()">
+         <div class="fields" id="{{category.quizName}}" #div (click)="toRulesForm(div)">
+           <p>{{category.quizName}} Created by the {{category.userName}} user
+             <br>
+             <br>
+             <br>
+             <br>
+           <ng-container *ngIf="category.userName !== 'admin'">
+             <div style="display: flex; flex-direction: row">
+               <div style="display: flex; flex-direction: row">
+                 <div>{{category.likesCount}} likes</div>
+                 <input type="button" [class.liked]="category.userLiked" value="Like" (click)="toLikeQuizAsync(category.id!); $event.stopPropagation()">
+               </div>
+               <div style="display: flex; flex-direction: row">
+                 <div>{{category.dislikesCount}} dislikes</div>
+                 <input type="button" [class.disliked]="category.userDisliked" value="Dislike" (click)="toDislikeQuizAsync(category.id!); $event.stopPropagation()">
+               </div>
+               <div style="display: flex; flex-direction: row">
+                 <div>{{category.commentsCount}} comments</div>
+                 <input type="button" value="Comments" [routerLink]="['/app/comments', category.id, category.categoryName, category.quizName]">
+               </div>
+               <div>Average feedback: {{category.averageFeedbackScore}}</div>
+               <div>{{category.timesPassed}} times passed</div>
+             </div>
+           </ng-container>
+         </div>
+       </div>
+     </div>
+    <div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-enter-private-test-code-popup-form *ngIf="flagForCodeChecking"></app-enter-private-test-code-popup-form>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

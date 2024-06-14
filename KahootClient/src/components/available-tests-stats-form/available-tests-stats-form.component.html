@@ -1,0 +1,29 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+  <div style="display: flex; flex-direction: column;">
+    <div class="statement">{{"Choose a field to view your own stats" | translate}}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Quiz' | translate}}" />
+  </div>
+  <div class="main-container">
+    <ng-container *ngIf="flag">
+      <div *ngFor="let quiz of filterPassedQuizzes()">
+        <div class="fields" id="{{quiz.quizName}}" #div (click)="ToLevelsForm(div)">
+          <p>{{quiz.quizName}}</p>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!flag">
+      <div *ngFor="let quiz of filterQuizzes()">
+        <div class="fields" id="{{quiz.quizName}}" #div (click)="ToLevelsForm(div)">
+          <p>{{quiz.quizName}}</p>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+    <div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

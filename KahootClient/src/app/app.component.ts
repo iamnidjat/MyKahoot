@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -7,19 +6,5 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 
-export class AppComponent implements OnInit{
+export class AppComponent {}
 
-  constructor(private router: Router) {
-  }
-  ngOnInit(): void {
-    this.AutoLogin();
-  }
-
-    public AutoLogin(): void{
-    const access = localStorage.getItem("Username") || localStorage.getItem("newLogin");
-
-    if (access) {
-      this.router.navigate(['/app/player-options-form']);
-    }
-  }
-}

@@ -1,0 +1,45 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="main-container">
+  <ng-container *ngIf="!flag">
+    <div class="table-wrapper">
+      <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category or Test' | translate}}" />
+      <table class="fl-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Category</th>
+          <th>Test</th>
+          <th>Private</th>
+          <th>Code for a test</th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let category of filterCategories(); let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{category.categoryName}}</td>
+          <td (click)="ToWatchQuizForm(category.quizName!, category.categoryName!)"><a>{{category.quizName}}</a></td>
+          <td>{{category.isPrivate ? "yes" : "no"}}</td>
+          <td>{{category.quizCode}}</td>
+          <div style="display: flex; flex-direction: row">
+            <td (click)="confirmDelete(category.categoryName!, category.quizName!)" style="cursor: pointer; color: red">{{"Delete" | translate}}</td>
+            <td (click)="ToUpdateQuizForm(category.quizName!, category.categoryName!)" style="cursor: pointer; color: blue"><a>{{"Update" | translate}}</a></td>
+          </div>
+          <td (click)="ToCreatedQuizStatsForm(category.id!, category.quizName!, category.categoryName!)" style="cursor: pointer; color: green">{{"Your quiz stats" | translate}}</td>
+        </tr>
+        </tbody>
+        <pagination-controls (pageChange)="p = $event" [id]="paginationId"></pagination-controls>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="flag">
+    <div>You haven't yet created a quiz!</div>
+  </ng-container>
+</div>
+
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

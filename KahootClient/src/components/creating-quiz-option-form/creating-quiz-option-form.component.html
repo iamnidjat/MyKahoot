@@ -1,0 +1,23 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+  <div style="display: flex; flex-direction: column;">
+    <div class="statement">{{"Choose a field to create a quiz" | translate}}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category' | translate}}" />
+  </div>
+  <div class="main-container">
+    <div class="fields" id="newCategory" (click)="openModalWindow()"><p>{{"NewCategory" | translate}}</p></div>
+
+    <div *ngFor="let category of filterCategories()">
+      <div class="fields" id="{{category.categoryName}}" #div (click)="toCreatingQuizForm(div)"><p>{{category.categoryName}}</p></div>
+    </div>
+  </div>
+
+  <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+
+<app-add-new-category-popup-form *ngIf="flagOfCustomCategory"></app-add-new-category-popup-form>
+<app-choose-type-of-quiz-form *ngIf="flagOfExistingCategory"></app-choose-type-of-quiz-form>

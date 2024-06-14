@@ -1,0 +1,63 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="content-outer-contaienr">
+  <div class="inner-outer-container">
+<div class="responsive-container-block bigContainer">
+  <div class="responsive-container-block Container">
+    <div>
+      {{'Remember that you can just freeze your account' | translate}}
+      <span class="here" (click)="OpenModal2()">{{"here" | translate}}</span>
+      {{"instead" | translate}}
+    </div>
+    <p class="text-blk heading">
+      {{"Account Deleting" | translate}}
+    </p>
+    <div>
+      <div>
+        <input id="reason1" type="radio" value="Not interested" name="radAnswer" (change)="checkStatus($event);">
+        <label>{{"Not interested" | translate}}</label>
+      </div>
+      <div>
+        <input id="reason2" type="radio" value="Bad interface" name="radAnswer" (change)="checkStatus($event);">
+        <label>{{"Bad interface" | translate}}</label>
+      </div>
+      <div>
+        <input id="reason3" type="radio" value="Bad features" name="radAnswer" (change)="checkStatus($event);">
+        <label>{{"Bad features" | translate}}</label>
+      </div>
+      <div>
+        <input id="reason4" type="radio" value="Found new website" name="radAnswer" (change)="checkStatus($event);">
+        <label>{{"Found new website" | translate}}</label>
+      </div>
+      <div>
+        <input id="reason5" type="radio" value="Other" name="radAnswer" (change)="checkStatus($event);">
+        <label>{{"Other" | translate}}</label>
+      </div>
+      <div>
+        <textarea id="reason6" #WriteTheReason placeholder="{{'Write the reason' | translate}}"></textarea>
+      </div>
+      <div>
+        <input [type]="visibility ? 'text' : 'password'" #password type="password" placeholder="{{'Specify your password here' | translate}}" (cut)="false" (copy)="false" (paste)="false">
+        <button id="hidden-eye1" (click)="ChangeVisibilityPassword()">
+          <span [class]="visibility ? 'fa fa-eye icon' : 'fa fa-eye-slash icon'"></span>
+        </button>
+      </div>
+    </div>
+    <div>
+      <button class="btn btn-delete" (click)="OpenModal()">
+        <span class="mdi mdi-delete mdi-24px"></span>
+        <span class="mdi mdi-delete-empty mdi-24px"></span>
+        <span>{{"Delete" | translate}}</span>
+      </button>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+
+<app-delete-acc-popup-form *ngIf="flag"></app-delete-acc-popup-form>
+<app-freeze-acc-popup-form *ngIf="flag2"></app-freeze-acc-popup-form>
+
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

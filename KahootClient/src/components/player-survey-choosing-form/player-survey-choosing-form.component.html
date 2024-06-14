@@ -1,0 +1,22 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+  <div style="display: flex; flex-direction: column;">
+    <div class="statement">{{"Choose a field to pass a quiz" | translate}}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category' | translate}}" />
+  </div>
+  <div class="main-container">
+    <div *ngFor="let category of filterCategories()">
+      <div class="fields" id="{{category.categoryName}}" #div (click)="onQuizzesListClick(div)">
+        <p>{{category.categoryName}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-choose-action-popup-form *ngIf="flagOfAction"></app-choose-action-popup-form>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+
