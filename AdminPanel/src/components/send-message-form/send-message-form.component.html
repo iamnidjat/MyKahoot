@@ -1,0 +1,20 @@
+<div class="message-container">
+  <h2>Send a Message</h2>
+  <form>
+    <div class="form-group">
+      <label for="recipient">To:</label>
+      <input type="text" id="recipient" name="recipient" [value]="receiver" placeholder="Recipient's email">
+    </div>
+    <div class="form-group">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" #Title placeholder="Message title">
+    </div>
+    <div class="form-group">
+      <label for="body">Message:</label>
+      <textarea id="body" name="body" #Body placeholder="Write your message here"></textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" (click)="sendMessageAsync(Title.value, Body.value)">Send</button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,43 @@
+<app-navbar-form></app-navbar-form>
+
+<div class="main-container">
+  <ng-container *ngIf="!flag">
+    <div class="table-wrapper">
+      <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by username, name, surname, email or role' | translate}}" />
+      <table class="fl-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Surname</th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of filterUsers(); let i = index">
+          <td>{{i + 1}}</td>
+          <td>{{user.username}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.surname}}</td>
+          <div style="display: flex; flex-direction: row">
+            <td (click)="confirmDelete(user.id, user.username!)" style="cursor: pointer; color: blue">{{"Delete" | translate}}</td>
+            <td (click)="confirmBan(user.id, user.username!)" style="cursor: pointer; color: red">{{"Ban" | translate}}</td>
+            <td (click)="messageUser(user.username!)" style="cursor: pointer; color: green">{{"Message" | translate}}</td>
+          </div>
+        </tr>
+        </tbody>
+        <pagination-controls (pageChange)="p = $event" [id]="paginationId"></pagination-controls>
+      </table>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="flag">
+    <div>There is no user yet!</div>
+  </ng-container>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

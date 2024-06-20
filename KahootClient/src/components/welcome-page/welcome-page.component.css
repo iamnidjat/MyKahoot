@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.third-layer {
+  display: flex;
+  flex-direction: column;
+}
+
+.left-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.right-side {
+  top:0;
+  right:0;
+}
+
+.first-layer {
+  display: flex;
+  flex-direction: row;
+}
+
+.second-layer {
+  display: flex;
+  flex-direction: row;
+  background-color: rgb(24, 24, 27);
+}
+
+.second-layer div, span {
+  color: white;
+}
+
+.features-container, .sub-feature-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.features-container2 {
+  display: flex;
+  flex-direction: row;
+}
+
+.trapezoid-img {
+  clip-path: polygon(20% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.left-side-questions, .right-side-questions {
+  display: flex;
+  flex-direction: column;
+}
+
+.questions {
+  display: flex;
+  flex-direction: row;
+}

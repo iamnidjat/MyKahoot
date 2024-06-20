@@ -1,0 +1,126 @@
+import { Component } from '@angular/core';
+import {User} from "../../models/User";
+import {GettingDataService} from "../../services/getting-data.service";
+import {ManipulatingDataService} from "../../services/manipulating-data.service";
+import {FilteringDataService} from "../../services/filtering-data.service";
+import {Router} from "@angular/router";
+import Swal from "sweetalert2";
+import {NgForOf, NgIf} from "@angular/common";
+import {NgxPaginationModule} from "ngx-pagination";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {TranslateModule} from "@ngx-translate/core";
+import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
+import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
+import {FooterFormComponent} from "../footer-form/footer-form.component";
+
+@Component({
+  selector: 'app-users-list-form',
+  standalone: true,
+  imports: [
+    NgForOf,
+    NgIf,
+    NgxPaginationModule,
+    ReactiveFormsModule,
+    TranslateModule,
+    FormsModule,
+    NavbarFormComponent,
+    ScrollToTopFormComponent,
+    FooterFormComponent
+  ],
+  templateUrl: './users-list-form.component.html',
+  styleUrl: './users-list-form.component.css'
+})
+export class UsersListFormComponent {
+  public users: User[] = [];
+  public flag: boolean = false;
+  public searchText: string = '';
+  public p: number = 1;
+  public paginationId: string = 'unique-pagination-id';
+  constructor(private gettingDataService: GettingDataService, private manipulatingDataService: ManipulatingDataService,
+              private filteringDataService: FilteringDataService, private router: Router) {}
+
+  public async GetUsers(): Promise<void> {
+    await this.gettingDataService.GetUsersAsync(this.users);
+  }
+
+  private async deleteUser(userId: number): Promise<void>{
+    await this.manipulatingDataService.deleteUserAsync(userId);
+  }
+
+  private async banUser(userId: number): Promise<void>{
+    await this.manipulatingDataService.banUserAsync(userId);
+  }
+
+  public confirmDelete(userId: number, userName: string): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete the user "${userName}"`,
+      icon: 'warning',
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await this.deleteUser(userId);
+        Swal.fire(
+          'Deleted',
+          `You deleted "${userName}" user`,
+          'info'
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelled',
+          'Your user is safe :)',
+          'info'
+        );
+      }
+    });
+  }
+
+
+  public confirmBan(userId: number, userName: string): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to ban the user "${userName}"`,
+      icon: 'warning',
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, ban it!',
+      cancelButtonText: 'No, keep it'
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await this.banUser(userId);
+        Swal.fire(
+          'Deleted',
+          `You banned "${userName}" user`,
+          'info'
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelled',
+          'Your user is safe :)',
+          'info'
+        );
+      }
+    });
+  }
+
+  public messageUser(username: string): void {
+    this.router.navigate([`/app/sendMessage/${username}`]);
+  }
+
+  public filterUsers(): User[] {
+    return this.filteringDataService.filterUsers(this.users, this.searchText);
+  }
+
+  ngOnInit(): void {
+    this.GetUsers().then(() => {
+      if (this.users.length == 0) {
+        this.flag = true;
+      }
+    });
+
+    alert(this.flag);
+  }
+}
