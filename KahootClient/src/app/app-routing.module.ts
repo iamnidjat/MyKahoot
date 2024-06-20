@@ -41,12 +41,21 @@ import {CreatedQuizStatsFormComponent} from "../components/created-quiz-stats-fo
 import {CommentsFormComponent} from "../components/comments-form/comments-form.component";
 import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
 import {QuizHistoryFormComponent} from "../components/quiz-history-form/quiz-history-form.component";
+import {SendMessageFormComponent} from "../components/send-message-form/send-message-form.component";
+import {GetMessagesFormComponent} from "../components/get-messages-form/get-messages-form.component";
+import {LeadeboardFormComponent} from "../components/leadeboard-form/leadeboard-form.component";
+import {PointsHistoryFormComponent} from "../components/points-history-form/points-history-form.component";
+import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
 
-let routes: Route[] = [
+export const routes: Route[] = [
   {
     path: '',
     redirectTo: 'app/auth-form',
     pathMatch: 'full',
+  },
+  {
+    path: 'app/welcome-page',
+    component: WelcomePageComponent
   },
   {
     path: 'app/auth-form',
@@ -220,6 +229,26 @@ let routes: Route[] = [
     path: 'app/quizHistory',
     component: QuizHistoryFormComponent,
    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/sendMessage/:receiver',
+    component: SendMessageFormComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/getMessages',
+    component: GetMessagesFormComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/leaderboard',
+    component: LeadeboardFormComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/pointsHistory/:user',
+    component: PointsHistoryFormComponent,
+    // canActivate: [AuthGuard]
   },
   { path: '**', component: NotFoundFormComponent }
 ];

@@ -25,6 +25,10 @@ export class ProfileFormComponent implements OnInit{
     this.router.navigate(['/app/choose-field-form']);
   }
 
+  public ToLeaderBoard(): void{
+    this.router.navigate(['/app/leaderboard']);
+  }
+
   public ToYourQuizzes(): void{
     this.router.navigate(['/app/my-quizzes-form']);
   }

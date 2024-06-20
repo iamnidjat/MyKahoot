@@ -1,4 +1,5 @@
 ﻿using KahootWebApi.Models;
+using KahootWebApi.Models.DTOs;
 using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -89,9 +90,9 @@ namespace KahootWebApi.Controllers.Version1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task AddQuestion(Quiz question)
+        public async Task AddQuestion([FromForm] QuizUploadDto quizDto)
         {
-            await _manager.AddQuestionAsync(question);
+            await _manager.AddQuestionAsync(quizDto);
         }
 
         [HttpDelete("RemoveQuestions")]

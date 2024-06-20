@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {NavigationExtras, Router} from "@angular/router";
+import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
+import {Comment} from "../../models/userInteraction/Comment";
+import {InteractionService} from "../../services/interaction.service";
 
 @Component({
   selector: 'app-rules-form',
@@ -10,7 +12,8 @@ export class RulesFormComponent implements OnInit{
   public level: string = "";
   public action: string = "";
 
-  constructor(private router: Router) {}
+  public id: number = 1;
+  constructor(private router: Router, private interactionService: InteractionService, private route: ActivatedRoute) {}
 
   toTheQuiz(): void {
     const action: string = this.action === "play" ? "play" : "watch";

@@ -23,7 +23,8 @@ export class ChooseLevelFormComponent {
         "mode": localStorage.getItem("mode"),
         'categoryName': localStorage.getItem("categoryName"),
         'testName': localStorage.getItem("TestName"),
-        'level': localStorage.getItem("Level")}
+        'level': localStorage.getItem("Level"),
+        },
       };
     this.router.navigate([`/app/rules-form`], navigationExtras);
   }

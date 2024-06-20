@@ -1,6 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 body{
-  background-color: #fff !important;
+  background-color: var(--background-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,3 +11,14 @@ body{
   padding: 0;
 }
 
+:root {
+  --primary-color: #000;
+  --background-color: #f4f4f9;
+  --text-color: #000;
+}
+
+[data-theme='dark'] {
+  --primary-color: #fff;
+  --background-color: #000;
+  --text-color: #fff;
+}

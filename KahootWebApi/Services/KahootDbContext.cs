@@ -3,7 +3,7 @@ using KahootWebApi.Models;
 
 namespace KahootWebApi.Services
 {
-    public class KahootDbContext: DbContext
+    public class KahootDbContext : DbContext
     {
         public KahootDbContext(DbContextOptions<KahootDbContext> options) : base(options)
         {
@@ -21,6 +21,7 @@ namespace KahootWebApi.Services
         public DbSet<Dislike> Dislikes { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<MyQuizAnswers> MyQuizAnswers { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,11 +29,6 @@ namespace KahootWebApi.Services
                 .HasMany(p => p.CreatedQuizzes)
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.Restrict); // or DeleteBehavior.SetNull, DeleteBehavior.Cascade
-
-            //modelBuilder.Entity<CreatedQuiz>()
-            //   .HasOne(cq => cq.CreatedQuizStats)
-            //   .WithOne(cqs => cqs.CreatedQuiz)
-            //   .HasForeignKey<CreatedQuizStats>(cqs => cqs.CreatedQuizId);
         }
     }
 }

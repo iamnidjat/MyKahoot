@@ -19,7 +19,11 @@ namespace KahootWebApi.Models
         [Required]
         public string? Question { get; set; }
 
-       // public string? ImageName { get; set; }
+        public string? PhotoUrl { get; set; }
+
+        public string? VideoUrl { get; set; }
+
+        public string? AudioUrl { get; set; }
 
         [Required]
         public string? Option1 { get; set; }
@@ -44,3 +48,4 @@ namespace KahootWebApi.Models
         public int Points { get; set; }
     }
 }
+

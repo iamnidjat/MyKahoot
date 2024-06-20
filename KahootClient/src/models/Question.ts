@@ -4,6 +4,9 @@ export type Question = {
   quizName: string; // Test name
   testFormat: string;
   question: string;
+  photoUrl?: string;
+  videoUrl?: string;
+  audioUrl?: string;
   option1: string;
   option2: string;
   option3: string | null;

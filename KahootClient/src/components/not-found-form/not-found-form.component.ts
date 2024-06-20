@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-not-found-form',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./not-found-form.component.css']
 })
 export class NotFoundFormComponent {
+  constructor(private location: Location) {}
 
+  goBack(): void {
+    this.location.back();
+  }
 }

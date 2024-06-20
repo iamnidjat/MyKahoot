@@ -1,0 +1,24 @@
+<app-navbar-form></app-navbar-form>
+
+<div id="allthethings">
+  <div style="display: flex; flex-direction: column;">
+    <div class="statement">{{"Your messages" | translate}}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Title' | translate}}" />
+  </div>
+  <div class="main-container">
+    <div *ngIf="messages.length === 0" class="text-muted">No messages yet.</div>
+    <div *ngFor="let message of filterMessages()">
+      <div class="fields" (click)="openMessage(message.id!)">
+        <p>{{message.sender}} : {{message.title}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+</div>
+
+<app-message-popup-form *ngIf="openMessageFlag" [message]="selectedMessage!" (closePopup)="openMessageFlag = false"></app-message-popup-form>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+
+

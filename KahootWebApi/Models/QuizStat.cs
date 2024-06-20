@@ -39,6 +39,8 @@ namespace KahootWebApi.Models
         [Required]
         public int SkippedQuestionsCount { get; set; }
 
+        public bool Flag { get; set; } = false;
+
         [Required]
         public int UserId { get; set; }
 

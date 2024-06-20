@@ -3,6 +3,7 @@ import { Question } from 'src/models/Question';
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {CreatedQuiz} from "../../models/CreatedQuiz";
+import {QuestionService} from "../../services/question.service";
 
 const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
 
@@ -42,11 +43,17 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   @ViewChild('RadioOption31') RadioOption31!: ElementRef; // When 3 answers, third option
   @ViewChild('RadioOption12') RadioOption12!: ElementRef; // When 2 answers, first option
   @ViewChild('RadioOption22') RadioOption22!: ElementRef; // When 2 answers, second option
+  @ViewChild('photoInput') photoInput!: ElementRef<HTMLInputElement>; // for clearing photo input after eah question
+  @ViewChild('videoInput') videoInput!: ElementRef<HTMLInputElement>; // for clearing video input after eah question
+  @ViewChild('audioInput') audioInput!: ElementRef<HTMLInputElement>; // for clearing audio input after eah question
+  public videoFile: File | null = null;
+  public photoFile: File | null = null;
+  public audioFile: File | null = null;
   public isFourAnswersChecked: boolean = false;
   public isThreeAnswersChecked: boolean = false;
   public isTrueFalseAnswersChecked: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private questionService: QuestionService) {}
 
   ngOnDestroy(): void {
      localStorage.removeItem("MyCategory"); // Don't need anymore
@@ -127,13 +134,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
             timeToAnswer: this.Time.nativeElement.value }
 
-          await fetch(API_URL + "AddQuestion", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(question)
-          })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
           localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
           localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer11.nativeElement.value);
@@ -154,13 +155,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
             points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
-        await fetch(API_URL + "AddQuestion", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(question)
-        })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
         localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
         localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer12.nativeElement.value);
@@ -182,13 +177,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
             timeToAnswer: this.Time.nativeElement.value}
 
-          await fetch(API_URL + "AddQuestion", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(question)
-          })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
           localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
           localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer1.nativeElement.value);
@@ -209,20 +198,14 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
         if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer11.nativeElement.value,
           this.Answer21.nativeElement.value, this.Answer31.nativeElement.value))
         {
-          let question: Question = {quizType: this.quizType, quizName: this.testType,
+          let question: Question = { quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
             option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
             questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
-            timeToAnswer: this.Time.nativeElement.value}
+            timeToAnswer: this.Time.nativeElement.value }
 
-          await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(question)
-          })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
           localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
           localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer11.nativeElement.value);
@@ -244,13 +227,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
             points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
-          await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(question)
-          })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
           localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
           localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer12.nativeElement.value);
@@ -272,13 +249,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             answer: this.correctAnswer, questionNumber: this.currentQuestion,
             points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
-          await fetch(API_URL + `UpdateQuestion?question=${localStorage.getItem(`question${this.currentQuestion}`)}`, {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify(question)
-          })
+          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
 
           localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
           localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer1.nativeElement.value);
@@ -301,6 +272,18 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     }
 
     this.clearInputs();
+  }
+
+  public onPhotoFileSelected(event: any) {
+    this.photoFile = event.target.files[0];
+  }
+
+  public onVideoFileSelected(event: any) {
+    this.videoFile = event.target.files[0];
+  }
+
+  public onAudioFileSelected(event: any) {
+    this.audioFile = event.target.files[0];
   }
 
   public FinishProcess(): void{
@@ -350,6 +333,13 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
 
   private clearInputs(): void{
     this.Question.nativeElement.value = "";
+    // Clear file inputs
+    this.photoFile = null;
+    this.videoFile = null;
+    this.audioFile = null;
+    this.photoInput.nativeElement.value = '';
+    this.videoInput.nativeElement.value = '';
+    this.audioInput.nativeElement.value = '';
     if (this.testFormat === "three-answers")
     {
       this.Answer11.nativeElement.value = "";

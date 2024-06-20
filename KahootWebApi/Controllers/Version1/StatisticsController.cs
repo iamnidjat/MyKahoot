@@ -43,5 +43,23 @@ namespace KahootWebApi.Controllers.v1
         {
             return await _manager.DownloadResultAsync(catType, quizType, level);
         }
+
+        [HttpGet("DownloadTopResult")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IEnumerable<QuizStat>> DownloadTopResultAsync(int userId)
+        {
+            return await _manager.DownloadTopResultAsync(userId);
+        }
+
+        [HttpGet("GetLeaderBoardUsers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IEnumerable<User>> GetLeaderBoardUsersAsync()
+        {
+            return await _manager.GetLeaderBoardUsersAsync();
+        }
     }
 }

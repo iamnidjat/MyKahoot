@@ -8,7 +8,7 @@
   height: 100vh;
   display: flex;
   align-items: center;
-  position:absolute;
+  position: absolute;
   bottom:0;
   left:0;
 }
@@ -106,10 +106,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position:absolute;
+  position: absolute;
   top:0;
   bottom:0;
-  left:50%;
 }
 
 .form-header {
@@ -129,12 +128,9 @@
   flex-direction: row;
 }
 
-.hidden-eye{
+.hidden-eye {
   width: 50px !important;
   height: 47px;
-  /*position: relative;*/
-  /*top: -47px;*/
-  /*left: 400px;*/
 }
 
 .register-route:hover,

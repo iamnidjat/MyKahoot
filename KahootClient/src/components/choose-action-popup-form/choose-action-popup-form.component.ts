@@ -1,4 +1,4 @@
-import {Component, ElementRef} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Output} from '@angular/core';
 import {PlayerSurveyChoosingFormComponent} from "../player-survey-choosing-form/player-survey-choosing-form.component";
 import {NavigationExtras, Router} from "@angular/router";
 
@@ -8,6 +8,8 @@ import {NavigationExtras, Router} from "@angular/router";
   styleUrls: ['./choose-action-popup-form.component.css']
 })
 export class ChooseActionPopupFormComponent {
+  @Output() closePopup = new EventEmitter<void>();
+  @Output() actionChosen = new EventEmitter<string>();
   constructor(private el: ElementRef, private childComponent: PlayerSurveyChoosingFormComponent,
               private router: Router) {}
 
@@ -17,30 +19,19 @@ export class ChooseActionPopupFormComponent {
 
     modal.style.display = "none";
 
-    this.childComponent.flagOfAction = false;
+    this.closePopup.emit();
   }
 
-  public ToPreview(): void {
-    this.childComponent.flagOfAction = false;
-    localStorage.setItem("action", "watch");
-    // Navigate to the tests-list-form with parameters
-    const navigationExtras: NavigationExtras = {
-      queryParams: { 'action': 'watch',
-        'categoryName': localStorage.getItem("categoryName") }
-    };
-
-    this.router.navigate(['/app/tests-list-form'], navigationExtras);
+  public toPreview(): void {
+    this.chooseAction('watch');
   }
 
-  public ToPlay(): void {
-    this.childComponent.flagOfAction = false;
-    localStorage.setItem("action", "play");
-    // Navigate to the tests-list-form with parameters
-    const navigationExtras: NavigationExtras = {
-      queryParams: { 'action': 'play',
-        'categoryName': localStorage.getItem("categoryName") }
-    };
+  public toPlay(): void {
+    this.chooseAction('play');
+  }
 
-    this.router.navigate(['/app/tests-list-form'], navigationExtras);
+  private chooseAction(action: string): void {
+    localStorage.setItem("action", action);
+    this.actionChosen.emit(action);
   }
 }

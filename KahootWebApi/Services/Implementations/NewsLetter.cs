@@ -59,11 +59,11 @@ namespace KahootWebApi.Services.Implementations
                     return new StatusCodeResult(200);
                 }
 
-                _logger.LogError("Mail is not valid.");
+                _logger.LogWarning("Mail is not valid.");
                 return new StatusCodeResult(400);
             }
 
-            _logger.LogError("Mails are not valid."); //
+            _logger.LogWarning("Mails are not valid."); //
             return new StatusCodeResult(400);
         }
 

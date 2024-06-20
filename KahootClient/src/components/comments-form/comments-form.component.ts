@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {InteractionService} from "../../services/interaction.service";
 import {ActivatedRoute} from "@angular/router";
 import {Comment} from "../../models/userInteraction/Comment";
@@ -12,16 +12,17 @@ export class CommentsFormComponent implements OnInit{
   public comments: Comment[] = [];
   public myComments: Comment[] = [];
   public userName: string = localStorage.getItem("Login")!;
-  private categoryName: string = "";
-  private quizName: string = "";
-  private id: number = 0;
+ // @Input() private categoryName: string = "";
+ // @Input() private quizName: string = "";
+  @Input() public id: number = 0;
 
   constructor(private interactionService: InteractionService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.categoryName = this.route.snapshot.params['categoryName'];
-    this.quizName = this.route.snapshot.params['quizName'];
+    // this.categoryName = this.route.snapshot.params['categoryName'];
+    // this.quizName = this.route.snapshot.params['quizName'];
     this.id = this.route.snapshot.params['id'];
+    console.log("id => ", this.id);
 
     this.getAllCommentsAsync();
     this.getMyCommentsAsync();
@@ -40,6 +41,7 @@ export class CommentsFormComponent implements OnInit{
   }
 
   public async getMyCommentsAsync(): Promise<void> {
+    alert(this.id);
     await this.interactionService.getCommentAsync(parseInt(localStorage.getItem("userId")!), this.id, this.myComments);
   }
 }

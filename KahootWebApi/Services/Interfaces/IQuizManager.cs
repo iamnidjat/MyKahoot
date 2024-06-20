@@ -1,4 +1,5 @@
 ﻿using KahootWebApi.Models;
+using KahootWebApi.Models.DTOs;
 
 namespace KahootWebApi.Services.Interfaces
 {
@@ -7,7 +8,7 @@ namespace KahootWebApi.Services.Interfaces
         Task<bool> IsCategoryNameUsed(string catName);
         Task<bool> IsQuizNameUsed(string catName, string quizName);
         Task DeleteQuizAsync(string categoryName, string testName);
-        Task AddQuestionAsync(Quiz question);
+        Task AddQuestionAsync(QuizUploadDto quizDto);
         Task<IEnumerable<Quiz>> ReadQuestionsAsync(string catName, string quizName);
         Task RemoveQuestionsAsync(string catName, string quizName);
         Task UpdateQuestionAsync(string catName, string quizName, int questionNumber, Quiz quiz);
