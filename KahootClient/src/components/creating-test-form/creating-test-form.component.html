@@ -49,6 +49,11 @@
           <input type="text" #Question placeholder="Enter your question here..."/>
         </div>
       </div>
+      <div class="media">
+        <input #photoInput  type="file" (change)="onPhotoFileSelected($event)" />
+        <input #videoInput type="file" (change)="onVideoFileSelected($event)" />
+        <input #audioInput type="file" (change)="onAudioFileSelected($event)" />
+      </div>
       <ng-container *ngIf="testFormat=='four-answers'">
         <div class="options">
           <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">

@@ -1,18 +1,21 @@
 ﻿using KahootWebApi.Models;
+using KahootWebApi.Models.DTOs;
 using KahootWebApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace KahootWebApi.Services.Implementations
 {
-    public class QuizManager: IQuizManager
+    public class QuizManager : IQuizManager
     {
         private readonly KahootDbContext _context;
         private readonly ILogger<QuizManager> _logger;
+        private readonly IWebHostEnvironment _environment;
 
-        public QuizManager(KahootDbContext context, ILogger<QuizManager> logger)
+        public QuizManager(KahootDbContext context, ILogger<QuizManager> logger, IWebHostEnvironment environment)
         {
             _context = context;
             _logger = logger;
+            _environment = environment;
         }
 
         public async Task<bool> IsCategoryNameUsed(string catName)
@@ -58,11 +61,65 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task AddQuestionAsync(Quiz question)
+        public async Task AddQuestionAsync(QuizUploadDto quizDto)
         {
+            var uploadPath = Path.Combine(_environment.ContentRootPath, "uploads");
+
+            // Ensure the upload directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
             try
             {
-                await _context.Questions.AddAsync(question);
+                var quiz = new Quiz
+                {
+                    QuizType = quizDto.QuizType,
+                    QuizName = quizDto.QuizName,
+                    TestFormat = quizDto.TestFormat,
+                    Question = quizDto.Question,
+                    Option1 = quizDto.Option1,
+                    Option2 = quizDto.Option2,
+                    Option3 = quizDto.Option3,
+                    Option4 = quizDto.Option4,
+                    Answer = quizDto.Answer,
+                    QuestionNumber = quizDto.QuestionNumber,
+                    TimeToAnswer = quizDto.TimeToAnswer,
+                    Points = quizDto.Points
+                };
+
+                if (quizDto.Photo != null)
+                {
+                    var photoPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Photo.FileName);
+                    using (var stream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        await quizDto.Photo.CopyToAsync(stream);
+                    }
+                    quiz.PhotoUrl = $"/uploads/{quizDto.Photo.FileName}";
+                }
+
+                if (quizDto.Video != null)
+                {
+                    var videoPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Video.FileName);
+                    using (var stream = new FileStream(videoPath, FileMode.Create))
+                    {
+                        await quizDto.Video.CopyToAsync(stream);
+                    }
+                    quiz.VideoUrl = $"/uploads/{quizDto.Video.FileName}";
+                }
+
+                if (quizDto.Audio != null)
+                {
+                    var audioPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Audio.FileName);
+                    using (var stream = new FileStream(audioPath, FileMode.Create))
+                    {
+                        await quizDto.Audio.CopyToAsync(stream);
+                    }
+                    quiz.AudioUrl = $"/uploads/{quizDto.Audio.FileName}";
+                }
+
+                await _context.Questions.AddAsync(quiz);
 
                 await _context.SaveChangesAsync();
             }
@@ -217,11 +274,15 @@ namespace KahootWebApi.Services.Implementations
         {
             try
             {
-                _context.CreatedQuizzes.Add(createdQuiz);
+                await  _context.CreatedQuizzes.AddAsync(createdQuiz);
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == createdQuiz.UserId);
+
+                user!.OverallPoints += 20;
 
                 await _context.SaveChangesAsync();
             }
-            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException or ArgumentNullException)
             {
                 _logger.LogError(ex, "An error occurred in the SaveCategoryAsync method.");
             }

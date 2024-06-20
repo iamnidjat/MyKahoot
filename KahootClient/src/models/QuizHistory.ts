@@ -1,4 +1,4 @@
-export type QuizHistory = { //
+export type QuizHistory = {
   id?: number;
   categoryName: string;
   quizName: string;

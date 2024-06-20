@@ -28,8 +28,7 @@ export class AddNewCategoryPopupFormComponent{
     if (this.categoryType.nativeElement.value !== "") {
       if (await this.checkService.IsCatNameUsed(this.categoryType.nativeElement.value)) {
         this.isCatNameUsed = true;
-      }
-      else {
+      } else {
         this.createNewCategoryFlag = true;
 
         let modal = this.el.nativeElement.querySelector(".modal");

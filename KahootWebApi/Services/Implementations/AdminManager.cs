@@ -1,4 +1,5 @@
-﻿using KahootWebApi.Services.Interfaces;
+﻿using KahootWebApi.Models;
+using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MimeKit;
@@ -63,8 +64,131 @@ namespace KahootWebApi.Services.Implementations
                 return credentials;
             }
 
-            _logger.LogError("Mail is not valid.");
+            _logger.LogWarning("Mail is not valid.");
             return Array.Empty<string>(); ;
+        }
+
+        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        {
+            try
+            {
+                return await _context.Users.ToListAsync(); 
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the GetAllUsers method.");
+                return Enumerable.Empty<User>();
+            }
+        }
+
+        public async Task<IEnumerable<CreatedQuiz>> GetAllQuizzesAsync()
+        {
+            try
+            {
+                return await _context.CreatedQuizzes.ToListAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the GetAllQuizzes method.");
+                return Enumerable.Empty<CreatedQuiz>();
+            }
+        }
+
+        public async Task DeleteUserAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    _context.Users.Remove(user);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the DeleteUser method.");
+            }
+        }
+
+        public async Task BanUserAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    user.IsBanned = true;
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the BanUserAsync method.");
+            }
+        }
+
+
+        public async Task<bool> IsUserBannedAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    return user.IsBanned;
+                }
+
+                return false;
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the BanUserAsync method.");
+                return false;
+            }
+        }
+
+        public async Task UnbanUserAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user != null)
+                {
+                    user.IsBanned = false; 
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the UnbanUserAsync method.");
+            }
+        }
+
+        public async Task DeleteQuizAsync(int quizId)
+        {
+            try
+            {
+                var quiz = await _context.CreatedQuizzes.FirstOrDefaultAsync(u => u.Id == quizId);
+
+                if (quiz != null)
+                {
+                    _context.CreatedQuizzes.Remove(quiz);
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the DeleteQuiz method.");
+            }
         }
 
         private static int RandomPasswordLength()

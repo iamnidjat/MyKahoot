@@ -11,7 +11,7 @@ import {FilterCollectionsService} from "../../services/filter-collections.servic
 })
 export class PlayerSurveyChoosingFormComponent implements AfterViewInit {
   public categories: CreatedQuiz[] = [];
-  public flagOfAction: boolean = false;
+  @Input() public flagOfAction: boolean = false;
   public searchText: string = '';
 
   constructor(private router: Router, private downloadCategories: DownloadCategoriesSharedService,
@@ -50,5 +50,13 @@ export class PlayerSurveyChoosingFormComponent implements AfterViewInit {
 
   public filterCategories(): CreatedQuiz[] {
     return this.filter.filterCategories(this.categories, this.searchText);
+  }
+
+  public navigateToAction(action: string): void {
+    this.flagOfAction = false;
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'action': action, 'categoryName': localStorage.getItem("categoryName") }
+    };
+    this.router.navigate(['/app/tests-list-form'], navigationExtras);
   }
 }

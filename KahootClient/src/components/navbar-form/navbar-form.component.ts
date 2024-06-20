@@ -18,7 +18,7 @@ export class NavbarFormComponent{
   constructor(private router: Router, private switchLanguage: SwitchLanguageService,
               private el: ElementRef, private sharedService: SharedService) {}
 
-  Search(request: string): void {
+  public Search(request: string): void {
     // Define mappings of destination URLs to arrays of terms
     const termMappings: { [key: string]: string[] } = {
       'player-options-form': ['home', 'menu', 'main', 'меню', 'главное', 'menü', 'əsas'],
@@ -60,9 +60,10 @@ export class NavbarFormComponent{
   }
 
   toggleMenu(): void{
-    let subMenu = this.el.nativeElement.querySelector("#subMenu");
+    let subMenu = this.el.nativeElement.querySelector(".sub-menu-wrap");
 
-    subMenu.classList.toggle("open-menu");
+    if (subMenu.style.display == "none") subMenu.style.display = "block";
+    else subMenu.style.display = "none";
   }
 
   ToProfile(): void{

@@ -87,6 +87,17 @@
             <h3>{{questions[currentQuestion]?.question}}</h3>
           </div>
         </div>
+        <div class="media">
+          <div *ngIf="questions[currentQuestion].photoUrl">
+            <img [src]="'https://localhost:7176' + questions[currentQuestion].photoUrl" alt="Photo" />
+          </div>
+          <div *ngIf="questions[currentQuestion].videoUrl">
+            <video [src]="questions[currentQuestion].videoUrl" controls></video>
+          </div>
+          <div *ngIf="questions[currentQuestion].audioUrl">
+            <audio [src]="questions[currentQuestion].audioUrl" controls></audio>
+          </div>
+        </div>
         <div class="options" [ngClass]="{disabledDiv: isActive}">
           <ng-container *ngIf="testFormat === 'four-answers'">
             <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">

@@ -27,5 +27,6 @@ export type User = {
   birthday: Date;
   role: string;
   provider: string;
+  overallPoints: number;
   photoURL: string;
 };

@@ -15,7 +15,7 @@
   <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 </div>
 
-<app-choose-action-popup-form *ngIf="flagOfAction"></app-choose-action-popup-form>
+<app-choose-action-popup-form *ngIf="flagOfAction" (closePopup)="flagOfAction = false" (actionChosen)="navigateToAction($event)"></app-choose-action-popup-form>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

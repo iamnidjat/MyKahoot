@@ -33,6 +33,7 @@
                </div>
                <div>Average feedback: {{category.averageFeedbackScore}}</div>
                <div>{{category.timesPassed}} times passed</div>
+               <div [routerLink]="['/app/sendMessage', category.userName]">Send Message</div>
              </div>
            </ng-container>
          </div>

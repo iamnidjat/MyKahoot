@@ -241,7 +241,6 @@ C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\staticwebassets.
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\staticwebassets.build.json
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\staticwebassets.development.json
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\scopedcss\bundle\KahootWebApi.styles.css
-C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.csproj.CopyComplete
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.dll
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\refint\KahootWebApi.dll
 C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.pdb
@@ -253,3 +252,5 @@ C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Xceed.Document.N
 C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Xceed.Words.NET5.dll
 C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\System.IO.Packaging.dll
 C:\Important Files\Kahoot Project\KahootWebApi\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWebApi.sourcelink.json
+C:\Important Files\Kahoot Project\KahootWebApi\obj\Debug\net7.0\KahootWe.D2E451B7.Up2Date

@@ -35,6 +35,7 @@ builder.Services.AddTransient<ICaptchaVerificationService, CaptchaVerificationSe
 builder.Services.AddTransient<IDownloadQuizService, DownloadQuizService>();
 builder.Services.AddTransient<IInteractionService, InteractionService>();
 builder.Services.AddTransient<IFeedbackService, FeedbackService>();
+builder.Services.AddTransient<IMessageService, MessageService>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");
@@ -65,7 +66,6 @@ builder.Services.Configure<FormOptions>(o =>
     o.MemoryBufferThreshold = int.MaxValue;
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,6 +75,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Configure static file serving for the "uploads" directory
+var uploadsPath = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsPath),
+    RequestPath = "/uploads"
+});
+
+
 app.UseHttpsRedirection();
 
 app.UseCors(options =>
@@ -83,13 +92,6 @@ app.UseCors(options =>
     .AllowAnyMethod()
     .AllowAnyHeader();
 });
-
-//app.UseStaticFiles();
-//app.UseStaticFiles(new StaticFileOptions()
-//{
-//    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"Resources")),
-//    RequestPath = new PathString("/Resources")
-//});
 
 app.UseAuthentication();
 

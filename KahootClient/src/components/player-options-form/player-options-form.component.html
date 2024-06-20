@@ -1,4 +1,5 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div id="allthethings">
   <ng-container *ngIf="role === 'Teacher'">
@@ -24,8 +25,6 @@
     <button class="button" id="declineBtn" (click)="declineCookiesClick()">{{'Decline' | translate}}</button>
   </div>
 </div>
-
-<!--<app-feedback-popup-form></app-feedback-popup-form>-->
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

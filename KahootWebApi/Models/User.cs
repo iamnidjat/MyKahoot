@@ -48,9 +48,13 @@ namespace KahootWebApi.Models
 
         public string? FreezingReason { get; set; }
 
+        public bool IsBanned { get; set; } = false;
+
         //public DateTime? DateOfFreezing { get; set; }
 
         //public int FreezingDeadline { get; set; }
+
+        public int OverallPoints { get; set; }
 
         //public int Badges { get; set; }
 

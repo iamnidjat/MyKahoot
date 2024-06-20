@@ -5,6 +5,7 @@ import {SharedService} from "../../services/shared.service";
 
 const API_URL: string = "https://localhost:7176/api/v1/CredentialsChanging/";
 const API_URL2: string = "https://localhost:7176/api/v1/UserInfo/";
+const API_URL3: string = "https://localhost:7176/api/v1/Message/";
 
 @Component({
   selector: 'app-profile-dashboard-form',
@@ -317,9 +318,31 @@ export class ProfileDashboardFormComponent implements OnInit{
         this.flagHideButton2 = false;
         this.mailLabel = "You already changed your mail!";
       }
+
+      await this.getMessagesCountAsync();
     }
 
     localStorage.removeItem("IsMailChanged");
     localStorage.removeItem("IsUsernameChanged");
+  }
+
+  public async getMessagesCountAsync(): Promise<number> {
+    try {
+      const response = await fetch(API_URL3 + `GetMessagesCount?userName=${localStorage.getItem("Login")}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      alert(data);
+      return data; // Ensure that `data` is of type number
+
+    } catch (error) {
+      console.error("Failed to fetch messages count:", error);
+      throw error; // Rethrow the error after logging it
+    }
   }
 }

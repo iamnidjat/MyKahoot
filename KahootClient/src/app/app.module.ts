@@ -88,6 +88,14 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {NotFoundFormComponent} from "../components/not-found-form/not-found-form.component";
 import {QuizHistoryFormComponent} from "../components/quiz-history-form/quiz-history-form.component";
 import {QuizHistoryService} from "../services/quiz-history.service";
+import {SendMessageFormComponent} from "../components/send-message-form/send-message-form.component";
+import {GetMessagesFormComponent} from "../components/get-messages-form/get-messages-form.component";
+import {MessagePopupFormComponent} from "../components/message-popup-form/message-popup-form.component";
+import {LeadeboardFormComponent} from "../components/leadeboard-form/leadeboard-form.component";
+import {PointsHistoryFormComponent} from "../components/points-history-form/points-history-form.component";
+import {ThemeToggleComponent} from "../components/theme-toggle/theme-toggle.component";
+import {ThemeService} from "../services/theme.service";
+import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
 
 @NgModule({
   declarations: [
@@ -142,7 +150,14 @@ import {QuizHistoryService} from "../services/quiz-history.service";
     CreatedQuizStatsFormComponent,
     CommentsFormComponent,
     NotFoundFormComponent,
-    QuizHistoryFormComponent
+    QuizHistoryFormComponent,
+    SendMessageFormComponent,
+    GetMessagesFormComponent,
+    MessagePopupFormComponent,
+    LeadeboardFormComponent,
+    PointsHistoryFormComponent,
+    ThemeToggleComponent,
+    WelcomePageComponent,
   ],
   imports: [
     BrowserModule,
@@ -167,9 +182,9 @@ import {QuizHistoryService} from "../services/quiz-history.service";
   ],
   providers: [QuestionService, ConfigService, CookiesService, DownloadCategoriesSharedService, DownloadQuizService,
     UserSharedService, SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
-    FilterCollectionsService, SendFeedbackService, InteractionService, QuizHistoryService, TestProcessComponent, PlayerOptionsFormComponent,
-    RegisterFormComponent, ChooseTypeOfQuizFormComponent, CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent,
-    ProfileFormComponent, AvailableTestsStatsFormComponent,
+    FilterCollectionsService, SendFeedbackService, InteractionService, QuizHistoryService, ThemeService,
+    TestProcessComponent, PlayerOptionsFormComponent, RegisterFormComponent, ChooseTypeOfQuizFormComponent,
+    CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent, ProfileFormComponent, AvailableTestsStatsFormComponent,
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

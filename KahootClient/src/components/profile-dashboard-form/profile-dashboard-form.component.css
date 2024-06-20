@@ -1,88 +1,105 @@
-* {
-  font-family: Nunito, sans-serif;
-}
-
-.inputbox {
-  font-family: inherit;
-  border: 0;
-  border-bottom: 2px solid #9b9b9b;
-  outline: 0;
-  font-size: 1.3rem;
-  background: transparent;
-  transition: border-color 0.2s;
-  margin-bottom: 2px;
-}
-
-.changeButton {
-  background: #5E5DF0;
-  border-radius: 999px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-}
-
-.changeButton2 {
-  background: green;
-  border-radius: 999px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
-}
-
-.text-blk {
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
   margin: 0;
   padding: 0;
-  line-height: 25px;
-}
-
-.text-blk.heading {
-  font-size: 36px !important;
-  line-height: 45px !important;
-  font-weight: 800 !important;
-  margin: 0 0 30px !important;
-}
-
-.responsive-container-block.Container {
-  max-width: 800px;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  height: 100vh;
+}
+
+.profile-dashboard {
+  background-color: #fff;
+  width: 90%;
+  max-width: 600px;
   padding: 20px;
-  margin: 30px auto;
-  background-color: white;
-  border-radius: 10px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.responsive-container-block.Container div{
-  margin-top: 15px;
+.dashboard-icon {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  float: right;
 }
 
-.responsive-container-block.Container input {
-  margin-left: 15px;
+.dashboard-icon:hover {
+  background-color: #0056b3;
 }
 
+.dashboard-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.credential-item {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.input-box {
+  width: calc(100% - 85px);
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.change-button {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.change-button:hover {
+  background-color: #218838;
+}
+
+.error-label {
+  font-size: 0.875rem;
+  color: #dc3545;
+  margin-top: 5px;
+}
+
+.birthday, .password {
+  margin-top: 10px;
+}
+
+.birthday .change-button, .password .change-button {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.role {
+  margin-top: 20px;
+}
+
+.role .input-box {
+  background-color: #f8f9fa;
+  color: #495057;
+  cursor: not-allowed;
+}
+
+.role .error-label {
+  margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+  .profile-dashboard {
+    width: 100%;
+  }
+}
 

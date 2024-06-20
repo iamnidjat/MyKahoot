@@ -42,6 +42,8 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   public level: string = "";
   public action: string = "";
   public showFileTypes: boolean = false;
+  public timeToAnswer: number = 0;
+  public pointsPerAnswer: number = 0;
 
   constructor(private questionService: QuestionService, private router: Router,
               private documentService: DownloadQuizService, private quizHistoryService: QuizHistoryService) {}
@@ -103,7 +105,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      console.log(data);
+      console.log("tests: ", data);
       Object.keys(data).forEach((key) =>
       {
         this.questions.push(data[key]);
