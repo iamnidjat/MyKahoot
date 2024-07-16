@@ -2,6 +2,8 @@
 
 MyKahoot is a dynamic and interactive quiz platform built using ASP.NET Core Web API for the backend, MSSQL with Entity Framework Core for data management, and Angular for the frontend. The application supports multiple roles (teacher and student) and provides a range of features to enhance the quiz experience, including multimedia support, statistics tracking, user authentication, and much more.
 
+Note: The app is currently in the development stage, and users might experience changes and improvements as the app evolves.
+
 ## Features
 
 ### General Features
