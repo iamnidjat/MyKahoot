@@ -5,6 +5,8 @@ import {QuizModel} from "../../models/QuizModel";
 import {QuestionService} from "../../services/question.service";
 import {DownloadQuizService} from "../../services/download-quiz.service";
 import {QuizHistoryService} from "../../services/quiz-history.service";
+import {GamificationService} from "../../services/gamification.service";
+import Swal from "sweetalert2";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 const API_URL2: string = "https://localhost:7176/api/v1/Quiz/";
@@ -44,9 +46,11 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   public showFileTypes: boolean = false;
   public timeToAnswer: number = 0;
   public pointsPerAnswer: number = 0;
+  public api: string = "https://localhost:7176";
 
   constructor(private questionService: QuestionService, private router: Router,
-              private documentService: DownloadQuizService, private quizHistoryService: QuizHistoryService) {}
+              private documentService: DownloadQuizService, private quizHistoryService: QuizHistoryService,
+              private gamificationService: GamificationService) {}
 
   public ngOnInit(): void {
     localStorage.getItem("Guest") ? this.name = "Guest" : this.name = localStorage.getItem("Login")!;
@@ -345,6 +349,11 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       },
       body: JSON.stringify(quizInfo)
     });
+
+    if (await this.gamificationService.upgradeLevelAsync())
+    {
+      Swal.fire('Level up', `you have increased to level ${parseInt(localStorage.getItem("userLevel")!)}`, 'info');
+    }
   }
 
   public downloadDocument(fileType: string): void {

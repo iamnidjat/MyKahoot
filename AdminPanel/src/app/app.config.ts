@@ -11,11 +11,8 @@ import {
   TranslateService,
   TranslateStore,
   TranslateModule,
-  TranslateCompiler,
-  TranslateParser
 } from "@ngx-translate/core";
 import { ConfigService } from "../services/config.service";
-import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 export const appConfig: ApplicationConfig = {
@@ -36,21 +33,10 @@ export const appConfig: ApplicationConfig = {
         deps: [HttpClient],
       }
     })),
-    // TranslateModule.forRoot({
-    //   loader:  {
-    //     provide: TranslateLoader,
-    //     useFactory: HttpLoaderFactory,
-    //     deps: [HttpClient],
-    //   }
-    // }),
-    // {
-    //   provide: TranslateCompiler,
-    //   useClass: TranslateMessageFormatCompiler,
-    // },
   ],
 };
 
 // required for AOT compilation
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http);
 }

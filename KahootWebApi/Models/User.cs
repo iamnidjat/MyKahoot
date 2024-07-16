@@ -50,15 +50,16 @@ namespace KahootWebApi.Models
 
         public bool IsBanned { get; set; } = false;
 
-        //public DateTime? DateOfFreezing { get; set; }
-
-        //public int FreezingDeadline { get; set; }
-
         public int OverallPoints { get; set; }
 
         //public int Badges { get; set; }
 
-        //public int Level { get; set; }
+        [Range(1, 100)]
+        public int Level { get; set; } = 1;
+
+        public int Points { get; set; } // for level
+
+        public int Coins { get; set; }
 
         public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
 
@@ -71,5 +72,13 @@ namespace KahootWebApi.Models
         public ICollection<Dislike> Dislikes { get; set; } = new ObservableCollection<Dislike>();
 
         public ICollection<MyQuizAnswers> MyQuizAnswers { get; set; } = new ObservableCollection<MyQuizAnswers>();
+
+        public ICollection<UserBadge> UserBadges { get; set; } = new ObservableCollection<UserBadge>();
+
+        public ICollection<Reminder> Reminders { get; set; } = new ObservableCollection<Reminder>();
+
+        public ICollection<UserVirtualClassroom> UserVirtualClassrooms { get; set; } = new ObservableCollection<UserVirtualClassroom>();
+
+        public ICollection<UserItem> UserItems { get; set; } = new ObservableCollection<UserItem>();
     }
 }

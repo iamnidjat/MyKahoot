@@ -20,11 +20,9 @@ namespace KahootWebApi.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<string[]> SendCredentialsAsync(string email)
+        public async Task<string> SendCredentialsAsync(string email)
         {
             var newPassword = RandomPasswordGenerator(RandomPasswordLength());
-            var newLogin = _manager.RandomLoginGenerator();
-            string[] credentials = new string[2] { newPassword, newLogin};
 
             using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
 
@@ -44,7 +42,7 @@ namespace KahootWebApi.Services.Implementations
 
                     var part = new TextPart("plain")
                     {
-                        Text = $"Your new password: {newPassword}\nYour new login: {newLogin}\nIf the message was sent by mistake, just ignore it."
+                        Text = $"Your new password: {newPassword}\nIf the message was sent by mistake, just ignore it."
                     };
 
                     message.Body = part;
@@ -54,18 +52,18 @@ namespace KahootWebApi.Services.Implementations
                 catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
                 {
                     _logger.LogError(ex, "An error occurred in the SendCredentialsAsync method.");
-                    return Array.Empty<string>();
+                    return string.Empty;
                 }
                 finally
                 {
                     smtpClient.Disconnect(true);
                 }
 
-                return credentials;
+                return newPassword;
             }
 
             _logger.LogWarning("Mail is not valid.");
-            return Array.Empty<string>(); ;
+            return string.Empty;
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -77,6 +75,19 @@ namespace KahootWebApi.Services.Implementations
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, "An error occurred in the GetAllUsers method.");
+                return Enumerable.Empty<User>();
+            }
+        }
+
+        public async Task<IEnumerable<User>> GetAllBannedUsersAsync()
+        {
+            try
+            {
+                return await _context.Users.Where(u => u.IsBanned).ToListAsync();
+            }
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "An error occurred in the GetAllBannedUsersAsync method.");
                 return Enumerable.Empty<User>();
             }
         }
@@ -215,6 +226,83 @@ namespace KahootWebApi.Services.Implementations
             //{
             //    throw new Exception(ex.Message, ex);
             //}
+        }
+
+        public async Task<IActionResult> SendMessageToEmailAsync(string email, string title, string body)
+        {
+            using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
+
+            if (Validators.IsEmailValid(email))
+            {
+                try
+                {
+                    smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
+                    smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
+
+                    var message = new MimeMessage();
+
+                    message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
+                    message.To.Add(new MailboxAddress("You", email));
+
+                    message.Subject = $"{title}";
+
+                    var part = new TextPart("plain")
+                    {
+                        Text = $"{body}"
+                    };
+
+                    message.Body = part;
+
+                    smtpClient.Send(message);
+                }
+                catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
+                {
+                    return new StatusCodeResult(400);
+                }
+                finally
+                {
+                    smtpClient.Disconnect(true);
+                }
+
+                return new StatusCodeResult(200);
+            }
+
+            return new StatusCodeResult(400);
+        }
+
+        public async Task AddItemToStoreAsync(ItemToBuy item)
+        {
+            try
+            {
+                await _context.ItemToBuys.AddAsync(item);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException)
+            {
+                _logger.LogError(ex, "An error occurred in the AddItemToStoreAsync method.");
+            }
+        }
+
+        public async Task RemoveItemFromStoreAsync(int itemId)
+        {
+            try
+            {
+                var item = await _context.ItemToBuys.FindAsync(itemId);
+
+                if (item != null)
+                {
+                    _context.ItemToBuys.Remove(item);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    _logger.LogWarning("Item with ID {ItemId} not found.", itemId);
+                }
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException)
+            {
+                _logger.LogError(ex, "An error occurred in the RemoveItemFromStoreAsync method.");
+            }
         }
     }
 }

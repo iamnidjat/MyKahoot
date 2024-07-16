@@ -46,11 +46,12 @@ import {GetMessagesFormComponent} from "../components/get-messages-form/get-mess
 import {LeadeboardFormComponent} from "../components/leadeboard-form/leadeboard-form.component";
 import {PointsHistoryFormComponent} from "../components/points-history-form/points-history-form.component";
 import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
+import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/mykahoot-store-form.component";
 
 export const routes: Route[] = [
   {
     path: '',
-    redirectTo: 'app/auth-form',
+    redirectTo: 'app/welcome-page',
     pathMatch: 'full',
   },
   {
@@ -248,6 +249,11 @@ export const routes: Route[] = [
   {
     path: 'app/pointsHistory/:user',
     component: PointsHistoryFormComponent,
+    // canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/mykahoot-store',
+    component: MykahootStoreFormComponent,
     // canActivate: [AuthGuard]
   },
   { path: '**', component: NotFoundFormComponent }

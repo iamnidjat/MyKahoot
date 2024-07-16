@@ -33,8 +33,8 @@ export class RegisterFormComponent implements OnInit{
     if (await this.checkCredsService.IsEmailUsed(this.mail)) {
         this.isEmailUsed = true;
     }
-    else if (this.newLogin === "admin" ) {
-      Swal.fire('Oops', 'admin is a reserved login, you cannot use it!', 'error');
+    else if (this.newLogin === "admin" || this.newLogin === "Admin") {
+      Swal.fire('Oops', 'admin/Admin is a reserved login, you cannot use it!', 'error');
     }
     else {
       if (this.newPassword === this.cNewPassword && this.newPassword.length >= 5 && this.newLogin.length >= 5 && localStorage.getItem("Role"))
@@ -72,6 +72,10 @@ export class RegisterFormComponent implements OnInit{
           localStorage.setItem("userMail", JSON.stringify(Object.values(userid)[8]));
           localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
           localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
+          localStorage.setItem("overallPoints", JSON.stringify(Object.values(userid)[19]));
+          localStorage.setItem("userLevel", JSON.stringify(Object.values(userid)[20]));
+          localStorage.setItem("points", JSON.stringify(Object.values(userid)[21]));
+          localStorage.setItem("coins", JSON.stringify(Object.values(userid)[22]));
           this.sharedService.SentConfirmationMail(this.mail, parseInt(localStorage.getItem("userId")!));
         }).catch(() => {
 

@@ -58,5 +58,7 @@ namespace KahootWebApi.Services.Implementations
             _logger.LogError("Mail is not valid.");
             return new StatusCodeResult(400);
         }
+
+        
     }
 }

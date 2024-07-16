@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {Router} from "@angular/router";
 
 const API_URL: string = "https://localhost:7176/api/v1/Admin/";
 @Injectable({
@@ -6,27 +7,29 @@ const API_URL: string = "https://localhost:7176/api/v1/Admin/";
 })
 export class AuthService {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
-  public async Login(email: string): Promise<void> {
+  public async sendCredsToEmail(email: string): Promise<void> {
+    localStorage.setItem("email", email);
     await fetch(API_URL + `SendCredentials?email=${email}`, {
       method: 'POST',
       headers: {
         "Content-Type": "application/json"
       }
     }).then((response) => {
+      console.log("response", response);
       return response.text();
     }).then((data) => {
       console.log("creds: ", data);
-      localStorage.setItem("login", data[0]);
-      localStorage.setItem("password", data[1]);
+      localStorage.setItem("password", data);
     }).catch(() => {
       alert("Incorrect login or password");
     });
   }
 
-  public Logout(): void {
+  public logout(): void {
     localStorage.removeItem("login");
     localStorage.removeItem("password");
+    this.router.navigate(['/']);
   }
 }

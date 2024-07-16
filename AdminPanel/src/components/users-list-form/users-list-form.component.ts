@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/User";
 import {GettingDataService} from "../../services/getting-data.service";
 import {ManipulatingDataService} from "../../services/manipulating-data.service";
@@ -30,7 +30,7 @@ import {FooterFormComponent} from "../footer-form/footer-form.component";
   templateUrl: './users-list-form.component.html',
   styleUrl: './users-list-form.component.css'
 })
-export class UsersListFormComponent {
+export class UsersListFormComponent implements OnInit{
   public users: User[] = [];
   public flag: boolean = false;
   public searchText: string = '';
@@ -39,8 +39,11 @@ export class UsersListFormComponent {
   constructor(private gettingDataService: GettingDataService, private manipulatingDataService: ManipulatingDataService,
               private filteringDataService: FilteringDataService, private router: Router) {}
 
-  public async GetUsers(): Promise<void> {
-    await this.gettingDataService.GetUsersAsync(this.users);
+  public async GetUsersAsync(): Promise<void> {
+    this.users = await this.gettingDataService.GetUsersAsync("All");
+    if (this.users.length === 0) {
+      this.flag = true;
+    }
   }
 
   private async deleteUser(userId: number): Promise<void>{
@@ -115,12 +118,6 @@ export class UsersListFormComponent {
   }
 
   ngOnInit(): void {
-    this.GetUsers().then(() => {
-      if (this.users.length == 0) {
-        this.flag = true;
-      }
-    });
-
-    alert(this.flag);
+    this.GetUsersAsync();
   }
 }

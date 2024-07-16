@@ -10,6 +10,8 @@ export class SwitchLanguageService {
     // Set the default language to English when the component is instantiated
     translate.setDefaultLang(englishSettings.code);
 
+    console.log("a", englishSettings.code);
+
     // Retrieve the stored language preference from local storage
     const storedLang: string | null = localStorage.getItem("lang");
 

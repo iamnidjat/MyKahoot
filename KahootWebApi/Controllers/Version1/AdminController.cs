@@ -1,6 +1,7 @@
 ﻿using KahootWebApi.Models;
 using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace KahootWebApi.Controllers.Version1
 {
@@ -19,7 +20,7 @@ namespace KahootWebApi.Controllers.Version1
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<string[]> SendCredentialsAsync(string email)
+        public async Task<string> SendCredentialsAsync(string email)
         {
             return await _manager.SendCredentialsAsync(email);
         }
@@ -31,6 +32,15 @@ namespace KahootWebApi.Controllers.Version1
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _manager.GetAllUsersAsync();
+        }
+
+        [HttpGet("GetAllBannedUsers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IEnumerable<User>> GetAllBannedUsersAsync()
+        {
+            return await _manager.GetAllBannedUsersAsync();
         }
 
         [HttpGet("GetAllQuizzes")]
@@ -85,6 +95,27 @@ namespace KahootWebApi.Controllers.Version1
         public async Task DeleteQuizAsync(int quizId)
         {
             await _manager.DeleteQuizAsync(quizId);
-        }      
+        }
+
+        [HttpPost("SendMessageToEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task SendMessageToEmailaAsync(string email, string title, string body)
+        {
+            await _manager.SendMessageToEmailAsync(email, title, body);
+        }
+
+        [HttpPost("AddItemToStore")]
+        public async Task AddItemToStoreAsync(ItemToBuy item)
+        {
+            await _manager.AddItemToStoreAsync(item);
+        }
+
+        [HttpDelete("RemoveItemFromStore")]
+        public async Task RemoveItemFromStoreAsync(int itemId)
+        {
+            await _manager.RemoveItemFromStoreAsync(itemId);
+        }
     }
 }

@@ -83,6 +83,10 @@ export class AuthFormComponent implements OnInit, OnDestroy{
         localStorage.setItem("userMail", JSON.stringify(Object.values(userid)[8]));
         localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
         localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
+        localStorage.setItem("overallPoints", JSON.stringify(Object.values(userid)[19]));
+        localStorage.setItem("userLevel", JSON.stringify(Object.values(userid)[20]));
+        localStorage.setItem("points", JSON.stringify(Object.values(userid)[21]));
+        localStorage.setItem("coins", JSON.stringify(Object.values(userid)[22]));
 
         if (await this.CheckStatusOfAnAccAsync()) {
           await this.UnFreezeAnAccAsync();

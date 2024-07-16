@@ -6,6 +6,8 @@ import {NgForOf, NgIf} from "@angular/common";
 import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
 import {FooterFormComponent} from "../footer-form/footer-form.component";
 import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
+import {TranslateModule} from "@ngx-translate/core";
+import {MessagePopupFormComponent} from "../message-popup-form/message-popup-form.component";
 
 const API_URL: string = "https://localhost:7176/api/v1/Message/";
 
@@ -18,7 +20,9 @@ const API_URL: string = "https://localhost:7176/api/v1/Message/";
     NgForOf,
     ScrollToTopFormComponent,
     FooterFormComponent,
-    NavbarFormComponent
+    NavbarFormComponent,
+    TranslateModule,
+    MessagePopupFormComponent
   ],
   templateUrl: './get-messages-form.component.html',
   styleUrls: ['./get-messages-form.component.css']
@@ -32,7 +36,7 @@ export class GetMessagesFormComponent implements OnInit{
   constructor(private router: Router) {}
 
   public async getMessagesAsync(): Promise<void> {
-    const response = await fetch(API_URL + `GetMessages?userName=${localStorage.getItem("Login")}`);
+    const response = await fetch(API_URL + `GetMessages?userName=admin`);
     const data = await response.json();
     this.messages = data.map((item: any) => ({
       id: item.id,

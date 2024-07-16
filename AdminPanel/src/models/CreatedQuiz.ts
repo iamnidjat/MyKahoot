@@ -7,10 +7,10 @@ export type CreatedQuiz = {
   quizCode: string;
   timesPassed?: number;
   averageFeedbackScore?: number;
-  likesCount?: number;
-  dislikesCount?: number;
-  commentsCount?: number;
-  userLiked?: boolean;
-  userDisliked?: boolean;
+  // likesCount?: number;
+  // dislikesCount?: number;
+  // commentsCount?: number;
+  // userLiked?: boolean;
+  // userDisliked?: boolean;
   userId: number;
 }

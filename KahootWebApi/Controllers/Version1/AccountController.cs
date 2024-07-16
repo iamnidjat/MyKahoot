@@ -18,14 +18,17 @@ namespace KahootWebApi.Controllers.v1
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
+        private readonly IBadgeManager _badgeManager;
         private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAccountManager manager, 
-            KahootDbContext context, ILogger<AccountController> logger)
+        public AccountController(IAccountManager manager,KahootDbContext context, 
+            ILogger<AccountController> logger, IBadgeManager badgeManager)
         {
             _context = context;
             _manager = manager;
             _logger = logger;
+            _badgeManager = badgeManager;
+
         }
 
         [HttpPost("AddSocialUser")]
@@ -94,6 +97,8 @@ namespace KahootWebApi.Controllers.v1
                     await AuthenticateAsync(model.UserName!);
 
                     newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
+
+                    await _badgeManager.AssignBadgeAsync(newUser!.Id, 10);
                 }
                 else
                 {
@@ -106,7 +111,7 @@ namespace KahootWebApi.Controllers.v1
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(newUser);
+            return Ok(newUser); // !
         }
 
         [HttpGet("Logout")]

@@ -44,12 +44,7 @@ namespace KahootWebApi.Services.Implementations
         public async Task<IEnumerable<QuizStat>> DownloadTopResultAsync(int userId)
         {
             try
-            {
-                //var topResults = await _context.Quizzes
-                //    .Where(q => q.UserId == userId && q.IsVisible)
-                //    .GroupBy(q => new { q.CategoryName, q.QuizName, q.Level })
-                //    .Select(g => g.OrderByDescending(q => q.Score).FirstOrDefault())
-                //    .ToListAsync();
+            {          
                 var topResults = await _context.Quizzes
                         .Where(q => q.UserId == userId && q.IsVisible && q.Flag)
                         .ToListAsync();
@@ -88,14 +83,17 @@ namespace KahootWebApi.Services.Implementations
                     {
                         case "easy":
                             user!.OverallPoints += 5;
+                            user!.Points += 5;
                             item.Flag = true;
                             break;
                         case "medium":
                             user!.OverallPoints += 10;
+                            user!.Points += 10;
                             item.Flag = true;
                             break;
                         case "hard":
                             user!.OverallPoints += 15;
+                            user!.Points += 15;
                             item.Flag = true;
                             break;
                     }

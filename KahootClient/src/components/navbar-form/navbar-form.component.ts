@@ -11,6 +11,10 @@ import {SwitchLanguageService} from "../../services/switch-language.service";
 })
 export class NavbarFormComponent{
   public username: string = localStorage.getItem("Login")!;
+  public userLevel: number = parseInt(localStorage.getItem("userLevel")!);
+  public points: number = parseInt(localStorage.getItem("points")!);
+  public overallPoints: number = parseInt(localStorage.getItem("overallPoints")!);
+  public coins: number = parseInt(localStorage.getItem("coins")!);
   public flag: boolean = false;
   public imageURL: string = "/assets/images/user.png";
   @ViewChild('SearchRequest') SearchRequest!: ElementRef;

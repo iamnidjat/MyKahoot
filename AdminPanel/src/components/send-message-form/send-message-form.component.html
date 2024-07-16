@@ -3,7 +3,16 @@
   <form>
     <div class="form-group">
       <label for="recipient">To:</label>
-      <input type="text" id="recipient" name="recipient" [value]="receiver" placeholder="Recipient's email">
+      <select id="recipient" name="recipient" [(ngModel)]="receiver">
+        <option *ngFor="let user of users" [value]="user.email">
+          <ng-container *ngIf="users === undefined; else users">
+            <div>There is no user yet</div>
+          </ng-container>
+          <ng-template #users>
+            <div>{{ user.username }}</div>
+          </ng-template>
+        </option>
+      </select>
     </div>
     <div class="form-group">
       <label for="title">Title:</label>

@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {QuestionService} from "../../services/question.service";
+import {GamificationService} from "../../services/gamification.service";
 
 const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
 
@@ -53,7 +54,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   public isThreeAnswersChecked: boolean = false;
   public isTrueFalseAnswersChecked: boolean = false;
 
-  constructor(private router: Router, private questionService: QuestionService) {}
+  constructor(private router: Router, private questionService: QuestionService, private gamificationService: GamificationService) {}
 
   ngOnDestroy(): void {
      localStorage.removeItem("MyCategory"); // Don't need anymore
@@ -378,5 +379,10 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
     },
       body: JSON.stringify(category)
     })
+
+    if (await this.gamificationService.upgradeLevelAsync())
+    {
+      Swal.fire('Level up', `you have increased to level ${parseInt(localStorage.getItem("userLevel")!)}`, 'info');
+    }
   }
 }

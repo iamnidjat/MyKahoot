@@ -244,7 +244,7 @@ export class ProfileDashboardFormComponent implements OnInit{
   public async setMail(e: any, mail: string): Promise<void>{
     e.preventDefault();
 
-    if (mail !== "") // improve this if statement
+    if (mail !== "" && this.isValidEmail(mail)) // improve this if statement
     {
       await fetch(API_URL + `SetMail?username=${this.username}&mail=${mail}`, {
         method: "POST",
@@ -261,34 +261,45 @@ export class ProfileDashboardFormComponent implements OnInit{
           Swal.fire('You successfully changed your mail! Please confirm your new mail, we have sent an instruction to your mail!');
         }
         else {
-          Swal.fire('Oops', 'User with this mail already exists!!', 'error');
+          Swal.fire('Oops', 'User with this mail already exists!', 'error');
         }
       })
     }
     else
     {
-      Swal.fire('Oops', 'Please fill in all fields!', 'error');
+      Swal.fire('Oops', 'Please fill the mail field!', 'error');
     }
   }
 
   public async setBackUpMail(e: any, bMail: string): Promise<void>{
     e.preventDefault();
 
-    await fetch(API_URL + `SetBMail?username=${this.username}&bMail=${bMail}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }).then((response) => {
-      if (response.status == 200) {
-        this.flag5 = false;
-        this.getUserInfo();
-        Swal.fire('You successfully set your backup mail!');
-      }
-      else {
-        Swal.fire('Oops', 'Incorrect data!', 'error');
-      }
-    })
+    if (bMail !== "" && this.isValidEmail(bMail))
+    {
+      await fetch(API_URL + `SetBMail?username=${this.username}&bMail=${bMail}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then((response) => {
+        if (response.status == 200) {
+          this.flag5 = false;
+          this.getUserInfo();
+          Swal.fire('You successfully set your backup mail!');
+        }
+        else {
+          Swal.fire('Oops', 'Incorrect data!', 'error');
+        }
+      })
+    }
+    else {
+      Swal.fire('Oops', 'Please fill the backup mail field!', 'error');
+    }
+  }
+
+  private isValidEmail(email: string): boolean {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   }
 
   public ToBirthdayChanging(): void{

@@ -23,7 +23,14 @@
       <button type="submit" class="fas fa-search" (click)="Search(SearchRequest.value)"></button>
     </form>
 
-    <img [src]="'assets/images/user.png'" class="user-pic" (click)="toggleMenu()">
+    <div class="user-info-container">
+      <div class="user-stats">
+        <span class="user-level"><i class="fas fa-level-up-alt"></i> {{userLevel}}</span>
+        <span class="user-points"><i class="fas fa-star"></i> {{points}} / {{overallPoints}}</span>
+        <span class="user-coins"><i class="fas fa-coins"></i> {{coins}}</span>
+      </div>
+      <img [src]="'assets/images/user.png'" class="user-pic" (click)="toggleMenu()">
+    </div>
 
     <div class="sub-menu-wrap" id="subMenu">
       <div class="sub-menu">

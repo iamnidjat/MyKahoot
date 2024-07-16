@@ -13,6 +13,7 @@ import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
 import {ThemeToggleComponent} from "../theme-toggle/theme-toggle.component";
 import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
 import {FooterFormComponent} from "../footer-form/footer-form.component";
+import {AuthService} from "../../services/auth.service";
 
 
 @Component({
@@ -28,8 +29,8 @@ import {FooterFormComponent} from "../footer-form/footer-form.component";
   templateUrl: './menu-form.component.html',
   styleUrl: './menu-form.component.css'
 })
-export class MenuFormComponent{
-  constructor(private router: Router) {}
+export class MenuFormComponent implements OnInit{
+  constructor(private router: Router, private authService: AuthService) {}
 
   public onUsersListsClick(): void {
     this.router.navigate(['/app/users-list']);
@@ -43,7 +44,16 @@ export class MenuFormComponent{
     this.router.navigate(['/app/send-news']);
   }
 
-  public backAuth(): void {
+  public onMessagesClick(): void {
+    this.router.navigate(['/app/messages-menu-page']);
+  }
 
+  public backAuth(): void {
+    this.authService.logout();
+  }
+
+  ngOnInit(): void {
+    localStorage.removeItem("email");
+    localStorage.removeItem("password");
   }
 }

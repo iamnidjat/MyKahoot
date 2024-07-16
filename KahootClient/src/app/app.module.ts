@@ -96,6 +96,8 @@ import {PointsHistoryFormComponent} from "../components/points-history-form/poin
 import {ThemeToggleComponent} from "../components/theme-toggle/theme-toggle.component";
 import {ThemeService} from "../services/theme.service";
 import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
+import {BadgesListComponent} from "../components/badges-list/badges-list.component";
+import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/mykahoot-store-form.component";
 
 @NgModule({
   declarations: [
@@ -158,6 +160,8 @@ import {WelcomePageComponent} from "../components/welcome-page/welcome-page.comp
     PointsHistoryFormComponent,
     ThemeToggleComponent,
     WelcomePageComponent,
+    BadgesListComponent,
+    MykahootStoreFormComponent
   ],
   imports: [
     BrowserModule,

@@ -18,46 +18,71 @@
   width: 30%; /* Could be more or less, depending on screen size */
 }
 
-/* The Close Button */
+/* Slide-in Animation */
+@keyframes slide-in {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Close Button */
 .close {
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
   cursor: pointer;
+  color: #888;
+  transition: color 0.3s ease;
 }
 
+.close:hover {
+  color: #333;
+}
+
+/* Input Box */
 .inputBox {
-  font-family: inherit;
   width: 100%;
+  padding: 10px;
+  margin: 20px 0;
   border: 0;
-  border-bottom: 2px solid #9b9b9b;
-  outline: 0;
-  font-size: 1.3rem;
-  padding: 7px 0;
-  background: transparent;
-  transition: border-color 0.2s;
-  margin-bottom: 5px;
-}
-
-.createButton {
-  background: #5E5DF0;
-  border-radius: 999px;
-  box-shadow: #5E5DF0 0 10px 20px -10px;
-  box-sizing: border-box;
-  color: #FFFFFF;
-  cursor: pointer;
-  font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+  border-bottom: 2px solid #ccc;
   font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  opacity: 1;
-  outline: 0 solid transparent;
-  padding: 8px 18px;
 }
 
+/* Alert Message */
+.alert {
+  color: #d9534f;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* Create Button */
+.createButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.createButton:hover {
+  background-color: #007bff;
+  transform: scale(1.05);
+}
+
+.createButton:active {
+  transform: scale(1);
+}

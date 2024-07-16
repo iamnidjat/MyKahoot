@@ -36,6 +36,10 @@ export class PlayerOptionsFormComponent implements OnInit{
     window.open(this.configService.cookiesConsentUrl, "_blank");
   }
 
+  public onStoreClick(): void{
+    this.router.navigate(['/app/mykahoot-store']);
+  }
+
   public acceptCookiesClick(): void {
     this.cookiesService.setCookie("username", localStorage.getItem("Login")!, 365);
 

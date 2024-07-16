@@ -89,13 +89,13 @@
         </div>
         <div class="media">
           <div *ngIf="questions[currentQuestion].photoUrl">
-            <img [src]="'https://localhost:7176' + questions[currentQuestion].photoUrl" alt="Photo" />
+            <img [src]="api + questions[currentQuestion].photoUrl" alt="Photo" />
           </div>
           <div *ngIf="questions[currentQuestion].videoUrl">
-            <video [src]="questions[currentQuestion].videoUrl" controls></video>
+            <video [src]="api + questions[currentQuestion].videoUrl" controls></video>
           </div>
           <div *ngIf="questions[currentQuestion].audioUrl">
-            <audio [src]="questions[currentQuestion].audioUrl" controls></audio>
+            <audio [src]="api + questions[currentQuestion].audioUrl" controls></audio>
           </div>
         </div>
         <div class="options" [ngClass]="{disabledDiv: isActive}">

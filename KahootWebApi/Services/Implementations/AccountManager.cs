@@ -5,6 +5,7 @@ using KahootWebApi.Models;
 using BCrypt.Net;
 using BC = BCrypt.Net.BCrypt;
 using KahootWebApi.Services.Interfaces;
+using KahootWebApi.Models.DTOs;
 
 namespace KahootWebApi.Services.Implementations
 {
@@ -12,11 +13,13 @@ namespace KahootWebApi.Services.Implementations
     {
         private readonly KahootDbContext _context;
         private readonly ILogger<AccountManager> _logger;
+        private readonly IWebHostEnvironment _environment;
 
-        public AccountManager(KahootDbContext context, ILogger<AccountManager> logger) 
+        public AccountManager(KahootDbContext context, ILogger<AccountManager> logger, IWebHostEnvironment environment) 
         {
             _context = context;
             _logger = logger;
+            _environment = environment;
         }
 
         public async Task AddSocialUser(SocialUser socialUser)
@@ -78,7 +81,7 @@ namespace KahootWebApi.Services.Implementations
         //            NotifyingAboutDeletingAsync(email);
         //        }
         //    }
-        //}
+        //} 
 
         //public async Task<IActionResult> NotifyingAboutDeletingAsync(string email) // !
         //{
@@ -209,7 +212,7 @@ namespace KahootWebApi.Services.Implementations
 
                 var stats = await GetQuizStatsByIdAsync(userId);
 
-                if (user != null)
+                if (user != null) // && stats != null
                 {
                     _context.Users.Remove(user!);
 
@@ -465,6 +468,38 @@ namespace KahootWebApi.Services.Implementations
             {
                 _logger.LogError(ex, "An error occurred in the RandomLoginGenerator method.");
                 return string.Empty;
+            }
+        }
+
+        public async Task AddUserPhotoAsync(UserPhotoDto userPhoto) //
+        {
+            var uploadPath = Path.Combine(_environment.ContentRootPath, "userPhotos");
+
+            // Ensure the upload directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
+            try
+            { 
+                var user = new User();
+
+                if (userPhoto.Photo != null)
+                {
+                    var photoPath = Path.Combine(_environment.ContentRootPath, "userPhotos", user.PhotoURL);
+                    using (var stream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        await userPhoto.Photo.CopyToAsync(stream);
+                    }
+                    user.PhotoURL = $"/userPhotos/{userPhoto.Photo.FileName}";
+                }
+
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            {
+                _logger.LogError(ex, "An error occurred in the AddUserPhotoAsync method.");
             }
         }
     }

@@ -36,6 +36,10 @@ builder.Services.AddTransient<IDownloadQuizService, DownloadQuizService>();
 builder.Services.AddTransient<IInteractionService, InteractionService>();
 builder.Services.AddTransient<IFeedbackService, FeedbackService>();
 builder.Services.AddTransient<IMessageService, MessageService>();
+builder.Services.AddTransient<IGamificationService, GamificationService>();
+builder.Services.AddTransient<IReminderService, ReminderService>();
+builder.Services.AddTransient<IBadgeManager, BadgeManager>();
+builder.Services.AddTransient<IItemStoreManager, ItemStoreManager>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
     var connectionString = builder.Configuration.GetConnectionString("MyKahootDb");

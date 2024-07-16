@@ -1,25 +1,36 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Message} from "../../models/Message";
 import {ActivatedRoute} from "@angular/router";
-import {Subscription} from "rxjs";
+import {User} from "../../models/User";
+import {GettingDataService} from "../../services/getting-data.service";
+import {NgForOf, NgIf} from "@angular/common";
+import {FormsModule} from "@angular/forms";
 
 const API_URL: string = "https://localhost:7176/api/v1/Message/";
 
 @Component({
   selector: 'app-send-message-form',
   standalone: true,
-  imports: [],
+  imports: [
+    NgForOf,
+    FormsModule,
+    NgIf
+  ],
   templateUrl: './send-message-form.component.html',
   styleUrls: ['./send-message-form.component.css']
 })
-export class SendMessageFormComponent implements OnInit, OnDestroy{
-
+export class SendMessageFormComponent implements OnInit{
   public receiver: string = "";
-  private routeSub: Subscription | undefined;
+  public users: User[] = [];
   @ViewChild("Title") Title!: ElementRef;
   @ViewChild("Body") Body!: ElementRef;
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private gettingDataService: GettingDataService) {}
   public async sendMessageAsync(title: string, body: string): Promise<void> {
+    if (!this.receiver) {
+      alert("Please select a recipient.");
+      return;
+    }
+
     let message: Message = {
       body: body, title: title, createdDate: new Date(), receiver: this.receiver, sender: localStorage.getItem("Login")!
     }
@@ -36,16 +47,20 @@ export class SendMessageFormComponent implements OnInit, OnDestroy{
     this.Title.nativeElement.value = "";
     this.Body.nativeElement.value = "";
   }
-
-  ngOnInit(): void {
-    this.routeSub = this.route.paramMap.subscribe(params => {
-      this.receiver = params.get('receiver')!;
-    });
+  public async sendMessageToEmailAsync(email: string, title: string, body: string): Promise<void> {
+    await fetch(API_URL + `SendMessage?email=${email}&title=${title}&body=${body}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    })
   }
 
-  ngOnDestroy(): void {
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
-    }
+  public async GetUsersAsync(): Promise<void> {
+    this.users = await this.gettingDataService.GetUsersAsync("All");
+  }
+
+  ngOnInit(): void {
+    this.GetUsersAsync();
   }
 }

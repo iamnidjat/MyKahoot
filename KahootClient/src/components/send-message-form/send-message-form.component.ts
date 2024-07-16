@@ -11,7 +11,6 @@ const API_URL: string = "https://localhost:7176/api/v1/Message/";
   styleUrls: ['./send-message-form.component.css']
 })
 export class SendMessageFormComponent implements OnInit, OnDestroy{
-
   public receiver: string = "";
   private routeSub: Subscription | undefined;
   @ViewChild("Title") Title!: ElementRef;

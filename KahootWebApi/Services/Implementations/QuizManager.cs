@@ -279,6 +279,8 @@ namespace KahootWebApi.Services.Implementations
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == createdQuiz.UserId);
 
                 user!.OverallPoints += 20;
+                user!.Points += 20;
+                user!.Coins += 20;
 
                 await _context.SaveChangesAsync();
             }

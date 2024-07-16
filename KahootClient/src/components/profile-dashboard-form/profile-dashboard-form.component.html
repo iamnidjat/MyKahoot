@@ -6,6 +6,9 @@
       <button routerLink="/app/getMessages">
         <i class="fa-solid fa-envelope"></i>
       </button>
+      <button [routerLink]="['/app/sendMessage', 'admin']">
+        <i class="fa-solid fa-message"></i>
+      </button>
     </div>
     <div class="text-blk.heading">
       {{"Your Credentials" | translate}}

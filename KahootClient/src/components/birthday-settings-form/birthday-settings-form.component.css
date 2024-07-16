@@ -1,73 +1,65 @@
-.row {
-  background-color: rgba(20, 120, 200, 0.6);
-  color: #fff;
-  padding: 10px 0 10px 0;
-  border-radius: 5px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 100vh;
 }
 
-.row .form-group {
-  width: 500px;
-}
-
-.row .form-group label {
-  display: block;
-  color: #fff;
-  text-align: left;
-  font-weight: 600;
-}
-
-.row .form-group input, .row .form-group button {
-  display: block;
-  padding: 0.5em 0;
-  width: 100%;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  background-color: inherit;
-  border: none;
-  border-bottom: 1px solid #555;
-  color: #eee;
-}
-
-.row .form-group input:focus, .row .form-group button:focus {
+.container {
   background-color: #fff;
-  color: #000;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+button.continue-button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
   border: none;
-  padding: 1em 0.5em; animation: pulse 1s infinite ease;
-}
-
-.row .form-group button {
-  border: 1px solid #fff;
-  border-radius: 5px;
-  outline: none;
-  -moz-user-select: none;
-  user-select: none;
-  color: #333;
-  font-weight: 800;
+  border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  margin-top: 2em;
-  padding: 1em;
+  transition: background-color 0.3s;
 }
 
-.row .form-group button:hover, .row .form-group button:focus {
-  background-color: #fff; }
-
-@media screen and (max-width: 600px) and (min-width: 450px) {
-  .row{
-    width: 450px;
-  }
+button.continue-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
 
-@media screen and (max-width: 450px) and (min-width: 350px) {
-  .row{
-    width: 350px;
-    height: 500px;
-  }
+button.continue-button:hover:not(:disabled) {
+  background-color: #0056b3;
 }

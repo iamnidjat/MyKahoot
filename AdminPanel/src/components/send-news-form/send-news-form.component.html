@@ -1,1 +1,5 @@
-<p>send-news-form works!</p>
+<div class="container">
+  <h1>Send News</h1>
+  <textarea class="textarea" #News placeholder="Write your news message here..."></textarea>
+  <button class="button" (click)="sendNewsAsync(News.value)">Send</button>
+</div>
