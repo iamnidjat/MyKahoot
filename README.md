@@ -13,7 +13,7 @@ Note: The app is currently in the development stage, and users might experience 
 - **Multilingual Support**: Available in English, Russian, and Azerbaijani.
 - **Search Functionality**: Easily search for quizzes and categories.
 - **Feedback System**: Send feedback to the website administrator.
-- **Gamification**: Earn levels and badges, use them to access VIP quizzes and other features.
+- **Gamification**: Earn levels and coins, use them to access VIP quizzes and other features.
 - **Account Management**: Freeze or delete your account, with options to hide statistics or keep created quizzes available.
 
 ### Teacher Role
