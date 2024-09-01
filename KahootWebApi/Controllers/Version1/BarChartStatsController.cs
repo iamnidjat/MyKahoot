@@ -17,9 +17,7 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpGet("DownloadResult")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<QuizStat>> DownloadResult(string catType, string quizType, string level)
+        public async Task<IEnumerable<QuizStat>> DownloadResultAsync([FromQuery] string catType, [FromQuery] string quizType, [FromQuery] string level)
         {
             return await _manager.DownloadResultAsync(catType, quizType, level);
         }

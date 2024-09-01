@@ -1,0 +1,9 @@
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <h2 class="modal-title">{{'Add User Photo' | translate }}</h2>
+    <input type="file" class="file-input" (change)="onPhotoFileSelected($event)" />
+    <button class="submit-button" (click)="addUserPhotoAsync()">{{'Add' | translate }}</button>
+  </div>
+</div>
+

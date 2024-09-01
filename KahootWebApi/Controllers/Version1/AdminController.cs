@@ -1,4 +1,6 @@
 ﻿using KahootWebApi.Models;
+using KahootWebApi.Models.DTOs;
+using KahootWebApi.Services.Implementations;
 using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,103 +19,84 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SendCredentials")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<string> SendCredentialsAsync(string email)
+        public async Task<string> SendCredentialsAsync([FromQuery] string email)
         {
             return await _manager.SendCredentialsAsync(email);
         }
 
         [HttpGet("GetAllUsers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _manager.GetAllUsersAsync();
         }
 
         [HttpGet("GetAllBannedUsers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<User>> GetAllBannedUsersAsync()
         {
             return await _manager.GetAllBannedUsersAsync();
         }
 
         [HttpGet("GetAllQuizzes")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IEnumerable<CreatedQuiz>> GetAllQuizzesAsync()
         {
             return await _manager.GetAllQuizzesAsync();
         }
 
-        [HttpDelete("DeleteUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteUserAsync(int userId)
-        {
-            await _manager.DeleteUserAsync(userId);
-        }
-
         [HttpPost("BanUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task BanUserAsync(int userId)
+        public async Task BanUserAsync([FromQuery] int userId)
         {
             await _manager.BanUserAsync(userId);
         }
 
         [HttpPost("UnbanUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task UnbanUserAsync(int userId)
+        public async Task<IActionResult> UnbanUserAsync([FromQuery] int userId)
         {
-            await _manager.UnbanUserAsync(userId);
+            var result = await _manager.UnbanUserAsync(userId);
+
+            if (result.Success)
+            {
+                return Ok(new { success = true });
+            }
+            else if (result.Reason == "not_expired")
+            {
+                return BadRequest(new { success = false, reason = "not_expired" });
+            }
+            else if (result.Reason == "not_found")
+            {
+                return NotFound(new { success = false, reason = "not_found" });
+            }
+            else
+            {
+                return StatusCode(500, new { success = false, reason = "server_error" });
+            }
         }
 
         [HttpGet("IsUserBanned")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> IsUserBannedAsync(int userId)
+        public async Task<bool> IsUserBannedAsync([FromQuery] int userId)
         {
             return await _manager.IsUserBannedAsync(userId);
         }
 
         [HttpDelete("DeleteQuiz")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteQuizAsync(int quizId)
+        public async Task DeleteQuizAsync([FromQuery] int quizId)
         {
             await _manager.DeleteQuizAsync(quizId);
         }
 
         [HttpPost("SendMessageToEmail")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task SendMessageToEmailaAsync(string email, string title, string body)
+        public async Task SendMessageToEmailaAsync([FromQuery] string email, [FromQuery] string title, [FromQuery] string body)
         {
             await _manager.SendMessageToEmailAsync(email, title, body);
         }
 
         [HttpPost("AddItemToStore")]
-        public async Task AddItemToStoreAsync(ItemToBuy item)
+        public async Task AddItemToStoreAsync([FromForm] ItemToBuyDto item)
         {
             await _manager.AddItemToStoreAsync(item);
         }
 
         [HttpDelete("RemoveItemFromStore")]
-        public async Task RemoveItemFromStoreAsync(int itemId)
+        public async Task RemoveItemFromStoreAsync([FromQuery] int itemId)
         {
             await _manager.RemoveItemFromStoreAsync(itemId);
         }

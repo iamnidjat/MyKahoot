@@ -1,6 +1,7 @@
-import {Component, ElementRef, Injectable, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from "@angular/router";
-import  Swal  from 'sweetalert2';
+import { Location } from '@angular/common';
+import Swal from 'sweetalert2';
 
 const API_URL: string = "https://localhost:7176/api/v1/Account/";
 
@@ -17,7 +18,7 @@ export class SettingsFormComponent {
   public visibility2: boolean = false; // for newPassword value
   public visibility3: boolean = false; // for cNewPassword value
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private location: Location) {}
 
   public async changePassword(e: any, oldPassword: string, newPassword: string, cNewPassword: string): Promise<void> {
     e.preventDefault();
@@ -67,5 +68,9 @@ export class SettingsFormComponent {
     {
       this[propertyName] = !this[propertyName];
     }
+  }
+
+  public backOptions(): void {
+    this.location.back();
   }
 }

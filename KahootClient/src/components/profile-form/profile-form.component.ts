@@ -1,6 +1,5 @@
 import { Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {UserSharedService} from "../../services/user-shared.service";
 
 @Component({
   selector: 'app-profile-form',
@@ -8,9 +7,9 @@ import {UserSharedService} from "../../services/user-shared.service";
   styleUrls: ['./profile-form.component.css']
 })
 export class ProfileFormComponent implements OnInit{
-  public userRole: string = "";
+  public userRole: string = localStorage.getItem('Role')!;
 
-  constructor(private router: Router, private userSharedService: UserSharedService) {}
+  constructor(private router: Router) {}
 
   public ToSettings(): void{
       this.router.navigate(['/app/settings-choice-form']);
@@ -38,7 +37,6 @@ export class ProfileFormComponent implements OnInit{
   }
 
   ngOnInit(): void {
-     this.userRole = this.userSharedService.userRole;
-     localStorage.removeItem("ToStats");
+     localStorage.removeItem("ToStats"); // Don't need anymore
   }
 }

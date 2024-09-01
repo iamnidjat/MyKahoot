@@ -1,0 +1,57 @@
+.store-container {
+  background-color: var(--mi-container-bg);
+  padding: 20px;
+}
+
+.card {
+  background-color: var(--mi-card-bg);
+  border: 1px solid var(--mi-card-border);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--mi-card-shadow);
+  margin-bottom: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.card-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.card-content {
+  margin-top: 10px;
+}
+
+.card-title,
+.card-description,
+.card-quantity,
+.card-price,
+.card-address,
+.card-country,
+.card-city {
+  color: var(--mi-text-color);
+  margin: 5px 0;
+}
+
+.buy-button {
+  background-color: var(--mi-button-bg);
+  color: var(--mi-button-text-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.buy-button:hover {
+  background-color: var(--mi-button-hover-bg);
+}
+
+.no-items {
+  color: var(--mi-text-color);
+  text-align: center;
+  padding: 20px;
+}

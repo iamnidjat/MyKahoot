@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {QuizModel} from "../../models/QuizModel";
+import {Router} from "@angular/router";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 
@@ -14,6 +15,9 @@ export class Top10FormComponent implements OnInit{
   public quizType: string = '';
   public catType: string = '';
   public level: string = '';
+
+  constructor(private router: Router) {
+  }
 
   ngOnInit(): void {
     this.catType = localStorage.getItem("categoryName")!;
@@ -35,5 +39,9 @@ export class Top10FormComponent implements OnInit{
         this.info.push(data[key]);
       });
     });
+  }
+
+  public backOptions(): void{
+    this.router.navigate(['/app/profile-form']);
   }
 }

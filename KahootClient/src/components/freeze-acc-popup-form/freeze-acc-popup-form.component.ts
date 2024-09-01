@@ -1,8 +1,9 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
-import {DeleteAccFormComponent} from "../delete-acc-form/delete-acc-form.component";
 import Swal from "sweetalert2";
 import {SharedService} from "../../services/shared.service";
+
+const API_URL: string = "https://localhost:7176/api/v1/Account/";
 
 @Component({
   selector: 'app-freeze-acc-popup-form',
@@ -11,20 +12,20 @@ import {SharedService} from "../../services/shared.service";
 })
 
 export class FreezeAccPopupFormComponent implements AfterViewInit{
-  private url: string = "https://localhost:7176/api/v1/Account/";
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
   private reason: string = "";
   public Visibility: boolean = false;
   @ViewChild('password') password!: ElementRef;
   @ViewChild('WriteTheReason') WriteTheReason!: ElementRef;
 
-  constructor(private router: Router, private sharedService: SharedService,
-              private childComponent: DeleteAccFormComponent) {}
+  constructor(private router: Router, private sharedService: SharedService) {}
 
-  Cancel(): void{
-    this.childComponent.flag2 = false;
+  public Cancel(): void{
+    this.close.emit();
   }
 
-  checkStatus(e: any): void{
+  public checkStatus(e: any): void{
     if(e.target.checked) {
       this.reason = e.target.value;
     }
@@ -38,14 +39,14 @@ export class FreezeAccPopupFormComponent implements AfterViewInit{
 
     if (localStorage.getItem("SocialUser") === null)
     {
-      if (this.reason != "" && this.sharedService.checkPassword(this.password.nativeElement.value))
+      if (this.reason != "" && await this.sharedService.checkPasswordAsync(this.password.nativeElement.value))
       {
-        await fetch(this.url + `FreezeAcc?userId=${localStorage.getItem('userId')!}&reason=${this.reason}`, {
+        await fetch(API_URL  + `FreezeAcc?userId=${localStorage.getItem('userId')!}&reason=${this.reason}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           }
-        }).then((response) => {
+        }).then(() => {
           Swal.fire("Your account was frozen!");
           localStorage.removeItem("Login")
           localStorage.removeItem("Username")
@@ -62,12 +63,12 @@ export class FreezeAccPopupFormComponent implements AfterViewInit{
     {
       if (this.reason != "" && this.password.nativeElement.value == 'yes')
       {
-        await fetch(this.url + `FreezeAcc?userId=${localStorage.getItem('userId')!}&reason=${this.reason}`, {
+        await fetch(API_URL + `FreezeAcc?userId=${localStorage.getItem('userId')!}&reason=${this.reason}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           }
-        }).then((response) => {
+        }).then(() => {
           Swal.fire("Your account was frozen!");
           localStorage.removeItem("Login")
           localStorage.removeItem("Username")

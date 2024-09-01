@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
 import {Router} from "@angular/router";
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 import Swal from "sweetalert2";
@@ -11,18 +11,12 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
   styleUrls: ['./public-private-type-popup-form.component.css']
 })
 export class PublicPrivateTypePopupFormComponent {
-  @Input() public creatingTestProcessFlag: boolean = false;
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
+  public creatingTestProcessFlag: boolean = false;
 
-  constructor(private el: ElementRef, private router: Router,
-              private childComponent: CreatingQuizOptionFormComponent) {}
-
-  public ClosePopUp(): void{
-    let modal = this.el.nativeElement.querySelector(".modal");
-
-    modal.style.display = "none";
-
-    this.childComponent.flagOfCustomCategory = false;
-    this.childComponent.flagOfExistingCategory = false;
+  public closeModal(): void {
+    this.close.emit();
   }
 
   public async ToCreatingTestProcess(format: any): Promise<void>{
@@ -35,15 +29,12 @@ export class PublicPrivateTypePopupFormComponent {
       case "private":
         localStorage.setItem("Private", "true");
         await this.GenerateCode();
-        Swal.fire('Info', `Your generated code for this private quiz is: ${localStorage.getItem("GeneratedCode")}.\nYou can find it 'Your Quizzes' section.`, 'info');
+        Swal.fire('Info', `Your generated code for this private quiz is: ${localStorage.getItem("GeneratedCode")}.\nYou can find it in 'Your Quizzes' section.`, 'info');
         break;
     }
 
-    this.router.navigate(['app/creating-test-form']);
-
-    let modal = this.el.nativeElement.querySelector(".modal");
-
-    modal.style.display = "none";
+    this.closeModal();
+    this.creatingTestProcessFlag = true;
   }
 
   private async GenerateCode(): Promise<void> {

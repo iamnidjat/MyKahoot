@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 import Swal from "sweetalert2";
 import {CheckDataService} from "../../services/check-data.service";
@@ -9,19 +9,16 @@ import {CheckDataService} from "../../services/check-data.service";
   styleUrls: ['./add-new-category-popup-form.component.css']
 })
 export class AddNewCategoryPopupFormComponent{
-  @Input() public createNewCategoryFlag: boolean = false;
+  public createNewCategoryFlag: boolean = false;
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
   @ViewChild('CategoryType') categoryType!: ElementRef;
   public isCatNameUsed: boolean = false;
 
-  constructor(private el: ElementRef, private childComponent: CreatingQuizOptionFormComponent,
-              private checkService: CheckDataService) {}
+  constructor(private el: ElementRef, private checkService: CheckDataService) {}
 
-  public ClosePopUp(): void{
-    let modal = this.el.nativeElement.querySelector(".modal");
-
-    modal.style.display = "none";
-
-    this.childComponent.flagOfCustomCategory = false;
+  public closeModal(): void {
+    this.close.emit();
   }
 
   public async CreateNewCategoryAsync(): Promise<void> {
@@ -31,12 +28,9 @@ export class AddNewCategoryPopupFormComponent{
       } else {
         this.createNewCategoryFlag = true;
 
-        let modal = this.el.nativeElement.querySelector(".modal");
+        this.closeModal();
 
-        modal.style.display = "none";
-
-        localStorage.setItem("MyCategory", this.categoryType.nativeElement.value);
-        localStorage.removeItem("IsCatNameUsed"); // Don't need anymore
+        localStorage.setItem("MyCategory", this.categoryType.nativeElement.value); // my new category
       }
     } else {
       Swal.fire('Oops', 'Specify a category of a test!', 'error');

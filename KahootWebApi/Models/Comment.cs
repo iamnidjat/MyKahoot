@@ -13,9 +13,6 @@ namespace KahootWebApi.Models
         [Required]
         public DateTime Date { get; set; }
 
-        //[Required]
-        //public string? AuthorName { get; set; }
-
         [Required]
         public int AuthorId { get; set; }
 

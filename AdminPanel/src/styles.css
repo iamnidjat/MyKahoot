@@ -1,10 +1,301 @@
+@import "exit-button.css";
 /* You can add global styles to this file, and also import other style files */
 body {
+  background-color: var(--background-color);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
-  background-color: #f4f4f9;
-  font-family: Arial, sans-serif;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  overflow-x: hidden;
+  min-height: 100vh;
   margin: 0;
+  padding: 0;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure the container is at least full viewport height */
+}
+
+.content {
+  margin-top: 15%;
+  flex: 1; /* This allows the content to grow and push the footer down */
+}
+
+:root {
+  --footer-background-color: white;
+  --background-color: #F5F5F5 ;
+  --accent-color: #007bff; /* Updated for better contrast */
+  --highlight-color: #4070f4; /* Updated for accent highlights */
+}
+
+[data-theme='dark'] {
+  --footer-background-color: #1C1C1E;
+  --background-color: #121212;
+  --accent-color: #1a73e8; /* Softer blue for dark theme */
+  --highlight-color: #bb86fc; /* Slightly lighter for dark theme highlights */
+}
+
+:root {
+  --s-Xbackground-color: #fff;
+  --s-text-color: #333;
+  --s-textarea-bg-color: #fff;
+  --s-textarea-border-color: #ccc;
+  --s-button-bg-color: #007bff;
+  --s-button-hover-bg-color: #0056b3;
+}
+
+[data-theme="dark"] {
+  --s-background-color: #1e1e1e;
+  --s-text-color: #f1f1f1;
+  --s-textarea-bg-color: #2a2a2a;
+  --s-textarea-border-color: #444;
+  --s-button-bg-color: #0056b3;
+  --s-button-hover-bg-color: #003e7e;
+}
+
+
+:root {
+  --t-background-color: #ffffff;
+  --t-text-color: #333333;
+  --t-input-bg-color: #ffffff;
+  --t-input-border-color: #cccccc;
+  --t-table-header-bg-color: #4FC3A1;
+  --t-table-header-alt-bg-color: #324960;
+  --t-table-row-bg-color: #f8f8f8;
+  --t-table-row-alt-bg-color: #ffffff;
+  --t-table-border-color: #e6e4e4;
+}
+
+[data-theme="dark"] {
+  --t-background-color: #121212;
+  --t-text-color: #f1f1f1;
+  --t-input-bg-color: #1e1e1e;
+  --t-input-border-color: #444444;
+  --t-table-header-bg-color: #3b5998;
+  --t-table-header-alt-bg-color: #24292e;
+  --t-table-row-bg-color: #2a2a2a;
+  --t-table-row-alt-bg-color: #1e1e1e;
+  --t-table-border-color: #3a3a3a;
+}
+
+:root {
+  --sm-bg-color: #f9f9f9;
+  --sm-text-color: #333;
+  --sm-label-color: #555;
+  --sm-input-bg-color: #fff;
+  --sm-input-border-color: #ddd;
+  --sm-input-focus-border-color: #66afe9;
+  --sm-input-focus-shadow-color: rgba(102, 175, 233, 0.5);
+  --sm-button-bg-color: #007bff;
+  --sm-button-hover-bg-color: #0056b3;
+  --sm-button-active-bg-color: #004085;
+  --sm-dropdown-bg-color: #fff;
+  --sm-dropdown-hover-bg-color: #f1f1f1;
+  --sm-box-shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --sm-bg-color: #121212;
+  --sm-text-color: #f1f1f1;
+  --sm-label-color: #bbbbbb;
+  --sm-input-bg-color: #1e1e1e;
+  --sm-input-border-color: #333;
+  --sm-input-focus-border-color: #66afe9;
+  --sm-input-focus-shadow-color: rgba(102, 175, 233, 0.5);
+  --sm-button-bg-color: #1a73e8;
+  --sm-button-hover-bg-color: #1669c1;
+  --sm-button-active-bg-color: #135a9f;
+  --sm-dropdown-bg-color: #1e1e1e;
+  --sm-dropdown-hover-bg-color: #333;
+  --sm-box-shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+:root {
+  --a-bg-color: #f9f9f9;
+  --a-form-bg-color: #fff;
+  --a-text-color: #333;
+  --a-input-border-color: #e0e0e0;
+  --a-input-focus-border-color: #007bff;
+  --a-button-bg-color: #007bff;
+  --a-button-hover-bg-color: #0056b3;
+  --a-box-shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --a-bg-color: #121212;
+  --a-form-bg-color: #1e1e1e;
+  --a-text-color: #f1f1f1;
+  --a-input-border-color: #333;
+  --a-input-focus-border-color: #1a73e8;
+  --a-button-bg-color: #1a73e8;
+  --a-button-hover-bg-color: #135a9f;
+  --a-box-shadow-color: rgba(0, 0, 0, 0.5);
+}
+
+:root {
+  --ms-bg-color: #f8f9fa;
+  --ms-card-bg-color: #ffffff;
+  --ms-text-color: #333;
+  --ms-input-border-color: #e0e0e0;
+  --ms-input-focus-border-color: #007bff;
+  --ms-button-bg-color: #007bff;
+  --ms-button-hover-bg-color: #0056b3;
+  --ms-remove-button-bg-color: #dc3545;
+  --ms-remove-button-hover-bg-color: #c82333;
+  --ms-store-button-bg-color: #28a745;
+  --ms-store-button-hover-bg-color: #218838;
+  --ms-box-shadow-color: rgba(0, 0, 0, 0.1);
+  --ms-card-hover-shadow-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="dark"] {
+  --ms-bg-color: #121212;
+  --ms-card-bg-color: #1e1e1e;
+  --ms-text-color: #f1f1f1;
+  --ms-input-border-color: #444;
+  --ms-input-focus-border-color: #1a73e8;
+  --ms-button-bg-color: #1a73e8;
+  --ms-button-hover-bg-color: #135a9f;
+  --ms-remove-button-bg-color: #e63946;
+  --ms-remove-button-hover-bg-color: #d32f2f;
+  --ms-store-button-bg-color: #38b000;
+  --ms-store-button-hover-bg-color: #2a9d00;
+  --ms-box-shadow-color: rgba(0, 0, 0, 0.5);
+  --ms-card-hover-shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+:root {
+  --gm-background-color: #f8f9fa;
+  --gm-text-color: #333;
+  --gm-input-background: #ffffff;
+  --gm-input-border: #ddd;
+  --gm-input-text-color: #333;
+  --gm-statement-color: #333;
+  --gm-fields-background: #ffffff;
+  --gm-fields-border: #ddd;
+  --gm-muted-text-color: #6c757d;
+  --gm-primary-color: #007bff;
+}
+
+[data-theme="dark"] {
+  --gm-background-color: #121212;
+  --gm-text-color: #e0e0e0;
+  --gm-input-background: #1f1f1f;
+  --gm-input-border: #444;
+  --gm-input-text-color: #e0e0e0;
+  --gm-statement-color: #e0e0e0;
+  --gm-fields-background: #1f1f1f;
+  --gm-fields-border: #333;
+  --gm-muted-text-color: #999;
+  --gm-primary-color: #bb86fc;
+}
+
+:root {
+  --modal-background: rgba(0, 0, 0, 0.5);
+  --modal-content-background: #ffffff;
+  --modal-text-color: #333;
+  --modal-border-color: #ddd;
+  --close-button-color: #aaa;
+  --close-button-hover-color: #000;
+  --button-background: #007bff;
+  --button-color: #ffffff;
+  --button-hover-background: #0056b3;
+}
+
+[data-theme="dark"] {
+  --modal-background: rgba(0, 0, 0, 0.8);
+  --modal-content-background: #1f1f1f;
+  --modal-text-color: #e0e0e0;
+  --modal-border-color: #444;
+  --close-button-color: #bbb;
+  --close-button-hover-color: #fff;
+  --button-background: #bb86fc;
+  --button-color: #ffffff;
+  --button-hover-background: #3700b3;
+}
+
+:root {
+  --w-background-color: #ffffff;
+  --w-text-color: #333;
+  --w-card-background-color: #f9f9f9;
+  --w-card-shadow-color: rgba(0, 0, 0, 0.1);
+  --w-button-background-color: #03cae4;
+  --w-button-hover-background-color: #04adc4;
+  --w-button-focus-background-color: #44b927;
+  --w-primary-text-color: #007bff;
+  --w-option-hover-color: #007bff;
+}
+
+[data-theme="dark"] {
+  --w-background-color: #121212;
+  --w-text-color: #e0e0e0;
+  --w-card-background-color: #1f1f1f;
+  --w-card-shadow-color: rgba(0, 0, 0, 0.6);
+  --w-button-background-color: #bb86fc;
+  --w-button-hover-background-color: #3700b3;
+  --w-button-focus-background-color: #03dac6;
+  --w-primary-text-color: #bb86fc;
+  --w-option-hover-color: #03dac6;
+}
+
+:root {
+  --nf-primary-color: #007bff;
+  --nf-secondary-background: #ffffff;
+  --nf-text-color: #666;
+  --nf-box-shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --nf-primary-color: #0056b3;
+  --nf-secondary-background: #1f1f1f;
+  --nf-text-color: #ccc;
+  --nf-box-shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Light Theme Variables */
+:root {
+  --nap-background-color: #f9f9f9;
+  --nap-card-background: #ffffff;
+  --nap-text-color: #333333;
+  --nap-primary-color: #03cae4;
+  --nap-primary-hover: #02a9d8;
+  --nap-secondary-color: #444;
+  --nap-button-text-color: #ffffff;
+  --nap-404-color: #e0e0e0;
+}
+
+/* Dark Theme Variables */
+[data-theme='dark'] {
+  --nap-background-color: #1e1e1e;
+  --nap-card-background: #2d2d2d;
+  --nap-text-color: #e0e0e0;
+  --nap-primary-color: #03cae4;
+  --nap-primary-hover: #02a9d8;
+  --nap-secondary-color: #999999;
+  --nap-button-text-color: #ffffff;
+  --nap-404-color: #444444;
+}
+
+:root {
+  --navbar-background-color: #ffffff;
+  --navbar-text-color: #333;
+  --navbar-hover-color: #007bff;
+  --navbar-box-shadow-color: rgba(0, 0, 0, 0.1);
+  --navbar-border-color: #ddd;
+  --navbar-submenu-background: #ffffff;
+  --navbar-submenu-hover-bg: #f4f4f9;
+}
+
+/* Dark Theme Styles */
+[data-theme="dark"] {
+  --navbar-background-color: #121212;
+  --navbar-text-color: #f5f5f5;
+  --navbar-hover-color: #007bff;
+  --navbar-box-shadow-color: rgba(255, 255, 255, 0.1);
+  --navbar-border-color: #333;
+  --navbar-submenu-background: #1e1e1e;
+  --navbar-submenu-hover-bg: #333;
 }

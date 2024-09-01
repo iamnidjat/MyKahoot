@@ -1,18 +1,23 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Router} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import Swal from "sweetalert2";
-// import {SharedService} from "../../services/shared.service";
 import {SwitchLanguageService} from "../../services/switch-languages.service";
+import {NgIf} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-navbar-form',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf,
+    TranslateModule,
+    RouterLink
+  ],
   templateUrl: './navbar-form.component.html',
   styleUrls: ['./navbar-form.component.css']
 })
 export class NavbarFormComponent{
-  public username: string = localStorage.getItem("Login")!;
+  public isAuthed: boolean = !!localStorage.getItem('auth');
   public flag: boolean = false;
   public imageURL: string = "/assets/images/user.png";
   @ViewChild('SearchRequest') SearchRequest!: ElementRef;
@@ -23,20 +28,15 @@ export class NavbarFormComponent{
   public Search(request: string): void {
     // Define mappings of destination URLs to arrays of terms
     const termMappings: { [key: string]: string[] } = {
-      // 'player-options-form': ['home', 'menu', 'main', 'меню', 'главное', 'menü', 'əsas'],
-      // 'creating-quiz-option-form': ['create', 'creating', 'quiz', 'создать', 'создание', 'викторину', 'викторины', 'viktorina', 'yaratmaq'],
-      // 'player-survey-choosing-form': ['play', 'играть', 'oyna'],
-      // 'profile-form': ['profile', 'профиль', 'profil'],
-      // 'about-form': ['about', 'про', 'нас', 'bizim', 'haqqında'],
-      // 'contacts-form': ['contact', 'связь', 'əlaqə', 'help', 'support', 'помощь', 'поддержка', 'kömək', 'dəstək'],
-      // 'contact-list-form': ['contact list', 'data', 'данные', 'informasiya'],
-      // 'stats-form': ['stat', 'stats', 'статистика', 'statistika'],
-      // 'choose-field-form': ['top', 'топ', '10', 'rating', 'reytinq', 'рейтинг'],
-      // 'my-quizzes-form': ['quizzes', 'my', 'мои', 'mənim'],
-      // 'my-profile-form': ['edit', 'редакт', 'redakt'],
-      // 'delete-acc-form': ['delete', 'удалить', 'silmək'],
-      // 'settings-choice-form': ['settings', 'настройки', 'ayarlar'],
-      //'settings-choice-form': ['change', 'изменить', 'dəyiş'] // Note: This should navigate somewhere else, check and update
+      'app/menu-page': ['home', 'menu', 'main', 'dashboard', 'главное меню', 'главная', 'menü', 'əsas'],
+      'app/messages-menu-page': ['messages', 'inbox', 'mail', 'почта', 'сообщения', 'mesajlar'],
+      'app/send-message': ['send message', 'compose', 'write message', 'написать', 'отправить', 'mesaj yazmaq', 'göndərmək'],
+      'app/get-messages': ['inbox', 'received', 'mailbox', 'полученные', 'входящие', 'gələnlər', 'mesajlar'],
+      'app/users-list': ['users', 'contacts', 'address book', 'список пользователей', 'адресная книга', 'istifadəçilər', 'əlaqə siyahısı'],
+      'app/quizzes-list': ['quizzes', 'tests', 'my quizzes', 'мои викторины', 'викторины', 'quizlər', 'testlər'],
+      'app/send-news': ['send news', 'broadcast', 'announcement', 'рассылка', 'объявление', 'yenilik göndərmək', 'elan'],
+      'app/add-item-to-store': ['add item', 'store', 'shop', 'добавить товар', 'магазин', 'element əlavə et', 'dükan'],
+      'app/mykahoot-store': ['store', 'my kahoot', 'магазин', 'dükan', 'mykahoot dükanı'],
     };
 
     // Convert the search request to lowercase for case-insensitive matching

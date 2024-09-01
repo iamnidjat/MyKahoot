@@ -1,6 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-birthday-settings-form',
@@ -10,7 +11,7 @@ import Swal from "sweetalert2";
 export class BirthdaySettingsFormComponent {
   private url: string = "https://localhost:7176/api/v1/Account/";
   @ViewChild('newBirthday') newBirthday!: ElementRef;
-  constructor(private router: Router) {}
+  constructor(private router: Router, private location: Location) {}
 
   private getDifferenceInYears(date1: Date, date2: Date): number {
     const yearDiff: number = date1.getFullYear() - date2.getFullYear();
@@ -48,5 +49,9 @@ export class BirthdaySettingsFormComponent {
       Swal.fire('Oops', 'You are not eligible to change your birthday!', 'error');
       this.newBirthday.nativeElement.value = '';
     }
+  }
+
+  public backOptions(): void {
+    this.location.back();
   }
 }

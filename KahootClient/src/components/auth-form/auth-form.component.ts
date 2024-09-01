@@ -33,9 +33,8 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     localStorage.removeItem("isUserBot"); // Don't need anymore
   }
 
-  private async sendTokenToServerAsync(): Promise<string> {
+  private async sendTokenToServerAsync(): Promise<string> { //
       const token: string | undefined  = await this.recaptchaV3Service.execute('importantAction').toPromise();
-      console.log("token => ", token);
 
       await fetch(API_URL3 + `verify-captcha?token=${token}`, {
         method: "POST",
@@ -59,15 +58,77 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     if (await this.sendTokenToServerAsync() === "false") {
       let user: LoginModel = {userName: this.userLogin, password: this.userPassword};
 
-      await fetch(API_URL + "Login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-      }).then(async (response) => {
+      //   await fetch(API_URL + "Login", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json"
+      //     },
+      //     body: JSON.stringify(user)
+      //   }).then(async (response) => {
+      //     if (response.status === 200) {
+      //       localStorage.setItem("Login", this.userLogin);
+      //       this.router.navigate(['/app/player-options-form']);
+      //     } else {
+      //       Swal.fire('Oops', 'Incorrect data!', 'error');
+      //       this.userLogin = "";
+      //       this.userPassword = "";
+      //
+      //       this.visibility ? this.visibility = !this.visibility : this.visibility;
+      //     }
+      //     return await response.json();
+      //   }).then(async (data) => {
+      //     if (data) {
+      //       localStorage.setItem("userId", data.id);
+      //       localStorage.setItem("userMail", data.email);
+      //       localStorage.setItem("Role", data.role);
+      //       localStorage.setItem("overallPoints", data.overallPoints);
+      //       localStorage.setItem("userLevel", data.level);
+      //       localStorage.setItem("points", data.points);
+      //       localStorage.setItem("coins", data.coins);
+      //       localStorage.setItem("userPhoto", data.photo);
+      //
+      //       const statusOfAcc = await this.CheckStatusOfAnAccAsync();
+      //       if (statusOfAcc) {
+      //         await this.UnFreezeAnAccAsync();
+      //         Swal.fire('Your account is unfrozen!');
+      //       }
+      //     }
+      //   }).catch((error) => {
+      //     console.error("Error in LogInAsync:", error);
+      //     Swal.fire("Something went wrong, try again later.");
+      //   }).finally(() => {
+      //     this.spinner.hide();
+      //   });
+      // }
+
+      try {
+        const response = await fetch(API_URL + "Login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(user)
+        });
+
         if (response.status === 200) {
           localStorage.setItem("Login", this.userLogin);
+          const data = await response.json();
+
+          localStorage.setItem("userId", data.id);
+          localStorage.setItem("userMail", data.email);
+          localStorage.setItem("Role", data.role);
+          localStorage.setItem("overallPoints", data.overallPoints);
+          localStorage.setItem("userLevel", data.level);
+          localStorage.setItem("points", data.points);
+          localStorage.setItem("coins", data.coins);
+          localStorage.setItem("userPhoto", data.photo);
+
+          const statusOfAcc = await this.CheckStatusOfAnAccAsync();
+          if (statusOfAcc) {
+            await this.UnFreezeAnAccAsync();
+            Swal.fire('Your account is unfrozen!');
+          }
+
           this.router.navigate(['/app/player-options-form']);
         } else {
           Swal.fire('Oops', 'Incorrect data!', 'error');
@@ -76,28 +137,12 @@ export class AuthFormComponent implements OnInit, OnDestroy{
 
           this.visibility ? this.visibility = !this.visibility : this.visibility;
         }
-        return await response.json();
-      }).then(async (data) => {
-        let userid = JSON.parse(JSON.stringify(data));
-        localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
-        localStorage.setItem("userMail", JSON.stringify(Object.values(userid)[8]));
-        localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
-        localStorage.setItem("photoURL", JSON.stringify(Object.values(userid)[15]));
-        localStorage.setItem("overallPoints", JSON.stringify(Object.values(userid)[19]));
-        localStorage.setItem("userLevel", JSON.stringify(Object.values(userid)[20]));
-        localStorage.setItem("points", JSON.stringify(Object.values(userid)[21]));
-        localStorage.setItem("coins", JSON.stringify(Object.values(userid)[22]));
-
-        if (await this.CheckStatusOfAnAccAsync()) {
-          await this.UnFreezeAnAccAsync();
-          Swal.fire('Your account is unfrozen!');
-        }
-        localStorage.removeItem("IsFrozen"); // Don't need anymore
-      }).catch(() => {
-
-      }).finally(() => {
+      } catch (error) {
+        console.error("Error in LogInAsync:", error);
+        Swal.fire("Something went wrong, try again later.");
+      } finally {
         this.spinner.hide();
-      });
+      }
     }
     else {
       Swal.fire('Oops', 'You are not allowed to authorize, you can be a bot!', 'error');
@@ -127,8 +172,8 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     this.isChecked = !this.isChecked;
 
     if (this.isChecked && username !== "") {
-      localStorage.setItem("Username", this.userLogin);
-      localStorage.setItem("UsernameDate", new Date().toLocaleDateString());
+      localStorage.setItem("Username", username);
+      localStorage.setItem("UsernameDate", new Date().toISOString());
     }
   }
 
@@ -145,8 +190,7 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     });
 
     const data = await response.json();
-    localStorage.setItem("IsFrozen", JSON.parse(JSON.stringify(data)));
-    return JSON.parse(localStorage.getItem("IsFrozen")!);
+    return data;
   }
 
   private async UnFreezeAnAccAsync(): Promise<void>{
@@ -158,22 +202,23 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     });
   }
 
-  private async DoesUserExistAsync(username: string): Promise<boolean>{
-    fetch(API_URL2 + `DoesUserExist?username=${username}`, {
-      method: "GET"
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      console.log('data', data);
-      localStorage.setItem("DoesUserExist", JSON.parse(JSON.stringify(data)));
-    });
-  // console.log(JSON.parse(localStorage.getItem("DoesUserExist")!));
-  //   return JSON.parse(localStorage.getItem("DoesUserExist")!);
-    const storedData = localStorage.getItem("DoesUserExist");
-    if (storedData) {
-      return JSON.parse(storedData);
-    } else {
-      return false; // or handle the case where data is not available
+  private async DoesUserExistAsync(username: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${API_URL2}DoesUserExist?username=${username}`, {
+        method: "GET"
+      });
+
+      if (!response.ok) {
+        console.error(`Error: ${response.statusText}`);
+        return false;
+      }
+
+      const data = await response.json();
+
+      return data;
+    } catch (error) {
+      console.error("Error in DoesUserExistAsync:", error);
+      return false;
     }
   }
 
@@ -181,49 +226,28 @@ export class AuthFormComponent implements OnInit, OnDestroy{
     const access: string | null = localStorage.getItem("Username");
 
     if (access
-      && (+new Date().valueOf() - (+new Date(localStorage.getItem("UsernameDate")!)).valueOf()) / (24 * 60 * 60 * 1000) <= 30) {
+      && ((new Date().valueOf() - (new Date(localStorage.getItem("UsernameDate")!)).valueOf())) / (24 * 60 * 60 * 1000) <= 30) {
       this.router.navigate(['/app/player-options-form']);
     }
     else {
-      localStorage.removeItem("Guest");
-      localStorage.removeItem("Role");
-      localStorage.removeItem('Login');
-      localStorage.removeItem('Role');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userMail');
-      localStorage.removeItem('photoURL');
+      localStorage.clear();
     }
 
     this.socialAuthService.authState.subscribe(async (user) => {
-      if (await !this.DoesUserExistAsync(user.name))
-      {
+      const userExists = await this.DoesUserExistAsync(user.name);
+      if (!userExists) {
         localStorage.setItem("SocialUserFlag", "false");
         Swal.fire('Oops', 'You do not have an account! Please choose the account type!', 'error');
         this.router.navigate(['/app/choose-account-type-form']);
-      }
-      else
-      {
+      } else {
         localStorage.setItem("Login", user.name);
-        localStorage.setItem("photoURL", user.photoUrl);
         localStorage.setItem("SocialUser", "true");
-        this.sharedService.GetUserInfo(user.name);
-
-        // try { // dont work
-        //   await this.a();
-        // } catch (error) {
-        // }
-        this.router.navigate(['/app/player-options-form']); // Move navigation here
+        localStorage.setItem("userPhoto", user.photoUrl);
+        setTimeout(async () => {
+          await this.sharedService.GetUserInfoByUsername(user.name);
+        }, 100)
+        this.router.navigate(['/app/player-options-form']);
       }
-      localStorage.removeItem("DoesUserExist");
     });
   }
-
-  // async a(): Promise<void> {
-  //   if (await this.CheckStatusOfAnAcc()) {
-  //     await this.UnFreezeAnAcc();
-  //     Swal.fire('Your account is unfrozen!');
-  //   }
-  //   localStorage.removeItem("IsFrozen"); // Don't need anymore
-  // }
-
 }

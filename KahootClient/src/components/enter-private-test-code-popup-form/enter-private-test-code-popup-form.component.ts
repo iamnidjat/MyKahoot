@@ -58,8 +58,6 @@ export class EnterPrivateTestCodePopupFormComponent {
         let modal = this.el.nativeElement.querySelector(".modal");
 
         modal.style.display = "none";
-
-        localStorage.removeItem("CodesMatch"); // Don't need anymore
       }
     }
     else

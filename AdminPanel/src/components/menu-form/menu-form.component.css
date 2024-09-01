@@ -1,4 +1,4 @@
-.container {
+#allthethings {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -6,10 +6,10 @@
 }
 
 .fields {
-  width: 300px;
+  width: 600px;
   padding: 15px;
-  background-color: #ffffff;
-  border: 2px solid #007bff;
+  background-color: var(--background-color);
+  border: 2px solid var(--accent-color);
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
@@ -17,6 +17,121 @@
 }
 
 .fields:hover {
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: var(--accent-color);
+  color: var(--text-color);
 }
+
+.fields p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.2em;
+  font-weight: 500;
+  margin: 0;
+  padding: 10px 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.fields:hover p {
+  color: var(--text-color);
+}
+
+.store-button {
+  position: absolute;
+  top: 10%;
+  left: 0;
+  margin: 10px;
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: var(--text-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.store-button:hover {
+  background-color: #218838;
+  color: var(--text-color);
+}
+
+.wrapper {
+  position: absolute;
+  width: 100%;
+  max-width: 350px;
+  background-color: var(--background-color);
+  border-radius: 8px;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 25px 25px;
+  z-index: 99999;
+  animation-name: animation;
+  animation-duration: 5s;
+}
+
+.wrapper header {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+}
+
+header i {
+  color: var(--highlight-color);
+  font-size: 32px;
+}
+
+header h2 {
+  color: var(--highlight-color);
+  font-weight: 500;
+}
+
+.wrapper data {
+  margin-top: 16px;
+}
+
+.wrapper data p {
+  color: var(--text-color);
+  font-size: 16px;
+}
+
+.data p a {
+  color: var(--highlight-color);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.data p a:hover {
+  text-decoration: underline;
+}
+
+.wrapper .buttons {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.buttons .button {
+  border: none;
+  width: calc(100% / 2 - 10px);
+  color: var(--text-color);
+  padding: 8px 0;
+  border-radius: 4px;
+  background-color: var(--highlight-color);
+  cursor: pointer;
+}
+
+.buttons .button:hover {
+  background-color: #034bf1;
+}
+
+@keyframes animation {
+  0%   {right: -350px; bottom: 30px;}
+  50%  {right: 15px; bottom: 30px;}
+  100% {right: 30px; bottom: 30px;}
+}
+

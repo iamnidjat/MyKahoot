@@ -15,18 +15,6 @@ namespace KahootWebApi.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<IEnumerable<UserBadge>> GetBadgesListAsync()
-        {
-            try
-            {
-                return await _context.UserBadges.ToListAsync();
-            }
-            catch (Exception ex) when (ex is ArgumentNullException or OperationCanceledException)
-            {
-                _logger.LogError(ex, "An error occurred in the GetBadgesListAsync method.");
-                return Enumerable.Empty<UserBadge>();
-            }
-        }
 
         public async Task<int[]> GetGamificationStatsAsync(int userId)
         {

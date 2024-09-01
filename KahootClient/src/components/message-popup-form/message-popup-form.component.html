@@ -3,12 +3,12 @@
     <span class="close" (click)="closePopUp()">&times;</span>
     <div *ngIf="message">
       <h2>{{ message.title }}</h2>
-      <p><strong>From:</strong> {{ message.sender }}</p>
-      <p><strong>To:</strong> {{ message.receiver }}</p>
-      <p><strong>Date:</strong> {{ message.createdDate | date: 'short' }}</p>
-      <p>{{ message.body }}</p>
+      <p><strong>{{"From" | translate}}:</strong> {{ message.sender }}</p>
+      <p><strong>{{"To" | translate}}:</strong> {{ message.receiver }}</p>
+      <p><strong>{{"Date" | translate}}:</strong> {{ message.createdDate | date: 'short' }}</p>
+      <p><strong>{{"Message" | translate}}:</strong>{{ message.body }}</p>
     </div>
-    <button [routerLink]="['/app/sendMessage', message.sender]">Reply</button>
+    <button [routerLink]="['/app/sendMessage', message.sender]">{{"Reply" | translate}}</button>
   </div>
 </div>
 

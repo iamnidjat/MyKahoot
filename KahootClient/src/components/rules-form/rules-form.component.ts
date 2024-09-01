@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, NavigationExtras, Router} from "@angular/router";
-import {Comment} from "../../models/userInteraction/Comment";
-import {InteractionService} from "../../services/interaction.service";
+import {NavigationExtras, Router} from "@angular/router";
+import {QuizService} from "../../services/quiz.service";
+import {Location} from "@angular/common"
 
 @Component({
   selector: 'app-rules-form',
@@ -11,16 +11,12 @@ import {InteractionService} from "../../services/interaction.service";
 export class RulesFormComponent implements OnInit{
   public level: string = "";
   public action: string = "";
+  constructor(private router: Router, private location: Location, private quizService: QuizService) {}
 
-  public id: number = 1;
-  constructor(private router: Router, private interactionService: InteractionService, private route: ActivatedRoute) {}
-
-  toTheQuiz(): void {
-    const action: string = this.action === "play" ? "play" : "watch";
-
+  public async toTheQuiz(): Promise<void> {
     const navigationExtras: NavigationExtras  = {
       queryParams: {
-        'action': action,
+        'action': this.action,
         "mode": localStorage.getItem("mode"),
         'categoryName': localStorage.getItem("categoryName"),
         'testName': localStorage.getItem("TestName"),
@@ -28,11 +24,22 @@ export class RulesFormComponent implements OnInit{
       }
     };
 
-    this.router.navigate(['/app/test-process-form'], navigationExtras);
+    if (localStorage.getItem("IsVIP") === "true") {
+      if (await this.quizService.canUserPassVIPAsync(parseInt(localStorage.getItem("userId")!))) {
+        await this.router.navigate(['/app/test-process-form'], navigationExtras);
+      }
+    }
+    else {
+      await this.router.navigate(['/app/test-process-form'], navigationExtras);
+    }
   }
 
-  toChoosing(): void{
+  public toChoosing(): void{
     this.router.navigate(['/app/player-survey-choosing-form']);
+  }
+
+  public backOptions(): void{
+    this.location.back();
   }
 
   ngOnInit(): void {

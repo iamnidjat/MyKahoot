@@ -1,0 +1,27 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
+<div class="store-container">
+
+<ng-container *ngIf="userItems.length > 0; else NoItems">
+  <div class="card" *ngFor="let item of userItems">
+    <img class="card-image" [src]="api + item.photo" alt="{{item.name}}">
+    <div class="card-content">
+      <h3 class="card-title">{{"Name" | translate}}: {{ item.name }}</h3>
+      <p class="card-description">{{"Description" | translate}}: {{ item.description }}</p>
+      <p class="card-quantity">{{"Quantity" | translate}}: {{ item.quantity }}</p>
+      <p class="card-price">{{"Price" | translate}}: ${{ item.price }}</p>
+      <p class="card-price">{{"Address" | translate}}: ${{ item.address }}</p>
+      <p class="card-price">{{"Country" | translate}}: ${{ item.country }}</p>
+      <p class="card-price">{{"City" | translate}}: ${{ item.city }}</p>
+      <button class="buy-button" (click)="returnPurchaseAsync(item.itemToBuyId!)">{{"Return" | translate}}</button>
+    </div>
+  </div>
+</ng-container>
+  <ng-template #NoItems>
+    <div>There are no reminders yet.</div>
+  </ng-template>
+</div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

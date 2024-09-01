@@ -1,65 +1,62 @@
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
+/* Container Styles */
 .container {
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: var(--container-bg-color);
+  border-radius: var(--container-border-radius);
+  box-shadow: var(--container-box-shadow);
   padding: 20px;
   width: 400px;
   text-align: center;
+  color: var(--text-color);
 }
 
+/* Heading Styles */
 h1 {
-  font-size: 24px;
+  font-size: var(--heading-font-size);
   margin-bottom: 20px;
 }
 
+/* Form Group Styles */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
+/* Input Container Styles */
 .input-container {
   position: relative;
   display: flex;
   align-items: center;
 }
 
+/* Input Styles */
 input[type="date"] {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: var(--input-padding);
+  border: 1px solid var(--input-border-color);
+  border-radius: var(--input-border-radius);
   font-size: 16px;
+  background-color: var(--input-bg-color);
+  color: var(--text-color);
 }
 
+/* Button Styles */
 button.continue-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
+  background-color: var(--button-bg-color);
+  color: var(--button-text-color);
+  padding: var(--button-padding);
   border: none;
-  border-radius: 4px;
+  border-radius: var(--button-border-radius);
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 button.continue-button:disabled {
-  background-color: #ccc;
+  background-color: var(--button-disabled-bg-color);
   cursor: not-allowed;
 }
 
 button.continue-button:hover:not(:disabled) {
-  background-color: #0056b3;
+  background-color: var(--button-hover-bg-color);
 }

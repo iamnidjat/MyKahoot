@@ -18,7 +18,7 @@ namespace KahootWebApi.Services.Implementations
             _environment = environment;
         }
 
-        public async Task<bool> IsCategoryNameUsed(string catName)
+        public async Task<bool> IsCategoryNameUsedAsync(string catName)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<bool> IsQuizNameUsed(string catName, string quizName)
+        public async Task<bool> IsQuizNameUsedAsync(string catName, string quizName)
         {
             try
             {
@@ -91,32 +91,35 @@ namespace KahootWebApi.Services.Implementations
 
                 if (quizDto.Photo != null)
                 {
-                    var photoPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Photo.FileName);
+                    var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Photo.FileName}";
+                    var photoPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
                     using (var stream = new FileStream(photoPath, FileMode.Create))
                     {
                         await quizDto.Photo.CopyToAsync(stream);
                     }
-                    quiz.PhotoUrl = $"/uploads/{quizDto.Photo.FileName}";
+                    quiz.PhotoUrl = $"/uploads/{uniqueFileName}";
                 }
 
                 if (quizDto.Video != null)
                 {
-                    var videoPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Video.FileName);
+                    var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Video.FileName}";
+                    var videoPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
                     using (var stream = new FileStream(videoPath, FileMode.Create))
                     {
                         await quizDto.Video.CopyToAsync(stream);
                     }
-                    quiz.VideoUrl = $"/uploads/{quizDto.Video.FileName}";
+                    quiz.VideoUrl = $"/uploads/{uniqueFileName}";
                 }
 
                 if (quizDto.Audio != null)
                 {
-                    var audioPath = Path.Combine(_environment.ContentRootPath, "uploads", quizDto.Audio.FileName);
+                    var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Audio.FileName}";
+                    var audioPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
                     using (var stream = new FileStream(audioPath, FileMode.Create))
                     {
                         await quizDto.Audio.CopyToAsync(stream);
                     }
-                    quiz.AudioUrl = $"/uploads/{quizDto.Audio.FileName}";
+                    quiz.AudioUrl = $"/uploads/{uniqueFileName}";
                 }
 
                 await _context.Questions.AddAsync(quiz);
@@ -129,14 +132,71 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task UpdateQuestionAsync(string catName, string quizName, int questionNumber, Quiz quiz)
+        public async Task UpdateQuestionAsync(string catName, string quizName, int questionNumber, QuizUploadDto quizDto)
         {
+            var uploadPath = Path.Combine(_environment.ContentRootPath, "uploads");
+
+            // Ensure the upload directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+
             var data = await _context.Questions.Where(x => x.QuizType == catName && x.QuizName == quizName && x.QuestionNumber == questionNumber).FirstOrDefaultAsync();
 
             if (data != null)
             {
                 try
                 {
+                    var quiz = new Quiz
+                    {
+                        QuizType = quizDto.QuizType,
+                        QuizName = quizDto.QuizName,
+                        TestFormat = quizDto.TestFormat,
+                        Question = quizDto.Question,
+                        Option1 = quizDto.Option1,
+                        Option2 = quizDto.Option2,
+                        Option3 = quizDto.Option3,
+                        Option4 = quizDto.Option4,
+                        Answer = quizDto.Answer,
+                        QuestionNumber = quizDto.QuestionNumber,
+                        TimeToAnswer = quizDto.TimeToAnswer,
+                        Points = quizDto.Points
+                    };
+
+                    if (quizDto.Photo != null)
+                    {
+                        var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Photo.FileName}";
+                        var photoPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
+                        using (var stream = new FileStream(photoPath, FileMode.Create))
+                        {
+                            await quizDto.Photo.CopyToAsync(stream);
+                        }
+                        data.PhotoUrl = $"/uploads/{uniqueFileName}";
+                    }
+
+                    if (quizDto.Video != null)
+                    {
+                        var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Video.FileName}";
+                        var videoPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
+                        using (var stream = new FileStream(videoPath, FileMode.Create))
+                        {
+                            await quizDto.Video.CopyToAsync(stream);
+                        }
+                        data.VideoUrl = $"/uploads/{uniqueFileName}";
+                    }
+
+                    if (quizDto.Audio != null)
+                    {
+                        var uniqueFileName = $"{Guid.NewGuid()}_{quizDto.Audio.FileName}";
+                        var audioPath = Path.Combine(_environment.ContentRootPath, "uploads", uniqueFileName);
+                        using (var stream = new FileStream(audioPath, FileMode.Create))
+                        {
+                            await quizDto.Audio.CopyToAsync(stream);
+                        }
+                        data.AudioUrl = $"/uploads/{uniqueFileName}";
+                    }
+
                     // No need for changing category and test name
                     data.Question = quiz.Question;
                     data.Option1 = quiz.Option1;
@@ -162,7 +222,7 @@ namespace KahootWebApi.Services.Implementations
 
         public async Task RemoveQuestionAsync(string catName, string quizName, int questionNumber)
         {
-            var questionToDelete = await FindQuestion(catName, quizName, questionNumber);
+            var questionToDelete = await FindQuestionAsync(catName, quizName, questionNumber);
 
             try
             {
@@ -178,7 +238,7 @@ namespace KahootWebApi.Services.Implementations
 
         public async Task RemoveQuestionsAsync(string catName, string quizName)
         {
-            var questions = await FindQuestions(catName, quizName);
+            var questions = await FindQuestionsAsync(catName, quizName);
 
             try
             {
@@ -278,15 +338,92 @@ namespace KahootWebApi.Services.Implementations
 
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == createdQuiz.UserId);
 
-                user!.OverallPoints += 20;
-                user!.Points += 20;
-                user!.Coins += 20;
+                if (createdQuiz.IsVIP)
+                {
+                    user.Coins -= 15;
+                    if (user!.IsEmailConfirmed)
+                    {
+                        user.OverallPoints += 20;
+                        user.Points += 20;
+                    }
+                }
+                else
+                {
+                    if (user!.IsEmailConfirmed)
+                    {
+                        user.OverallPoints += 20;
+                        user.Points += 20;
+                        user.Coins += 20;
+                    }
+                }
 
                 await _context.SaveChangesAsync();
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException or ArgumentNullException)
             {
                 _logger.LogError(ex, "An error occurred in the SaveCategoryAsync method.");
+            }
+        }
+
+        public async Task<bool> IsAllowedUsersToDownloadAsync(string catName, string quizName)
+        {
+            try
+            {
+                var quiz = await _context.CreatedQuizzes.FirstOrDefaultAsync(q => q.CategoryName == catName && q.QuizName == quizName);
+
+                return quiz.AllowedToDownload;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred in the IsAllowedUsersToDownloadAsync method.");
+                return false;
+            }
+        }
+
+
+        public async Task<ResultModel> CanUserCreateVIPQuizAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user.Coins >= 15)
+                {
+                    user.Coins -= 15;
+                    return new ResultModel { Success = true };
+                }
+
+                _logger.LogWarning($"User {userId} does not have enough coins");
+                return new ResultModel { Success = false, Reason = "insufficient_coins" };
+
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException or ArgumentNullException)
+            {
+                _logger.LogError(ex, "An error occurred in the CanUserCreateVIPQuizAsync method.");
+                return new ResultModel { Success = false, Reason = "server_error" };
+            }
+        }
+
+        public async Task<ResultModel> CanUserPassVIPQuizAsync(int userId)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+                if (user.Coins >= 15)
+                {
+                    user.Coins -= 15;
+                    return new ResultModel { Success = true };
+                }
+
+                _logger.LogWarning($"User {userId} does not have enough coins");
+                return new ResultModel { Success = false, Reason = "insufficient_coins" };
+                
+            }
+            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException or ArgumentNullException)
+            {
+                _logger.LogError(ex, "An error occurred in the CanUserPassVIPQuizAsync method.");
+                return new ResultModel { Success = false, Reason = "server_error" };
             }
         }
 
@@ -334,7 +471,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<int> GetCorrectAnswer(string catName, string quizName, int questionNumber)
+        public async Task<int> GetCorrectAnswerAsync(string catName, string quizName, int questionNumber)
         {
             try
             {
@@ -415,15 +552,21 @@ namespace KahootWebApi.Services.Implementations
         {
             var answerToDelete = await FindUserAnswerAsync(catName, quizName, questionNumber);
 
-            try
+            if (answerToDelete != null)
             {
-                _context.MyQuizAnswers.Remove(answerToDelete);
-
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.MyQuizAnswers.Remove(answerToDelete);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+                {
+                    _logger.LogError(ex, "An error occurred in the RemoveUserAnswerAsync method.");
+                }
             }
-            catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
+            else
             {
-                _logger.LogError(ex, "An error occurred in the RemoveQuestionAsync method.");
+                _logger.LogWarning($"No answer found to delete for category '{catName}', quiz '{quizName}', and question number '{questionNumber}'.");
             }
         }
 
@@ -439,7 +582,7 @@ namespace KahootWebApi.Services.Implementations
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException)
             {
-                _logger.LogError(ex, "An error occurred in the RemoveQuestionsAsync method.");
+                _logger.LogError(ex, "An error occurred in the RemoveUserAnswersAsync method.");
             }
         }
 
@@ -482,7 +625,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        private async Task<IEnumerable<Quiz>> FindQuestions(string catName, string quizName)
+        private async Task<IEnumerable<Quiz>> FindQuestionsAsync(string catName, string quizName)
         {
             try
             {
@@ -495,7 +638,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        private async Task<Quiz> FindQuestion(string catName, string quizName, int questionNumber)
+        private async Task<Quiz> FindQuestionAsync(string catName, string quizName, int questionNumber)
         {
             try
             {
@@ -527,7 +670,7 @@ namespace KahootWebApi.Services.Implementations
             {
                 return await _context.MyQuizAnswers.FirstAsync(x => x.CategoryName == catName && x.QuizName == quizName && x.QuestionNumber == questionNumber);
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex) when (ex is ArgumentNullException or OperationCanceledException or InvalidOperationException)
             {
                 _logger.LogError(ex, "An error occurred in the FindUserAnswerAsync method.");
                 return null;

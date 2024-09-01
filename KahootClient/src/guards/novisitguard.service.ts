@@ -8,7 +8,7 @@ class PermissionsService {
   constructor(private router: Router) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (localStorage.getItem("ruleGuard") || localStorage.getItem("surveyGuard")) {
+    if (localStorage.getItem("surveyGuard")) {
       return true;
     }
 

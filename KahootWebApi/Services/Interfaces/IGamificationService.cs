@@ -7,6 +7,5 @@ namespace KahootWebApi.Services.Interfaces
         Task SubtractPointsAsync(int userId, int pointsToSubtract);
         Task<bool> UpgradeLevelAsync(int userId);
         Task<int[]> GetGamificationStatsAsync(int userId);
-        Task<IEnumerable<UserBadge>> GetBadgesListAsync();
     }
 }

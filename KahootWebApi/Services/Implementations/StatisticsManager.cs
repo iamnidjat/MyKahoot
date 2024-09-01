@@ -46,7 +46,7 @@ namespace KahootWebApi.Services.Implementations
             try
             {          
                 var topResults = await _context.Quizzes
-                        .Where(q => q.UserId == userId && q.IsVisible && q.Flag)
+                        .Where(q => q.UserId == userId && q.IsVisible)
                         .ToListAsync();
 
                 return topResults;
@@ -71,32 +71,41 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task UploadResultAsync(QuizStat item)
+        public async Task UploadResultAsync(QuizStat item, int quizId, string quizCreator)
         {
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == item.UserId);
+                var creator = await _context.Users.FirstOrDefaultAsync(u => u.Username == quizCreator);
+                var quiz = await _context.CreatedQuizzes.FirstOrDefaultAsync(q => q.Id == quizId);
 
-                if (await IsNewHighScoreAsync(item.CategoryName, item.QuizName, item.Level, item.UserId, item.Score))
+                if (user!.IsEmailConfirmed)
                 {
-                    switch (item.Level)
+                    if (await IsNewHighScoreAsync(item.CategoryName, item.QuizName, item.Level, item.UserId, item.Score))
                     {
-                        case "easy":
-                            user!.OverallPoints += 5;
-                            user!.Points += 5;
-                            item.Flag = true;
-                            break;
-                        case "medium":
-                            user!.OverallPoints += 10;
-                            user!.Points += 10;
-                            item.Flag = true;
-                            break;
-                        case "hard":
-                            user!.OverallPoints += 15;
-                            user!.Points += 15;
-                            item.Flag = true;
-                            break;
+                        switch (item.Level)
+                        {
+                            case "easy":
+                                user.OverallPoints += 5;
+                                user.Points += 5;
+                                user.Coins += 5;
+                                break;
+                            case "medium":
+                                user.OverallPoints += 10;
+                                user.Points += 10;
+                                user.Coins += 5;
+                                break;
+                            case "hard":
+                                user.OverallPoints += 15;
+                                user.Points += 15;
+                                user.Coins += 5;
+                                break;
+                        }
                     }
+                }
+                if (quiz?.IsVIP == true && creator != null)
+                {
+                    creator.Coins += 1;
                 }
 
                 await _context.Quizzes.AddAsync(item);
@@ -125,7 +134,7 @@ namespace KahootWebApi.Services.Implementations
             }
             catch (Exception ex) when (ex is OperationCanceledException or DbUpdateException or DbUpdateConcurrencyException or ArgumentNullException)
             {
-                _logger.LogError(ex, "An error occurred in the CheckUserResult method.");
+                _logger.LogError(ex, "An error occurred in the IsNewHighScoreAsync method.");
                 return false;
             }
         }

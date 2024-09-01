@@ -1,6 +1,7 @@
 import {AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import Swal from "sweetalert2";
 import {SharedService} from "../../services/shared.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-delete-acc-form',
@@ -10,12 +11,12 @@ import {SharedService} from "../../services/shared.service";
 export class DeleteAccFormComponent implements AfterViewInit, OnDestroy{
   @Input() public flag: boolean = false; // for opening delete popup form
   @Input() public flag2: boolean = false; // for opening freeze popup form
-  @Input() public reason: string = "";
+  public reason: string = "";
   @ViewChild('password') password!: ElementRef;
   @ViewChild('WriteTheReason') writeTheReason!: ElementRef;
   public visibility: boolean = false;
 
-  constructor(private sharedService: SharedService) {}
+  constructor(private router: Router, private sharedService: SharedService) {}
 
   public checkStatus(e: any): void{
     if (e.target.checked) {
@@ -25,9 +26,9 @@ export class DeleteAccFormComponent implements AfterViewInit, OnDestroy{
     }
   }
 
-  public OpenModal(): void {
+  public async OpenModal(): Promise<void> {
     if (localStorage.getItem('SocialUser') === null) {
-      if (this.reason !== '' && this.reason !== undefined && this.sharedService.checkPassword(this.password.nativeElement.value)) {
+      if (this.reason !== '' && this.reason !== undefined && await this.sharedService.checkPasswordAsync(this.password.nativeElement.value)) {
         this.flag = true;
       } else {
         Swal.fire('Oops', 'Either you did not specify a reason or you did not specify the password properly!', 'error');
@@ -50,6 +51,10 @@ export class DeleteAccFormComponent implements AfterViewInit, OnDestroy{
     {
       this.visibility = !this.visibility;
     }
+  }
+
+  public backOptions(): void {
+    this.router.navigate(['/app/player-options-form']);
   }
 
   ngAfterViewInit(): void {

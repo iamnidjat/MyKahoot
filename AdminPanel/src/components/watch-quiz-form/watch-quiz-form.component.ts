@@ -3,8 +3,9 @@ import {TranslateModule} from "@ngx-translate/core";
 import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
 import {FooterFormComponent} from "../footer-form/footer-form.component";
 import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
-import {NgIf} from "@angular/common";
+import {Location, NgIf} from "@angular/common";
 import {ActivatedRoute} from "@angular/router";
+import {ThemeToggleComponent} from "../theme-toggle/theme-toggle.component";
 
 const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
 
@@ -17,7 +18,8 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
     ScrollToTopFormComponent,
     FooterFormComponent,
     NavbarFormComponent,
-    NgIf
+    NgIf,
+    ThemeToggleComponent
   ],
   styleUrls: ['./watch-quiz-form.component.css']
 })
@@ -28,7 +30,7 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
   public currentQuestion: number = 0;
   public testFormat: string = "";
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, private location: Location) {}
 
   public async GetTestData(): Promise<void> {
     await fetch(API_URL + `GetTestData?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion + 1}`, {
@@ -70,6 +72,10 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
   public async resetQuiz(): Promise<void> {
     this.currentQuestion = 0;
     await this.GetTestData(); // Wait for GetTestData() to complete
+  }
+
+  public backOptions(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {

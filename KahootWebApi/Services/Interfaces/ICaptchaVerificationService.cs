@@ -4,6 +4,6 @@ namespace KahootWebApi.Services.Interfaces
 {
     public interface ICaptchaVerificationService
     {
-        Task<IActionResult> VerifyCaptcha(string token);
+        Task<IActionResult> VerifyCaptchaAsync(string token);
     }
 }

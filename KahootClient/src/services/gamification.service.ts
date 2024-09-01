@@ -9,7 +9,7 @@ export class GamificationService {
 
   public async upgradeLevelAsync(): Promise<boolean> {
     try {
-      const response = await fetch(API_URL + `UpgradeLevel?userId=${parseInt(localStorage.getItem("userId")!, 10)}`, {
+      const response = await fetch(API_URL + `UpgradeLevel?userId=${parseInt(localStorage.getItem("userId")!)}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -24,7 +24,7 @@ export class GamificationService {
         await this.getGamificationStatsAsync();
         return true;
       } else {
-        console.error("Upgrade failed:", data.message);
+        console.error("Upgrade failed:", data);
         return false;
       }
     } catch (error) {
@@ -39,7 +39,6 @@ export class GamificationService {
     }).then((response) => {
       return response.json()
     }).then((data) => {
-      console.log("game stats => ", data);
       localStorage.setItem("userLevel", data[0]);
       localStorage.setItem("points", data[1]);
       localStorage.setItem("overallPoints", data[2]);

@@ -1,13 +1,18 @@
 import { Component } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-theme-toggle',
   standalone: true,
-  imports: [],
+  imports: [
+    NgClass
+  ],
   template: `
-    <button (click)="toggleTheme()">
-      {{ themeService.isDarkTheme() ? 'Switch to Light Mode' : 'Switch to Dark Mode' }}
+    <button (click)="toggleTheme()" [ngClass]="{'theme-switch-button': true, 'light-theme': !themeService.isDarkTheme(), 'dark-theme': themeService.isDarkTheme()}">
+      <i class="fas fa-sun"></i>
+      <i class="fas fa-moon"></i>
+      <div class="toggle"></div>
     </button>
   `,
   styleUrls: ['./theme-toggle.component.scss'],

@@ -38,7 +38,6 @@ builder.Services.AddTransient<IFeedbackService, FeedbackService>();
 builder.Services.AddTransient<IMessageService, MessageService>();
 builder.Services.AddTransient<IGamificationService, GamificationService>();
 builder.Services.AddTransient<IReminderService, ReminderService>();
-builder.Services.AddTransient<IBadgeManager, BadgeManager>();
 builder.Services.AddTransient<IItemStoreManager, ItemStoreManager>();
 
 builder.Services.AddDbContext<KahootDbContext>(options => {
@@ -85,6 +84,21 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(uploadsPath),
     RequestPath = "/uploads"
+});
+
+
+var itemPhotosPath = Path.Combine(Directory.GetCurrentDirectory(), "itemPhotos");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(itemPhotosPath),
+    RequestPath = "/itemPhotos"
+});
+
+var userPhotosPath = Path.Combine(Directory.GetCurrentDirectory(), "userPhotos");
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(userPhotosPath),
+    RequestPath = "/userPhotos"
 });
 
 

@@ -21,8 +21,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   public isQuizCompleted: boolean = false;
   public testFormat: string = "";
   public correctAnswer: number = 0;
-  public value: any;
-  public flag: boolean = false;
+  public flag: boolean = false; // if a user tapped previous button or not
   @ViewChild('Points') Points!: ElementRef;
   @ViewChild('Time') Time!: ElementRef;
   @ViewChild('Question') Question!: ElementRef;
@@ -50,9 +49,6 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   public videoFile: File | null = null;
   public photoFile: File | null = null;
   public audioFile: File | null = null;
-  public isFourAnswersChecked: boolean = false;
-  public isThreeAnswersChecked: boolean = false;
-  public isTrueFalseAnswersChecked: boolean = false;
 
   constructor(private router: Router, private questionService: QuestionService, private gamificationService: GamificationService) {}
 
@@ -64,6 +60,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
      localStorage.removeItem("ManualCategory"); // Don't need anymore
      localStorage.removeItem("GeneratedCode"); // Don't need anymore
      localStorage.removeItem("Private"); // Don't need anymore
+     localStorage.removeItem("allowedToDownload"); // Don't need anymore
      for (let i: number = 1; i <= this.currentQuestion; i++) // Deleting resources
      {
        localStorage.removeItem(`question${i}`);
@@ -71,18 +68,14 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
        localStorage.removeItem(`answer2${i}`);
        localStorage.removeItem(`answer3${i}`);
        localStorage.removeItem(`answer4${i}`);
+       localStorage.removeItem(`correctAnswer${i}`);
      }
   }
 
   public ngOnInit(): void {
     this.name = localStorage.getItem("Login")!;
-    this.testFormat = localStorage.getItem('testFormat')!;
+    this.testFormat = "four-answers";
     this.testType = localStorage.getItem("MyTestName")!;
-
-    // Set boolean variables based on the value of testFormat
-    this.isFourAnswersChecked = this.testFormat === "four-answers";
-    this.isThreeAnswersChecked = this.testFormat === "three-answers";
-    this.isTrueFalseAnswersChecked = this.testFormat === "true-false-answers";
 
     const categoryKeys: string[] = ["CategoryType", "ManualCategory", "MyCategory"]; //
 
@@ -120,8 +113,6 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   }
 
   public async nextQuestion(): Promise<void> {
-    this.currentQuestion++; // !
-
     if (!this.flag)
     {
       if (this.testFormat === "three-answers")
@@ -132,15 +123,16 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
             option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
-            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+            questionNumber: this.currentQuestion + 1, points: this.Points.nativeElement.value,
             timeToAnswer: this.Time.nativeElement.value }
 
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
+          await this.questionService.addQuestionAsync(question, this.photoFile, this.videoFile, this.audioFile, this.flag);
 
-          localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-          localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer11.nativeElement.value);
-          localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer21.nativeElement.value);
-          localStorage.setItem(`answer3${this.currentQuestion}`, this.Answer31.nativeElement.value);
+          localStorage.setItem(`question${this.currentQuestion + 1}`, this.Question.nativeElement.value);
+          localStorage.setItem(`answer1${this.currentQuestion + 1}`, this.Answer11.nativeElement.value);
+          localStorage.setItem(`answer2${this.currentQuestion + 1}`, this.Answer21.nativeElement.value);
+          localStorage.setItem(`answer3${this.currentQuestion + 1}`, this.Answer31.nativeElement.value);
+          localStorage.setItem(`correctAnswer${this.currentQuestion + 1}`, this.correctAnswer.toString());
         }
         else{
           Swal.fire('Oops', 'Please fill in all fields!', 'error');
@@ -150,22 +142,23 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
       else if (this.testFormat === "true-false-answers") {
         if (this.Question.nativeElement.value != "" && this.correctAnswer != 0)
         {
-          let question: Question = {quizType: this.quizType, quizName: this.testType ,
+          let question: Question = {quizType: this.quizType, quizName: this.testType,
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer12.nativeElement.value, option2: this.Answer22.nativeElement.value,
-            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
+            option3: null, option4: null, answer: this.correctAnswer + 1, questionNumber: this.currentQuestion,
             points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
 
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
+          await this.questionService.addQuestionAsync(question, this.photoFile, this.videoFile, this.audioFile, this.flag);
 
-        localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-        localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer12.nativeElement.value);
-        localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer22.nativeElement.value);
+          localStorage.setItem(`question${this.currentQuestion + 1}`, this.Question.nativeElement.value);
+          localStorage.setItem(`answer1${this.currentQuestion + 1}`, this.Answer12.nativeElement.value);
+          localStorage.setItem(`answer2${this.currentQuestion + 1}`, this.Answer22.nativeElement.value);
+          localStorage.setItem(`correctAnswer${this.currentQuestion + 1}`, this.correctAnswer.toString());
       }
       else{
         Swal.fire('Oops', 'Please fill in all fields!', 'error');
         this.currentQuestion--;
-      }
+        }
       }
       else {
         if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer1.nativeElement.value,
@@ -175,16 +168,17 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
             testFormat: this.testFormat, question: this.Question.nativeElement.value,
             option1: this.Answer1.nativeElement.value, option2: this.Answer2.nativeElement.value,
             option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value, answer: this.correctAnswer,
-            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
+            questionNumber: this.currentQuestion + 1, points: this.Points.nativeElement.value,
             timeToAnswer: this.Time.nativeElement.value}
 
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
+          await this.questionService.addQuestionAsync(question, this.photoFile, this.videoFile, this.audioFile, this.flag);
 
-          localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-          localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer1.nativeElement.value);
-          localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer2.nativeElement.value);
-          localStorage.setItem(`answer3${this.currentQuestion}`, this.Answer3.nativeElement.value);
-          localStorage.setItem(`answer4${this.currentQuestion}`, this.Answer4.nativeElement.value);
+          localStorage.setItem(`question${this.currentQuestion + 1}`, this.Question.nativeElement.value);
+          localStorage.setItem(`answer1${this.currentQuestion + 1}`, this.Answer1.nativeElement.value);
+          localStorage.setItem(`answer2${this.currentQuestion + 1}`, this.Answer2.nativeElement.value);
+          localStorage.setItem(`answer3${this.currentQuestion + 1}`, this.Answer3.nativeElement.value);
+          localStorage.setItem(`answer4${this.currentQuestion + 1}`, this.Answer4.nativeElement.value);
+          localStorage.setItem(`correctAnswer${this.currentQuestion + 1}`, this.correctAnswer.toString());
         }
         else{
           Swal.fire('Oops', 'Please fill in all fields!', 'error');
@@ -192,87 +186,38 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
         }
       }
     }
-    else
-    {
-      if (this.testFormat === "three-answers")
-      {
-        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer11.nativeElement.value,
-          this.Answer21.nativeElement.value, this.Answer31.nativeElement.value))
-        {
-          let question: Question = { quizType: this.quizType, quizName: this.testType,
-            testFormat: this.testFormat, question: this.Question.nativeElement.value,
-            option1: this.Answer11.nativeElement.value, option2: this.Answer21.nativeElement.value,
-            option3: this.Answer31.nativeElement.value, option4: null, answer: this.correctAnswer,
-            questionNumber: this.currentQuestion, points: this.Points.nativeElement.value,
-            timeToAnswer: this.Time.nativeElement.value }
-
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
-
-          localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-          localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer11.nativeElement.value);
-          localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer21.nativeElement.value);
-          localStorage.setItem(`answer3${this.currentQuestion}`, this.Answer31.nativeElement.value);
-        }
-        else{
-          Swal.fire('Oops', 'Please fill in all fields!', 'error');
-          this.currentQuestion--;
-        }
+    else {
+      if (this.testFormat === "three-answers") {
+          this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion + 2}`);
+          this.Answer11.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion + 2}`);
+          this.Answer21.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion + 2}`);
+          this.Answer31.nativeElement.value = localStorage.getItem(`answer3${this.currentQuestion + 2}`);
+          this.saveRadioOptions(this.RadioOption11, this.RadioOption21, this.RadioOption31);
       }
-      else if (this.testFormat === "true-false-answers")
-      {
-        if (this.Question.nativeElement.value != "" && this.correctAnswer != 0)
-        {
-          let question: Question = {quizType: this.quizType, quizName: this.testType,
-            testFormat: this.testFormat, question: this.Question.nativeElement.value,
-            option1: this.Answer12.nativeElement.value, option2: this.Answer22.nativeElement.value,
-            option3: null, option4: null, answer: this.correctAnswer, questionNumber: this.currentQuestion,
-            points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
-
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
-
-          localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-          localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer12.nativeElement.value);
-          localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer22.nativeElement.value);
-        }
-        else{
-          Swal.fire('Oops', 'Please fill in all fields!', 'error');
-          this.currentQuestion--;
-        }
+      else if (this.testFormat === "true-false-answers") {
+          this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion + 2}`);
+          this.Answer12.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion + 2}`);
+          this.Answer22.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion + 2}`);
+          this.saveRadioOptions(this.RadioOption12, this.RadioOption22);
       }
       else {
-        if (this.checkConditions(this.Question.nativeElement.value, this.correctAnswer, this.Answer1.nativeElement.value,
-          this.Answer2.nativeElement.value, this.Answer3.nativeElement.value, this.Answer4.nativeElement.value))
-        {
-          let question: Question = {quizType: this.quizType, quizName: this.testType,
-            testFormat: this.testFormat, question: this.Question.nativeElement.value,
-            option1: this.Answer1.nativeElement.value, option2: this.Answer2.nativeElement.value,
-            option3: this.Answer3.nativeElement.value, option4: this.Answer4.nativeElement.value,
-            answer: this.correctAnswer, questionNumber: this.currentQuestion,
-            points: this.Points.nativeElement.value, timeToAnswer: this.Time.nativeElement.value}
-
-          await this.questionService.GetQuestionsFromDb(question, this.photoFile, this.videoFile, this.audioFile);
-
-          localStorage.setItem(`question${this.currentQuestion}`, this.Question.nativeElement.value);
-          localStorage.setItem(`answer1${this.currentQuestion}`, this.Answer1.nativeElement.value);
-          localStorage.setItem(`answer2${this.currentQuestion}`, this.Answer2.nativeElement.value);
-          localStorage.setItem(`answer3${this.currentQuestion}`, this.Answer3.nativeElement.value);
-          localStorage.setItem(`answer4${this.currentQuestion}`, this.Answer4.nativeElement.value);
-        }
-        else {
-          Swal.fire('Oops', 'Please fill in all fields!', 'error');
-          this.currentQuestion--;
-        }
+          this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion + 2}`);
+          this.Answer1.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion + 2}`);
+          this.Answer2.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion + 2}`);
+          this.Answer3.nativeElement.value = localStorage.getItem(`answer3${this.currentQuestion + 2}`);
+          this.Answer4.nativeElement.value = localStorage.getItem(`answer4${this.currentQuestion + 2}`);
+          this.saveRadioOptions(this.RadioOption1, this.RadioOption2, this.RadioOption3, this.RadioOption4);
       }
-
-      this.flag = false;
     }
+
+    this.currentQuestion++;
 
     if (this.currentQuestion === 50)
     {
       this.FinishProcess();
     }
 
-    this.clearInputs();
+    !this.flag ? this.clearInputs() : this.flag = !this.flag;
   }
 
   public onPhotoFileSelected(event: any) {
@@ -298,11 +243,13 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
       this.Answer11.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion}`);
       this.Answer21.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion}`);
       this.Answer31.nativeElement.value = localStorage.getItem(`answer3${this.currentQuestion}`);
+      this.saveRadioOptions(this.RadioOption11, this.RadioOption21, this.RadioOption31);
     }
     else if (this.testFormat === "true-false-answers") {
       this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion}`);
       this.Answer12.nativeElement.value = localStorage.getItem(`answer1${this.currentQuestion}`);
       this.Answer22.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion}`);
+      this.saveRadioOptions(this.RadioOption12, this.RadioOption22);
     }
     else {
       this.Question.nativeElement.value = localStorage.getItem(`question${this.currentQuestion}`);
@@ -310,10 +257,19 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
       this.Answer2.nativeElement.value = localStorage.getItem(`answer2${this.currentQuestion}`);
       this.Answer3.nativeElement.value = localStorage.getItem(`answer3${this.currentQuestion}`);
       this.Answer4.nativeElement.value = localStorage.getItem(`answer4${this.currentQuestion}`);
+      this.saveRadioOptions(this.RadioOption1, this.RadioOption2, this.RadioOption3, this.RadioOption4);
     }
 
     this.currentQuestion--;
-    this.flag = true;
+    if (this.currentQuestion != 0) this.flag = true;
+  }
+
+  private saveRadioOptions(...radioOptions: ElementRef[]): void {
+    const correctAnswer = localStorage.getItem(`correctAnswer${this.currentQuestion}`);
+    if (correctAnswer) {
+      const optionIndex = parseInt(correctAnswer);
+      radioOptions[optionIndex - 1].nativeElement.checked = true;
+    }
   }
 
   public async resetQuiz(): Promise<void> {
@@ -369,7 +325,7 @@ export class CreatingTestFormComponent implements OnInit, OnDestroy{
   private async saveCategories(): Promise<void>{
     let category: CreatedQuiz = { categoryName: this.quizType,
       quizName: this.testType, userName: localStorage.getItem("Login")!,
-      isPrivate: Boolean(localStorage.getItem("Private")),
+      isPrivate: Boolean(localStorage.getItem("Private")), allowedToDownload: localStorage.getItem("allowedToDownload") === "true",
       quizCode: localStorage.getItem("GeneratedCode")!, userId: parseInt(localStorage.getItem("userId")!) }
 
     await fetch(API_URL + "SaveCategory", {

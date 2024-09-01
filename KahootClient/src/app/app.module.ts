@@ -9,7 +9,7 @@ import { CreatingTestFormComponent } from "../components/creating-test-form/crea
 import { TestProcessComponent } from "../components/test-process/test-process.component";
 import { RulesFormComponent } from "../components/rules-form/rules-form.component";
 import { RouterOutlet } from "@angular/router";
-import { changeBG } from "../directives/changeBG";
+import { changeBG} from "../directives/changeBG";
 import { ForgotPasswordFormComponent } from "../components/forgot-password-form/forgot-password-form.component";
 import { SettingsChoiceFormComponent } from "../components/settings-choice-form/settings-choice-form.component";
 import { SettingsFormComponent } from "../components/settings-form/settings-form.component";
@@ -23,7 +23,6 @@ import {ChooseAccountTypeFormComponent} from "../components/choose-account-type-
 import {RegisterFormComponent} from "../components/register-form/register-form.component";
 import {AddNewCategoryPopupFormComponent} from "../components/add-new-category-popup-form/add-new-category-popup-form.component";
 import {YourQuizzesFormComponent} from "../components/your-quizzes-form/your-quizzes-form.component";
-import {ChooseTypeOfQuizFormComponent} from "../components/choose-type-of-quiz-form/choose-type-of-quiz-form.component";
 import {NavbarFormComponent} from "../components/navbar-form/navbar-form.component";
 import {FooterFormComponent} from "../components/footer-form/footer-form.component";
 import {AboutPageFormComponent} from "../components/about-page-form/about-page-form.component";
@@ -48,7 +47,6 @@ import {FreezeAccPopupFormComponent} from "../components/freeze-acc-popup-form/f
 import {ChooseLevelFormComponent} from "../components/choose-level-form/choose-level-form.component";
 import {UpdateQuizFormComponent} from "../components/update-quiz-form/update-quiz-form.component";
 import {WatchQuizFormComponent} from "../components/watch-quiz-form/watch-quiz-form.component";
-import {AddPhotoPopupFormComponent} from "../components/add-photo-popup-form/add-photo-popup-form.component";
 import {AvailableTestsListsFormComponent} from "../components/available-tests-lists-form/available-tests-lists-form.component";
 import {ChooseFieldLevelFormComponent} from "../components/choose-field-level-form/choose-field-level-form.component";
 import {AvailableTestsStatsFormComponent} from "../components/available-tests-stats-form/available-tests-stats-form.component";
@@ -58,7 +56,6 @@ import {ConfigService} from "../services/config.service";
 import {CookiesService} from "../services/cookies.service";
 import {DownloadCategoriesSharedService} from "../services/download-categories-shared.service";
 import {NgOptimizedImage} from "@angular/common";
-import {UserSharedService} from "../services/user-shared.service";
 import {SwitchLanguageService} from "../services/switch-language.service";
 import {SharedService} from "../services/shared.service";
 import {NgxPaginationModule} from "ngx-pagination";
@@ -96,8 +93,28 @@ import {PointsHistoryFormComponent} from "../components/points-history-form/poin
 import {ThemeToggleComponent} from "../components/theme-toggle/theme-toggle.component";
 import {ThemeService} from "../services/theme.service";
 import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
-import {BadgesListComponent} from "../components/badges-list/badges-list.component";
 import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/mykahoot-store-form.component";
+import {ReminderModalFormComponent} from "../components/reminder-modal-form/reminder-modal-form.component";
+import {MykahootstoreService} from "../services/mykahootstore.service";
+import {MyItemsFormComponent} from "../components/my-items-form/my-items-form.component";
+import {BuyItemModalFormComponent} from "../components/buy-item-modal-form/buy-item-modal-form.component";
+import {GetRemindersFormComponent} from "../components/get-reminders-form/get-reminders-form.component";
+import {ReminderService} from "../services/reminder.service";
+import {
+  AddUserPhotoPopupFormComponent
+} from "../components/add-user-photo-popup-form/add-user-photo-popup-form.component";
+import {UserStateService} from "../services/user-state.service";
+import {FaqPageComponent} from "../components/faq-page/faq-page.component";
+import {IsVipFormComponent} from "../components/is-vip-form/is-vip-form.component";
+import {AppChangeBg2Directive} from "../directives/app-change-bg2.directive";
+import {GettingCitiesCountriesService} from "../services/getting-cities-countries.service";
+import {
+  ConfirmActionPopupFormComponent
+} from "../components/confirm-action-popup-form/confirm-action-popup-form.component";
+import {
+  AllowToDownloadPopupFormComponent
+} from "../components/allow-to-download-popup-form/allow-to-download-popup-form.component";
+import {AppChangeBg3Directive} from "../directives/app-change-bg3.directive";
 
 @NgModule({
   declarations: [
@@ -122,7 +139,6 @@ import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/myka
     RegisterFormComponent,
     AddNewCategoryPopupFormComponent,
     YourQuizzesFormComponent,
-    ChooseTypeOfQuizFormComponent,
     NavbarFormComponent,
     FooterFormComponent,
     AboutPageFormComponent,
@@ -140,7 +156,6 @@ import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/myka
     ChooseLevelFormComponent,
     UpdateQuizFormComponent,
     WatchQuizFormComponent,
-    AddPhotoPopupFormComponent,
     AvailableTestsListsFormComponent,
     AvailableTestsStatsFormComponent,
     ChooseFieldLevelFormComponent,
@@ -160,8 +175,19 @@ import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/myka
     PointsHistoryFormComponent,
     ThemeToggleComponent,
     WelcomePageComponent,
-    BadgesListComponent,
-    MykahootStoreFormComponent
+    MykahootStoreFormComponent,
+    ReminderModalFormComponent,
+    MyItemsFormComponent,
+    BuyItemModalFormComponent,
+    GetRemindersFormComponent,
+    AddUserPhotoPopupFormComponent,
+    FaqPageComponent,
+    IsVipFormComponent,
+    AppChangeBg2Directive,
+    ConfirmActionPopupFormComponent,
+    AllowToDownloadPopupFormComponent,
+    changeBG,
+    AppChangeBg3Directive
   ],
   imports: [
     BrowserModule,
@@ -185,9 +211,10 @@ import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/myka
     MatProgressSpinnerModule,
   ],
   providers: [QuestionService, ConfigService, CookiesService, DownloadCategoriesSharedService, DownloadQuizService,
-    UserSharedService, SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
+    SharedService, SwitchLanguageService, CheckCredentialsService, CheckDataService,
     FilterCollectionsService, SendFeedbackService, InteractionService, QuizHistoryService, ThemeService,
-    TestProcessComponent, PlayerOptionsFormComponent, RegisterFormComponent, ChooseTypeOfQuizFormComponent,
+    MykahootstoreService, ReminderService, UserStateService, GettingCitiesCountriesService,
+    TestProcessComponent, PlayerOptionsFormComponent, RegisterFormComponent, IsVipFormComponent,
     CreatingQuizOptionFormComponent, PlayerSurveyChoosingFormComponent, ProfileFormComponent, AvailableTestsStatsFormComponent,
     {
       provide: 'SocialAuthServiceConfig',

@@ -1,5 +1,13 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
 <div class="container">
-  <h1>Send News</h1>
-  <textarea class="textarea" #News placeholder="Write your news message here..."></textarea>
-  <button class="button" (click)="sendNewsAsync(News.value)">Send</button>
+  <h1>{{"Send News" | translate}}</h1>
+  <textarea class="textarea" #News placeholder="{{'Write your news message here...' | translate}}"></textarea>
+  <button class="button" (click)="sendNewsAsync(News.value)">{{"Send" | translate}}</button>
 </div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

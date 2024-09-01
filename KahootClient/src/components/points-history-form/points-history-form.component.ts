@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/User";
 import {QuizModel} from "../../models/QuizModel";
+import {ActivatedRoute} from "@angular/router";
+import {Location} from "@angular/common";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 
@@ -10,10 +12,13 @@ const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
   styleUrls: ['./points-history-form.component.css']
 })
 export class PointsHistoryFormComponent implements OnInit{
+  public userId: number = 0;
   public pointsHistory: QuizModel[] = [];
 
+  constructor(private route: ActivatedRoute, private location: Location) {}
+
   public async DownloadUserPointsHistory(): Promise<void>{
-    await fetch(API_URL + `DownloadTopResult?userId=${parseInt(localStorage.getItem("userId")!)}`, {
+    await fetch(API_URL + `DownloadTopResult?userId=${this.userId}`, {
       method: "GET"
     }).then(text => text.json()).then(data => {
       console.log("points history =>", data);
@@ -27,7 +32,12 @@ export class PointsHistoryFormComponent implements OnInit{
     });
   }
 
+  public backOptions(): void {
+    this.location.back();
+  }
+
   ngOnInit(): void {
+    this.userId = parseInt(this.route.snapshot.paramMap.get("userId")!);
     this.DownloadUserPointsHistory();
   }
 }

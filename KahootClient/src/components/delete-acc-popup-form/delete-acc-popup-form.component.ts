@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import Swal from "sweetalert2";
 import {DeletedAcc} from "../../models/DeletedAcc";
 import {Router} from "@angular/router";
 import {DeleteAccFormComponent} from "../delete-acc-form/delete-acc-form.component";
+
+const API_URL: string = "https://localhost:7176/api/v1/Account/";
 
 @Component({
   selector: 'app-delete-acc-popup-form',
@@ -11,35 +13,31 @@ import {DeleteAccFormComponent} from "../delete-acc-form/delete-acc-form.compone
 })
 
 export class DeleteAccPopupFormComponent {
-  private url: string = "https://localhost:7176/api/v1/Account/";
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
+  @Input() reason: string = "";
 
-  constructor(private router: Router, private childComponent: DeleteAccFormComponent) {}
+  constructor(private router: Router) {}
 
-  Cancel(): void{
-    this.childComponent.flag = false;
+  public Cancel(): void{
+    this.close.emit();
   }
 
   public async DeleteAcc(e: any): Promise<void>{
     e.preventDefault();
 
     let deletedAcc: DeletedAcc = {userName: localStorage.getItem('Login')!,
-      email: localStorage.getItem('userMail')!, reason: this.childComponent.reason}
+      email: localStorage.getItem('userMail')!, reason: this.reason}
     {
-      await fetch(this.url + `DeleteAcc?userId=${parseInt(localStorage.getItem('userId')!)}`, {
-        method: "POST",
+      await fetch(API_URL + `DeleteAcc?userId=${parseInt(localStorage.getItem('userId')!)}`, {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify(deletedAcc)
       }).then((response) => {
         Swal.fire("Your account was deleted!");
-        localStorage.removeItem("Login")
-        localStorage.removeItem("Username")
-        localStorage.removeItem("UsernameDate")
-        localStorage.removeItem("userId");
-        localStorage.removeItem("userMail");
-        localStorage.removeItem("Role");
-        localStorage.removeItem("photoURL");
+        localStorage.clear();
         this.router.navigate(['/app/auth-form']);
       });
     }

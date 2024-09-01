@@ -2,10 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
 import {SharedService} from "../../services/shared.service";
+import {TranslateService} from "@ngx-translate/core";
 
 const API_URL: string = "https://localhost:7176/api/v1/CredentialsChanging/";
-const API_URL2: string = "https://localhost:7176/api/v1/UserInfo/";
-const API_URL3: string = "https://localhost:7176/api/v1/Message/";
+const API_URL2: string = "https://localhost:7176/api/v1/Message/";
 
 @Component({
   selector: 'app-profile-dashboard-form',
@@ -14,7 +14,7 @@ const API_URL3: string = "https://localhost:7176/api/v1/Message/";
 })
 export class ProfileDashboardFormComponent implements OnInit{
   public username: string = localStorage.getItem("Login")!;
-  public role: string = localStorage.getItem("Role")!.substring(1, localStorage.getItem("Role")!.length - 1);
+  public role: string = localStorage.getItem("Role")!;
   public name: string = "";
   public surname: string = "";
   public mail: string = "";
@@ -31,25 +31,27 @@ export class ProfileDashboardFormComponent implements OnInit{
   public flagHideButton1: boolean = true; // flag for hiding change button for username
   public flagHideButton2: boolean = true; // flag for hiding change button for mail
   public isSocialUser: boolean = JSON.parse(localStorage.getItem("SocialUser")!);
+  public isMailConfirmed: boolean = false;
+  public isMailChanged: boolean = false;
+  public isUsernameChanged: boolean = false;
+  public messagesCount: number = 0;
 
-  constructor(private router: Router, private sharedService: SharedService) {}
+  constructor(private router: Router, private sharedService: SharedService,
+              private translate: TranslateService) {}
 
-  private async getUserInfo(): Promise<void> {
-    alert(parseInt(localStorage.getItem("userId")!))
-      await fetch(API_URL2+ `GetUserInfo?id=${parseInt(localStorage.getItem("userId")!)}`, {
-        method: "GET",
-      }).then((response) => {
-        return response.json();
-      }).then((data) => {
-        console.log(data);
-        let userinfo = JSON.parse(JSON.stringify(data));
-        this.name = JSON.stringify(Object.values(userinfo)[5]).substring(1, JSON.stringify(Object.values(userinfo)[5]).length - 1);
-        this.surname = JSON.stringify(Object.values(userinfo)[6]).substring(1, JSON.stringify(Object.values(userinfo)[6]).length - 1);
-        this.mail = JSON.stringify(Object.values(userinfo)[8]).substring(1, JSON.stringify(Object.values(userinfo)[8]).length - 1);
-        this.backUpMail = JSON.stringify(Object.values(userinfo)[10]).substring(1, JSON.stringify(Object.values(userinfo)[10]).length - 1);
-        this.provider = JSON.stringify(Object.values(userinfo)[14]).substring(1, JSON.stringify(Object.values(userinfo)[14]).length - 1);
-      });
+  private async getUserInfoAsync(): Promise<void> {
+    const data = await this.sharedService.getUserInfoAsync();
+
+    this.name = data.name;
+    this.surname = data.surname;
+    this.mail = data.email;
+    this.backUpMail = data.backUpEmail;
+    this.provider = data.provider;
+    this.isMailConfirmed = data.isEmailConfirmed;
+    this.isMailChanged = data.isEmailChanged;
+    this.isUsernameChanged = data.isUsernameChanged;
   }
+
 
   private async changeUsernameChangingToTrue(): Promise<void> {
     await fetch(API_URL + `ChangeUsernameChangingToTrue?id=${parseInt(localStorage.getItem("userId")!)}`, {
@@ -67,28 +69,6 @@ export class ProfileDashboardFormComponent implements OnInit{
         "Content-Type": "application/json"
       }
     });
-  }
-
-  private async IsUsernameChanged(): Promise<boolean> {
-    const response = await fetch(API_URL2 + `IsUsernameChanged?id=${parseInt(localStorage.getItem("userId")!)}`, {
-      method: "GET",
-    });
-
-    const data = await response.json();
-    localStorage.setItem("IsUsernameChanged", JSON.parse(JSON.stringify(data)));
-
-    return JSON.parse(localStorage.getItem("IsUsernameChanged")!);
-  }
-
-  private async IsMailChanged(): Promise<boolean> {
-    const response = await fetch(API_URL2 + `IsEmailChanged?id=${parseInt(localStorage.getItem("userId")!)}`, {
-      method: "GET",
-    });
-
-    const data = await response.json();
-    localStorage.setItem("IsMailChanged", JSON.parse(JSON.stringify(data)));
-
-    return JSON.parse(localStorage.getItem("IsMailChanged")!);
   }
 
   public changeFlag(elemRef: any): void { // change flags to true that will allow us to change credentials (for non-social users)
@@ -170,7 +150,7 @@ export class ProfileDashboardFormComponent implements OnInit{
       }).then((response) => {
         if (response.status == 200) {
           this.flag2 = false;
-          this.getUserInfo();
+          this.getUserInfoAsync();
           Swal.fire('You successfully set your name!');
         }
         else {
@@ -197,7 +177,7 @@ export class ProfileDashboardFormComponent implements OnInit{
       }).then((response) => {
         if (response.status == 200) {
           this.flag3 = false;
-          this.getUserInfo();
+          this.getUserInfoAsync();
           Swal.fire('You successfully set your surname!');
         }
         else {
@@ -226,7 +206,7 @@ export class ProfileDashboardFormComponent implements OnInit{
           this.changeUsernameChangingToTrue();
           this.flag1 = false;
           localStorage.setItem("Login", username);
-          this.getUserInfo();
+          this.getUserInfoAsync();
           this.usernameLabel = "You already changed your username!";
           Swal.fire('You successfully changed your username!');
         }
@@ -256,7 +236,7 @@ export class ProfileDashboardFormComponent implements OnInit{
           this.changeMailChangingToTrue();
           this.sharedService.SentConfirmationMail(mail, parseInt(localStorage.getItem("userId")!));
           this.flag5 = false;
-          this.getUserInfo();
+          this.getUserInfoAsync();
           this.mailLabel = "You already changed your mail!";
           Swal.fire('You successfully changed your mail! Please confirm your new mail, we have sent an instruction to your mail!');
         }
@@ -284,7 +264,7 @@ export class ProfileDashboardFormComponent implements OnInit{
       }).then((response) => {
         if (response.status == 200) {
           this.flag5 = false;
-          this.getUserInfo();
+          this.getUserInfoAsync();
           Swal.fire('You successfully set your backup mail!');
         }
         else {
@@ -302,12 +282,16 @@ export class ProfileDashboardFormComponent implements OnInit{
     return emailRegex.test(email);
   }
 
-  public ToBirthdayChanging(): void{
+  public ToBirthdayChanging(): void {
     this.router.navigate(['app/birthday-settings-form']);
   }
 
-  public ToPasswordChanging(): void{
+  public ToPasswordChanging(): void {
     this.router.navigate(['app/settings-form']);
+  }
+
+  public onMyPurchasesClick(): void {
+    this.router.navigate(['/app/my-purchases', parseInt(localStorage.getItem("userId")!)]);
   }
 
   ngOnInit(): void {
@@ -315,22 +299,22 @@ export class ProfileDashboardFormComponent implements OnInit{
   }
 
   private async initAsync(): Promise<void> {
-      await this.getUserInfo();
+      await this.getUserInfoAsync();
 
       if (this.isSocialUser) {
-        this.usernameLabel = "You can't change your username!";
+        this.usernameLabel = 'You can\'t change your username!';
         this.mailLabel = "You can't change your mail!";
       } else {
-      if (await this.IsUsernameChanged()) {
+      if (this.isUsernameChanged) {
         this.flagHideButton1 = false;
         this.usernameLabel = 'You already changed your username!';
       }
-      if (await this.IsMailChanged()) {
+      if (this.isMailChanged) {
         this.flagHideButton2 = false;
         this.mailLabel = "You already changed your mail!";
       }
 
-      await this.getMessagesCountAsync();
+      this.messagesCount = await this.getMessagesCountAsync();
     }
 
     localStorage.removeItem("IsMailChanged");
@@ -339,7 +323,7 @@ export class ProfileDashboardFormComponent implements OnInit{
 
   public async getMessagesCountAsync(): Promise<number> {
     try {
-      const response = await fetch(API_URL3 + `GetMessagesCount?userName=${localStorage.getItem("Login")}`, {
+      const response = await fetch(API_URL2 + `GetMessagesCount?userName=${localStorage.getItem("Login")}`, {
         method: "GET",
       });
 
@@ -348,12 +332,10 @@ export class ProfileDashboardFormComponent implements OnInit{
       }
 
       const data = await response.json();
-      alert(data);
-      return data; // Ensure that `data` is of type number
-
+      return data;
     } catch (error) {
-      console.error("Failed to fetch messages count:", error);
-      throw error; // Rethrow the error after logging it
+      console.error('Failed to fetch messages count', error);
+      return -1; // Rethrow the error after logging it
     }
   }
 }

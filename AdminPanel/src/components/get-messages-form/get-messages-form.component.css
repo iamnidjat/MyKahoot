@@ -1,1 +1,67 @@
+#allthethings {
+  padding: 20px;
+  background-color: var(--gm-background-color);
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: 'Roboto', sans-serif;
+  color: var(--gm-text-color);
+}
+
+/* Statement Style */
+.statement {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--gm-statement-color);
+  margin-bottom: 15px;
+}
+
+/* Search Input Style */
+.search-input {
+  padding: 10px;
+  background-color: var(--gm-input-background);
+  border: 1px solid var(--gm-input-border);
+  border-radius: 5px;
+  font-size: 1rem;
+  color: var(--input-text-color);
+  margin-bottom: 20px;
+  transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: var(--gm-primary-color);
+  outline: none;
+}
+
+/* Main Container Style */
+.main-container {
+  background-color: var(--gm-background-color);
+}
+
+/* Fields Style */
+.fields {
+  background-color: var(--gm-ields-background);
+  border: 1px solid var(--gm-fields-border);
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.fields:hover {
+  background-color: var(--gm-primary-color);
+  border-color: var(--gm-primary-color);
+}
+
+.fields p {
+  margin: 0;
+  color: var(--gm-text-color);
+}
+
+/* Muted Text Style */
+.text-muted {
+  color: var(--gm-muted-text-color);
+  font-size: 0.9rem;
+  margin-top: 20px;
+}
 

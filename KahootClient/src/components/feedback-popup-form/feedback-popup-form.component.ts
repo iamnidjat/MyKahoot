@@ -1,6 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {TestProcessComponent} from "../test-process/test-process.component";
 import {SendFeedbackService} from "../../services/send-feedback.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-feedback-popup-form',
@@ -30,12 +31,13 @@ export class FeedbackPopupFormComponent {
     this.feedbackScore = starIndex;
   }
 
-  public async SaveQuizFeedback(): Promise<void> {
+  public async SaveQuizFeedback(): Promise<void> { // !
     await this.sendFeedbackService.SaveQuizFeedback(this.childComponent.testType, this.childComponent.quizName,
       this.feedbackScore, this.feedbackComment.nativeElement.value);
 
-    let modal = this.el.nativeElement.querySelector(".modal");
+    Swal.fire("Thank you for your feedback!");
 
+    let modal = this.el.nativeElement.querySelector(".modal");
     modal.style.display = "none";
   }
 

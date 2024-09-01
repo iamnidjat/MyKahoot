@@ -1,48 +1,72 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
-<div id="allthethings">
-    <div style="display: flex; flex-direction: row; justify-content: space-between; width: 800px">
-      <div (click)="downloadQuizzesAsync()" class="choice-button">Public quizzes</div>
-      <div (click)="downloadPrivateQuizzesAsync()" class="choice-button">Private quizzes</div>
+<div id="allthethings" class="container">
+  <div class="button-group">
+    <div (click)="loadCategories('public')" class="choice-button">{{ "Public quizzes" | translate }}</div>
+    <div (click)="loadCategories('private')" class="choice-button">{{ "Private quizzes" | translate }}</div>
+  </div>
+
+  <div class="search-section">
+    <div class="statement">{{ "Choose a quiz to pass" | translate }}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{ 'Search by Quiz' | translate }}" />
+  </div>
+
+  <div class="main-container">
+    <div *ngFor="let category of getCurrentPageItems()" class="quiz-item">
+      <div class="fields" id="{{ category.quizName }}" #div (click)="toRulesForm(category)">
+        <p class="quiz-title">{{ category.quizName }} {{ "Created by the" | translate }} {{ category.userName }} {{ "user" | translate }} ({{ category.isVIP ? "VIP" : "NOT VIP" }})</p>
+
+        <ng-container *ngIf="category.userName !== 'admin' && !isGuest">
+          <div class="quiz-details">
+            <div class="quiz-stats">
+              <span>{{ category.likesCount }}</span>
+              <i class="fa-solid fa-thumbs-up like-icon" [class.liked]="category.userLiked" (click)="toLikeQuizAsync(category.id!); $event.stopPropagation()"></i>
+            </div>
+
+            <div class="quiz-stats">
+              <span>{{ category.dislikesCount }}</span>
+              <i class="fa-solid fa-thumbs-down dislike-icon" [class.disliked]="category.userDisliked" (click)="toDislikeQuizAsync(category.id!); $event.stopPropagation()"></i>
+            </div>
+
+            <div class="quiz-stats">
+              <span>{{ category.commentsCount }}</span>
+              <i class="fa-solid fa-comment comment-icon" [routerLink]="['/app/comments', category.id, category.categoryName, category.quizName]"></i>
+            </div>
+
+            <div class="additional-info">
+              <span>{{ "Average feedback" | translate }}: {{ category.averageFeedbackScore }}</span>
+              <br/>
+              <span>{{ category.timesPassed }} {{ "times passed" | translate }}</span>
+            </div>
+
+            <div class="quiz-actions">
+              <div class="set-reminder" (click)="setReminder($event, category.categoryName, category.quizName)">
+                <i class="fa-solid fa-bell"></i> {{ "Set Reminder" | translate }}
+              </div>
+              <div [routerLink]="['/app/sendMessage', category.userName]" class="send-message">
+                <i class="fa-solid fa-envelope"></i> {{ "Send Message" | translate }}
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
     </div>
-    <div style="display: flex; flex-direction: column; justify-content: space-between">
-      <div class="statement">{{"Choose a quiz to pass" | translate}}</div>
-      <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Quiz' | translate}}" />
-    </div>
-     <div class="main-container">
-       <div *ngFor="let category of filterQuizzes()">
-         <div class="fields" id="{{category.quizName}}" #div (click)="toRulesForm(div)">
-           <p>{{category.quizName}} Created by the {{category.userName}} user
-             <br>
-             <br>
-             <br>
-             <br>
-           <ng-container *ngIf="category.userName !== 'admin'">
-             <div style="display: flex; flex-direction: row">
-               <div style="display: flex; flex-direction: row">
-                 <div>{{category.likesCount}} likes</div>
-                 <input type="button" [class.liked]="category.userLiked" value="Like" (click)="toLikeQuizAsync(category.id!); $event.stopPropagation()">
-               </div>
-               <div style="display: flex; flex-direction: row">
-                 <div>{{category.dislikesCount}} dislikes</div>
-                 <input type="button" [class.disliked]="category.userDisliked" value="Dislike" (click)="toDislikeQuizAsync(category.id!); $event.stopPropagation()">
-               </div>
-               <div style="display: flex; flex-direction: row">
-                 <div>{{category.commentsCount}} comments</div>
-                 <input type="button" value="Comments" [routerLink]="['/app/comments', category.id, category.categoryName, category.quizName]">
-               </div>
-               <div>Average feedback: {{category.averageFeedbackScore}}</div>
-               <div>{{category.timesPassed}} times passed</div>
-               <div [routerLink]="['/app/sendMessage', category.userName]">Send Message</div>
-             </div>
-           </ng-container>
-         </div>
-       </div>
-     </div>
-    <div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+  </div>
+</div>
+
+<div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+
+<div class="pagination-controls">
+  <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">{{"Previous" | translate}}</button>
+  <span *ngFor="let page of getPageNumbers()">
+    <button (click)="setPage(page)" [class.active]="currentPage === page">{{page}}</button>
+  </span>
+  <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">{{"Next" | translate}}</button>
 </div>
 
 <app-enter-private-test-code-popup-form *ngIf="flagForCodeChecking"></app-enter-private-test-code-popup-form>
+<app-reminder-modal-form [catName]="catName" [reminderName]="reminderName" [testMode]="testMode" (close)="handleReminderClose()" *ngIf="flagForReminder"></app-reminder-modal-form>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

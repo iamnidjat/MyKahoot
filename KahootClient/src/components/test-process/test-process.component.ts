@@ -1,6 +1,6 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
-import {interval} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {NavigationExtras, Router} from "@angular/router";
+import {interval, Observable} from "rxjs";
 import {QuizModel} from "../../models/QuizModel";
 import {QuestionService} from "../../services/question.service";
 import {DownloadQuizService} from "../../services/download-quiz.service";
@@ -17,8 +17,8 @@ const API_URL2: string = "https://localhost:7176/api/v1/Quiz/";
   styleUrls: ['./test-process.component.css']
 })
 export class TestProcessComponent implements OnInit, OnDestroy{
-  @Input() public testType: string = ""; // category
-  @Input() public quizName: string = "";
+  public testType: string = ""; // category
+  public quizName: string = ""; // quiz name
   public name: string = ""; // username
   public questionList: any = []; // questions from json file
   public questions: any = []; // questions from backend
@@ -39,20 +39,31 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   public isQuizCompleted: boolean = false;
   public feedback: string = "";
   public isActive: boolean = false;
-  public flag: boolean = false;
+  public flag: boolean = false; // whether to get questions from json or back
   public testFormat: string = "";
   public level: string = "";
   public action: string = "";
   public showFileTypes: boolean = false;
-  public timeToAnswer: number = 0;
   public pointsPerAnswer: number = 0;
+  public feedbackFlag: boolean = false;
+  public isCorrectFlag: boolean = false;
   public api: string = "https://localhost:7176";
+  public isVisible: boolean = false;
+  public flagForConfirmAction: boolean = false;
+  public allowedToDownload: boolean = false;
+  public correctAnswer: number = 0;
+  public flagForDirective: boolean = false;
+  public selectedOption: number | null = null;
+  public isPaused: boolean = false;
+  public remainingTime: number = 0; // Time left when paused
+  private confirmationPromise!: Promise<boolean>;
+  private confirmationResolve!: (value: boolean) => void;
 
   constructor(private questionService: QuestionService, private router: Router,
               private documentService: DownloadQuizService, private quizHistoryService: QuizHistoryService,
               private gamificationService: GamificationService) {}
 
-  public ngOnInit(): void {
+   ngOnInit(): void {
     localStorage.getItem("Guest") ? this.name = "Guest" : this.name = localStorage.getItem("Login")!;
 
     this.testType = localStorage.getItem("categoryName")!;
@@ -63,34 +74,38 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     if (localStorage.getItem("AnotherTest") !== null)
     {
       this.flag = true;
-      localStorage.removeItem("AnotherTest");
+      localStorage.removeItem("AnotherTest"); // Don't need anymore
       this.getTestData();
     }
 
     this.flag ? this.getAllQuestionsFromBack() : this.getAllQuestions();
-
-    localStorage.removeItem("mode"); // Don't need anymore
-    localStorage.removeItem("categoryName"); // Don't need anymore
-    localStorage.removeItem("TestName"); // Don't need anymore
-    localStorage.removeItem("Level"); // Don't need anymore
-    localStorage.removeItem("action"); // Don't need anymore
 
     if (this.action === "play") {
       this.startCounter();
     }
   }
 
-  public async getTestData(): Promise<void> {
+  private async IsAllowedUsersToDownloadAsync(): Promise<boolean> {
+    const response = await fetch(API_URL2 + `IsAllowedUsersToDownload?catName=${this.testType}&quizName=${this.quizName}`);
+    const data = await response.json();
+    return data;
+  }
+  private async getTestData(): Promise<void> {
     await fetch(API_URL2 + `GetTestData?catName=${this.testType}&quizName=${this.quizName}&questionNumber=${this.currentQuestion + 1}`, {
       method: "GET"
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      let testFormat = JSON.parse(JSON.stringify(data));
-      localStorage.setItem("testType", JSON.stringify(Object.values(testFormat)[3]));
+      console.log(data);
+      localStorage.setItem("testType", data.testFormat);
+      localStorage.setItem("timeToAnswer", data.timeToAnswer);
+      localStorage.setItem("pointsPerAnswer", data.points);
     });
 
-    this.testFormat = localStorage.getItem("testType")!.slice(1, localStorage.getItem('testType')!.length - 1);
+    this.testFormat = localStorage.getItem("testType")!;
+    this.counter = parseInt(localStorage.getItem("timeToAnswer")!);
+    this.pointsPerAnswer = parseInt(localStorage.getItem("pointsPerAnswer")!);
+    this.allowedToDownload = await this.IsAllowedUsersToDownloadAsync();
   }
 
   public async getCorrectAnswer(): Promise<void> {
@@ -101,6 +116,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }).then((data) => {
       localStorage.setItem("correctAnswer", data);
     });
+    this.correctAnswer = parseInt(localStorage.getItem("correctAnswer")!);
   }
 
   public async getAllQuestionsFromBack(): Promise<void>{
@@ -109,7 +125,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     }).then((response) => {
       return response.json();
     }).then((data) => {
-      console.log("tests: ", data);
+      this.questions = [];
       Object.keys(data).forEach((key) =>
       {
         this.questions.push(data[key]);
@@ -118,64 +134,128 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   }
 
   public getAllQuestions(): void {
-    this.questionService.getQuestionJson()!
-      .subscribe(res => {
-        this.questionList = res.questions;
-      })
+    const questionObservable = this.questionService.getQuestionJson();
+    if (questionObservable) {
+      questionObservable.subscribe(
+        res => {
+          this.questionList = res.questions;
+        },
+        err => {
+          console.error('Failed to load questions:', err);
+        }
+      );
+    } else {
+      console.error('Question service returned null or undefined observable.');
+    }
   }
 
   public async nextQuestion(): Promise<void> {
-    await this.getCorrectAnswer(); // for getting a correct answer when a user didn't answer a question
-    await this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
-      parseInt(localStorage.getItem("correctAnswer")!), -1, parseInt(localStorage.getItem("userId")!));
-    this.currentQuestion++;
-    this.skippedQuestionsCount++;
-    this.skippedQuestionsCountFlag = true;
-    this.correctAnswersCountFlag = false;
-    this.inCorrectAnswersCountFlag = false;
-    this.resetCounter();
-    this.getProgressPercent();
-    await this.getTestData(); // for getting a test type for the next question
+    if (this.action === "play") {
+      await this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
+        parseInt(localStorage.getItem("correctAnswer")!), -1, parseInt(localStorage.getItem("userId")!));
+      this.currentQuestion++;
+      if (this.flag) {
+        await this.getCorrectAnswer(); // for getting a correct answer when a user didn't answer a question
+        await this.getTestData();
+        // for getting a test type for the next question
+      }
+      this.skippedQuestionsCount++;
+      this.skippedQuestionsCountFlag = true;
+      localStorage.setItem(`skippedQuestionsCountFlag${this.currentQuestion}`, "true");
+      this.correctAnswersCountFlag = false;
+      localStorage.setItem(`correctAnswersCountFlag${this.currentQuestion}`, "false");
+      this.inCorrectAnswersCountFlag = false;
+      localStorage.setItem(`inCorrectAnswersCountFlag${this.currentQuestion}`, "false");
+      this.resetCounter();
+      this.getProgressPercent();
+    }
+    else {
+      this.currentQuestion++;
+    }
   }
 
   public async previousQuestion(): Promise<void> {
-    await this.quizHistoryService.RemoveUserAnswerAsync(this.testType, this.quizName, this.currentQuestion);
-    this.currentQuestion--;
-    this.resetCounter();
-    this.getProgressPercent();
+    if (this.action === "play") {
+      this.isVisible = true;
+      this.flagForConfirmAction = true;
 
-    if (this.correctAnswersCountFlag) {
-      this.correctAnswersCount--;
-      this.correctAnswersCountFlag = false;
-    }
-    else if (this.inCorrectAnswersCountFlag) {
-      this.inCorrectAnswersCount--;
-      this.inCorrectAnswersCountFlag = false;
-    }
-    else if (this.skippedQuestionsCountFlag) {
-      this.skippedQuestionsCount--;
-      this.skippedQuestionsCountFlag = false;
-    }
+      const data = await this.getConfirmationData();
+      if (data) {
+        await this.quizHistoryService.RemoveUserAnswerAsync(this.testType, this.quizName, this.currentQuestion);
+        this.currentQuestion--;
+        this.resetCounter();
+        this.getProgressPercent();
 
-    this.responseTimes.pop(); // for eliminating the last response time
-    await this.getTestData(); // for getting a test type for the previous question
+        this.responseTimes.pop(); // for eliminating the last response time
+        if (this.flag) {
+          await this.getCorrectAnswer();
+          await this.getTestData();
+          // for getting a test type for the previous question
+          if (localStorage.getItem(`correctAnswersCountFlag${this.currentQuestion + 1}`) === "true")  this.points -= this.pointsPerAnswer;
+          else if (localStorage.getItem(`inCorrectAnswersCountFlag${this.currentQuestion + 1}`) === "true")  this.points += this.pointsPerAnswer;
+        }
+        else {
+          if (localStorage.getItem(`correctAnswersCountFlag${this.currentQuestion + 1}`) === "true")  this.points -= 10;
+          else if (localStorage.getItem(`inCorrectAnswersCountFlag${this.currentQuestion + 1}`) === "true")  this.points += 10;
+        }
+
+        if (this.correctAnswersCountFlag) {
+          this.correctAnswersCount--;
+          this.correctAnswersCountFlag = false;
+        }
+        else if (this.inCorrectAnswersCountFlag) {
+          this.inCorrectAnswersCount--;
+          this.inCorrectAnswersCountFlag = false;
+        }
+        else if (this.skippedQuestionsCountFlag) {
+          this.skippedQuestionsCount--;
+          this.skippedQuestionsCountFlag = false;
+        }
+      }
+    }
+    else {
+      this.currentQuestion--;
+    }
+  }
+
+  private getConfirmationData(): Promise<boolean> {
+    this.pauseCounter();
+    this.confirmationPromise = new Promise<boolean>((resolve) => {
+      this.confirmationResolve = resolve;
+    });
+
+    // Return the promise
+    return this.confirmationPromise;
+  }
+
+  public handleConfirmationResponse(data: boolean): void {
+    if (this.confirmationResolve) {
+      this.confirmationResolve(data);
+    }
   }
 
   public answer(currentQno: number, option: any): void {
     this.isActive = true;
 
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
+    this.responseTimes.push(responseTime);
+
     if (currentQno === this.questionList.length) {
       this.isQuizCompleted = true;
       this.stopCounter();
       this.calculateAverageResponseTime();
-      this.feedbackGenerator();
+      this.feedbackFlag = true;
     }
     if (option.correct) {
       this.points += 10;
       this.correctAnswersCount++;
       this.correctAnswersCountFlag = true;
+      localStorage.setItem(`correctAnswersCountFlag${currentQno}`, "true");
       this.inCorrectAnswersCountFlag = false;
+      localStorage.setItem(`inCorrectAnswersCountFlag${currentQno}`, "false");
       this.skippedQuestionsCountFlag = false;
+      localStorage.setItem(`skippedQuestionsCountFlag${currentQno}`, "false");
+      if (this.feedbackFlag) this.feedbackGenerator();
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
@@ -188,8 +268,11 @@ export class TestProcessComponent implements OnInit, OnDestroy{
         this.currentQuestion++;
         this.inCorrectAnswersCount++;
         this.inCorrectAnswersCountFlag = true;
+        localStorage.setItem(`inCorrectAnswersCountFlag${currentQno}`, "true");
         this.correctAnswersCountFlag = false;
+        localStorage.setItem(`correctAnswersCountFlag${currentQno}`, "false");
         this.skippedQuestionsCountFlag = false;
+        localStorage.setItem(`skippedQuestionsCountFlag${currentQno}`, "false");
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
@@ -197,34 +280,47 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       this.points -= 10;
     }
 
-    this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
-      1, 2, parseInt(localStorage.getItem("userId")!));
+    const correctIndex = this.questionList[currentQno - 1].options.findIndex((option: any) => option.correct);
+    const selectedOptionIndex = this.questionList[currentQno - 1].options.findIndex((myOption: any) => myOption === option);
 
-    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
-    this.responseTimes.push(responseTime);
+    this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
+      correctIndex + 1, selectedOptionIndex + 1, parseInt(localStorage.getItem("userId")!));
   }
 
   public async answer2(currentQno: number, option: any): Promise<void> {
+    this.selectedOption = option;
     await this.getCorrectAnswer();
     this.isActive = true;
+
+    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
+    this.responseTimes.push(responseTime);
 
     if (currentQno === this.questions.length){
       this.isQuizCompleted = true;
       this.stopCounter();
       this.calculateAverageResponseTime();
-      this.feedbackGenerator();
+      this.feedbackFlag = true;
     }
     if (option == localStorage.getItem("correctAnswer")) {
-      this.points += 10;
+      this.points += this.pointsPerAnswer;
       this.correctAnswersCount++;
       this.correctAnswersCountFlag = true;
+      localStorage.setItem(`correctAnswersCountFlag${currentQno}`, "true");
       this.inCorrectAnswersCountFlag = false;
+      localStorage.setItem(`inCorrectAnswersCountFlag${currentQno}`, "false");
       this.skippedQuestionsCountFlag = false;
+      localStorage.setItem(`skippedQuestionsCountFlag${currentQno}`, "false");
+      this.flagForDirective = true;
+      this.isCorrectFlag = true;
+      if (this.feedbackFlag) this.feedbackGenerator();
       setTimeout(() => {
         this.currentQuestion++;
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
+        this.isCorrectFlag = false;
+        this.flagForDirective = false;
+        this.selectedOption = null;
       }, 1000);
     }
     else {
@@ -232,20 +328,23 @@ export class TestProcessComponent implements OnInit, OnDestroy{
         this.currentQuestion++;
         this.inCorrectAnswersCount++;
         this.inCorrectAnswersCountFlag = true;
+        localStorage.setItem(`inCorrectAnswersCountFlag${currentQno}`, "true");
         this.correctAnswersCountFlag = false;
+        localStorage.setItem(`correctAnswersCountFlag${currentQno}`, "false");
         this.skippedQuestionsCountFlag = false;
+        localStorage.setItem(`skippedQuestionsCountFlag${currentQno}`, "false");
         this.resetCounter();
         this.getProgressPercent();
         this.isActive = false;
+        this.isCorrectFlag = false;
+        this.flagForDirective = false;
+        this.selectedOption = null;
       }, 1000);
-      this.points -= 10;
+      this.points -= this.pointsPerAnswer;
     }
 
     await this.quizHistoryService.AddQuizHistoryAsync(this.testType, this.quizName, this.currentQuestion + 1,
       parseInt(localStorage.getItem("correctAnswer")!), option, parseInt(localStorage.getItem("userId")!));
-
-    const responseTime = Math.floor(new Date().getTime() / 1000) - this.questionStartTime;
-    this.responseTimes.push(responseTime);
   }
 
   public startCounter(): void {
@@ -254,9 +353,34 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       .subscribe(val => {
         this.counter--;
         if (this.counter === 0) {
-          this.currentQuestion++;
-          this.counter = 60;
-          this.skippedQuestionsCount++;
+          if (this.flag) {
+            if (this.currentQuestion < this.questions.length - 1) {
+              this.currentQuestion++;
+              this.skippedQuestionsCount++;
+              this.getTestData();
+            }
+            else {
+              this.isQuizCompleted = true;
+              this.skippedQuestionsCount++;
+              this.stopCounter();
+              this.calculateAverageResponseTime();
+              this.feedbackFlag = true;
+            }
+          }
+          else {
+            if (this.currentQuestion < this.questionList.length) {
+              this.currentQuestion++;
+              this.skippedQuestionsCount++;
+              this.counter = 60;
+            }
+            else {
+              this.isQuizCompleted = true;
+              this.skippedQuestionsCount++;
+              this.stopCounter();
+              this.calculateAverageResponseTime();
+              this.feedbackFlag = true;
+            }
+          }
         }
       });
     setTimeout(() => {
@@ -266,31 +390,61 @@ export class TestProcessComponent implements OnInit, OnDestroy{
 
   public stopCounter(): void {
     this.interval$.unsubscribe();
-    this.counter = 0;
+    this.remainingTime = this.counter; // Save remaining time
   }
 
-  public resetCounter(): void {
+  public pauseCounter(): void {
+    if (!this.isPaused) {
+      this.stopCounter();
+      this.isPaused = true;
+    }
+  }
+
+  public async resetCounter(): Promise<void> {
     this.stopCounter();
-    this.counter = 60;
+    if (this.flag) {
+      await this.getTestData();
+      // for getting a test type for the first question
+    }
+    else {
+      this.counter = 60;
+    }
     this.startCounter();
   }
 
   public async resetQuiz(): Promise<void> {
-    this.resetCounter();
-    this.flag ? this.getAllQuestionsFromBack() : this.getAllQuestions();
-    this.points = 0;
-   // this.counter = 60;
-    this.currentQuestion = 0;
-    this.correctAnswersCount = 0;
-    this.inCorrectAnswersCount = 0;
-    this.skippedQuestionsCount = 0;
-    this.correctAnswersCountFlag = false;
-    this.inCorrectAnswersCountFlag = false;
-    this.skippedQuestionsCountFlag = false;
-    this.progress = "0";
-    this.responseTimes = [];
-    await this.quizHistoryService.RemoveUserAnswersAsync(this.testType, this.quizName);
-    await this.getTestData(); // for getting a test type for the first question
+    if (this.action === "play") {
+      this.isVisible = true;
+      this.flagForConfirmAction = false;
+
+      const data = await this.getConfirmationData();
+      if (data) {
+        this.resetCounter();
+        this.flag ? await this.getAllQuestionsFromBack() : this.getAllQuestions();
+        this.points = 0;
+        this.currentQuestion = 0;
+        this.correctAnswersCount = 0;
+        this.inCorrectAnswersCount = 0;
+        this.skippedQuestionsCount = 0;
+        this.correctAnswersCountFlag = false;
+        this.inCorrectAnswersCountFlag = false;
+        this.skippedQuestionsCountFlag = false;
+        this.progress = "0";
+        this.responseTimes = [];
+        await this.quizHistoryService.RemoveUserAnswersAsync(this.testType, this.quizName);
+        if (this.flag) {
+          await this.getTestData();
+          // for getting a test type for the next question
+        }
+      }
+      else {
+        this.counter = this.remainingTime;
+        this.startCounter();
+      }
+    }
+    else {
+      this.currentQuestion = 0;
+    }
   }
 
   public getProgressPercent(): string {
@@ -313,10 +467,18 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     localStorage.setItem("SLevel", this.level);
     localStorage.setItem("categoryName", this.testType);
     localStorage.setItem("QuizType", this.quizName);
-    this.router.navigate(['/app/stats-form']);
+
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'action': 'myStats',
+        'categoryName': localStorage.getItem("categoryName"),
+        'testName': localStorage.getItem("QuizType"),
+        'level': localStorage.getItem('SLevel')}
+    };
+
+    this.router.navigate([`/app/stats-form`], navigationExtras);
   }
 
-  private feedbackGenerator(): void { // !
+  private feedbackGenerator(): void {
     const score: number = (this.correctAnswersCount / (this.questions.length || this.questionList.length)) * 100;
 
     if (score <= 40) {
@@ -341,8 +503,10 @@ export class TestProcessComponent implements OnInit, OnDestroy{
       level: this.level, userId: parseInt(localStorage.getItem("userId")!),
       averageResponseTime: this.averageResponseTime, correctAnswersCount: this.correctAnswersCount,
       wrongAnswersCount: this.inCorrectAnswersCount, skippedQuestionsCount: this.skippedQuestionsCount }
+      console.log("quizInfo => ", quizInfo);
 
-    await fetch(API_URL + "UploadResult", {
+
+    await fetch(API_URL + `UploadResult?quizId=${parseInt(localStorage.getItem("QuizId")!)}&quizCreator=${localStorage.getItem("QuizCreator")!}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -359,20 +523,17 @@ export class TestProcessComponent implements OnInit, OnDestroy{
   public downloadDocument(fileType: string): void {
     const data: string = JSON.stringify(this.questionList.length !== 0 ? this.questionList : this.questions);
 
-    let downloadFunction;
+    const downloadFunctionMap: { [key: string]: (data: string, quizName: string) => Observable<Blob> } = {
+      'docx': this.documentService.downloadDocument.bind(this.documentService),
+      'txt': this.documentService.downloadTxt.bind(this.documentService),
+      'json': this.documentService.downloadJson.bind(this.documentService),
+    };
 
-    switch (fileType) {
-      case "docx":
-        downloadFunction = this.documentService.downloadDocument;
-        break;
-      case "txt":
-        downloadFunction = this.documentService.downloadTxt;
-        break;
-      case "json":
-        downloadFunction = this.documentService.downloadJson;
-        break;
-      default:
-        return; // Invalid fileType
+    const downloadFunction = downloadFunctionMap[fileType];
+
+    if (!downloadFunction) {
+      console.error('Invalid file type');
+      return; // Invalid fileType
     }
 
     downloadFunction(data, this.quizName).subscribe({
@@ -382,6 +543,7 @@ export class TestProcessComponent implements OnInit, OnDestroy{
         anchor.href = downloadUrl;
         anchor.download = `${this.testType}/${this.quizName}.${fileType}`;
         anchor.click();
+        window.URL.revokeObjectURL(downloadUrl); // Clean up URL.createObjectURL
       },
       error: (error) => {
         console.error('Error downloading document:', error);
@@ -401,5 +563,21 @@ export class TestProcessComponent implements OnInit, OnDestroy{
     localStorage.removeItem("surveyGuard"); // Don't need anymore
     localStorage.removeItem("testType"); // Don't need anymore
     localStorage.removeItem("correctAnswer"); // Don't need anymore
+    localStorage.removeItem("QuizId"); // Don't need anymore
+    localStorage.removeItem("QuizCreator"); // Don't need anymore
+    localStorage.removeItem("timeToAnswer"); // Don't need anymore
+    localStorage.removeItem("pointsPerAnswer"); // Don't need anymore
+    localStorage.removeItem("IsVIP"); // Don't need anymore
+    localStorage.removeItem("mode"); // Don't need anymore
+    localStorage.removeItem("TestName"); // Don't need anymore
+    localStorage.removeItem("Level"); // Don't need anymore
+    localStorage.removeItem("action"); // Don't need anymore
+    localStorage.removeItem("allowedToDownload"); // Don't need anymore
+    for (let i: number = 1; i <= this.currentQuestion; i++) // Deleting resources
+    {
+      localStorage.removeItem(`correctAnswersCountFlag${i}`);
+      localStorage.removeItem(`inCorrectAnswersCountFlag${i}`);
+      localStorage.removeItem(`skippedQuestionsCountFlag${i}`);
+    }
   }
 }

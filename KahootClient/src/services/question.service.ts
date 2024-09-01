@@ -39,7 +39,7 @@ export class QuestionService {
     return null;
   }
 
-  public async GetQuestionsFromDb(question: Question, photoFile: File | null, videoFile: File | null, audioFile: File | null): Promise<void> {
+  public async addQuestionAsync(question: Question, photoFile: File | null, videoFile: File | null, audioFile: File | null, flag: boolean): Promise<void> {
     let formData = new FormData();
 
     formData.append("quizType", question.quizType);
@@ -66,9 +66,19 @@ export class QuestionService {
       formData.append("audio", audioFile);
     }
 
-    await fetch(API_URL + "AddQuestion", {
-      method: "POST",
-      body: formData
-    });
+    if (!flag) {
+
+      await fetch(API_URL + "AddQuestion", {
+        method: "POST",
+        body: formData
+      });
+    }
+    else {
+      alert(question.questionNumber)
+      await fetch(API_URL + `UpdateQuestion?catName=${question.quizType}&quizName=${question.quizName}&questionNumber=${question.questionNumber + 1}`, {
+        method: "PATCH",
+        body: formData
+      })
+    }
   }
 }

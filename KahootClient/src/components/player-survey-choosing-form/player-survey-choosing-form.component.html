@@ -1,4 +1,5 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div id="allthethings">
   <div style="display: flex; flex-direction: column;">
@@ -6,17 +7,27 @@
     <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category' | translate}}" />
   </div>
   <div class="main-container">
-    <div *ngFor="let category of filterCategories()">
+    <div *ngFor="let category of getCurrentPageItems()">
       <div class="fields" id="{{category.categoryName}}" #div (click)="onQuizzesListClick(div)">
         <p>{{category.categoryName}}</p>
       </div>
     </div>
   </div>
-  <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 </div>
 
-<app-choose-action-popup-form *ngIf="flagOfAction" (closePopup)="flagOfAction = false" (actionChosen)="navigateToAction($event)"></app-choose-action-popup-form>
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+
+<div class="pagination-controls">
+  <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">{{"Previous" | translate}}</button>
+  <span *ngFor="let page of getPageNumbers()">
+    <button (click)="setPage(page)" [class.active]="currentPage === page">{{page}}</button>
+  </span>
+  <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">{{"Next" | translate}}</button>
+</div>
+
+<app-choose-action-popup-form [isVisible]="flagOfAction" (close)="flagOfAction = false" (actionChosen)="navigateToAction($event)"></app-choose-action-popup-form>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>
+
 

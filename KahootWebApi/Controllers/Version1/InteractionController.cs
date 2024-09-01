@@ -17,13 +17,13 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpGet("GetComments")]
-        public async Task<IEnumerable<CommentDto>> GetCommentsAsync(int quizId)
+        public async Task<IEnumerable<CommentDto>> GetCommentsAsync([FromQuery] int quizId)
         {
             return await _interactionService.GetCommentsAsync(quizId);
         }
 
         [HttpGet("GetComment")]
-        public async Task<IEnumerable<Comment>> GetCommentAsync(int userId, int quizId)
+        public async Task<IEnumerable<Comment>> GetCommentAsync([FromQuery] int userId, [FromQuery] int quizId)
         {
             return await _interactionService.GetCommentAsync(userId, quizId);
         }
@@ -47,9 +47,9 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpDelete("RemoveComment")]
-        public async Task RemoveCommentAsync([FromQuery] int authorId, [FromQuery] int quizId)
+        public async Task RemoveCommentAsync([FromQuery] int commentId)
         {
-            await _interactionService.RemoveCommentAsync(authorId, quizId);
+            await _interactionService.RemoveCommentAsync(commentId);
         }
 
         [HttpDelete("RemoveLike")]
@@ -104,6 +104,13 @@ namespace KahootWebApi.Controllers.Version1
         public async Task<bool> DidUserDislikeQuizAsync([FromQuery] int userId, [FromQuery] int quizId)
         {
             return await _interactionService.DidUserDislikeQuizAsync(userId, quizId);
+        }
+
+        [HttpPut("UpdateComment")]
+        [HttpPatch("UpdateComment")]
+        public async Task UpdateCommentAsync([FromQuery] string commentContent, [FromQuery] int commentId)
+        {
+            await _interactionService.UpdateCommentAsync(commentContent, commentId);
         }
     }
 }

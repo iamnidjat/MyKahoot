@@ -4,7 +4,7 @@ import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/
   selector: '[appChangeBg]'
 })
 
-export class changeBG{
+export class changeBG {
   @Input() isCorrect: boolean = false;
   constructor(private el: ElementRef, private render: Renderer2) { }
   @HostListener('click') answer(): void {

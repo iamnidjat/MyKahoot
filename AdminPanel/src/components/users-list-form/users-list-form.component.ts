@@ -3,15 +3,16 @@ import {User} from "../../models/User";
 import {GettingDataService} from "../../services/getting-data.service";
 import {ManipulatingDataService} from "../../services/manipulating-data.service";
 import {FilteringDataService} from "../../services/filtering-data.service";
-import {Router} from "@angular/router";
+import {NavigationExtras, Router} from "@angular/router";
 import Swal from "sweetalert2";
-import {NgForOf, NgIf} from "@angular/common";
+import {DatePipe, Location, NgForOf, NgIf} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {TranslateModule} from "@ngx-translate/core";
 import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
 import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
 import {FooterFormComponent} from "../footer-form/footer-form.component";
+import {ThemeToggleComponent} from "../theme-toggle/theme-toggle.component";
 
 @Component({
   selector: 'app-users-list-form',
@@ -25,7 +26,9 @@ import {FooterFormComponent} from "../footer-form/footer-form.component";
     FormsModule,
     NavbarFormComponent,
     ScrollToTopFormComponent,
-    FooterFormComponent
+    FooterFormComponent,
+    DatePipe,
+    ThemeToggleComponent
   ],
   templateUrl: './users-list-form.component.html',
   styleUrl: './users-list-form.component.css'
@@ -36,8 +39,10 @@ export class UsersListFormComponent implements OnInit{
   public searchText: string = '';
   public p: number = 1;
   public paginationId: string = 'unique-pagination-id';
+  public url: string = "https://localhost:7176";
+
   constructor(private gettingDataService: GettingDataService, private manipulatingDataService: ManipulatingDataService,
-              private filteringDataService: FilteringDataService, private router: Router) {}
+              private filteringDataService: FilteringDataService, private router: Router, private location: Location) {}
 
   public async GetUsersAsync(): Promise<void> {
     this.users = await this.gettingDataService.GetUsersAsync("All");
@@ -46,15 +51,16 @@ export class UsersListFormComponent implements OnInit{
     }
   }
 
-  private async deleteUser(userId: number): Promise<void>{
-    await this.manipulatingDataService.deleteUserAsync(userId);
+  private async deleteUser(userId: number, username: string, userMail: string): Promise<void>{
+    await this.manipulatingDataService.deleteUserAsync(userId, username, userMail);
+    this.users = this.users.filter((user) => user.id !== userId);
   }
 
   private async banUser(userId: number): Promise<void>{
     await this.manipulatingDataService.banUserAsync(userId);
   }
 
-  public confirmDelete(userId: number, userName: string): void {
+  public confirmDelete(userId: number, userName: string, userMail: string): void {
     Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete the user "${userName}"`,
@@ -65,7 +71,7 @@ export class UsersListFormComponent implements OnInit{
       cancelButtonText: 'No, keep it'
     }).then(async (result: any) => {
       if (result.isConfirmed) {
-        await this.deleteUser(userId);
+        await this.deleteUser(userId, userName, userMail);
         Swal.fire(
           'Deleted',
           `You deleted "${userName}" user`,
@@ -110,11 +116,18 @@ export class UsersListFormComponent implements OnInit{
   }
 
   public messageUser(username: string): void {
-    this.router.navigate([`/app/sendMessage/${username}`]);
+    const navigationExtras: NavigationExtras = {
+      queryParams: { 'username': username }
+    };
+    this.router.navigate(['/app/send-message'], navigationExtras);
   }
 
   public filterUsers(): User[] {
     return this.filteringDataService.filterUsers(this.users, this.searchText);
+  }
+
+  public backOptions(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {

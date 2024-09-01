@@ -1,13 +1,5 @@
 <app-navbar-form></app-navbar-form>
-
-<!--<div class="row">-->
-<!--  <h1>{{"Change Birthday" | translate}}</h1>-->
-<!--  <div class="form-group">-->
-<!--    <input type="date" name="uNewBirthday" id="newBirthday" #newBirthday required="required" >-->
-<!--    <p><label>{{"New Birthday" | translate}}</label></p>-->
-<!--    <button (click)="changeBirthday($event, newBirthday.value)">{{"Continue" | translate}}</button>-->
-<!--  </div>-->
-<!--</div>-->
+<app-theme-toggle></app-theme-toggle>
 
 <div class="container">
   <h1>{{"Change Birthday" | translate}}</h1>
@@ -21,6 +13,7 @@
   </div>
 </div>
 
+<div id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

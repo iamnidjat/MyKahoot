@@ -20,71 +20,98 @@ export class SharedService {
     fetch(API_URL + "Logout", {
       method: "GET"
     }).then((response) => {
-      // localStorage.removeItem('Login');
-      // localStorage.removeItem('Role');
-      // localStorage.removeItem('userId');
-      // localStorage.removeItem('userMail');
-      // localStorage.removeItem('photoURL');
-      // localStorage.removeItem('IsMailChanged');
-      // localStorage.removeItem('IsFrozen');
-      // localStorage.removeItem("Username");
-      // localStorage.removeItem("UsernameDate");
-      // localStorage.removeItem("SocialUser"); // !
-      localStorage.clear();
-
+      localStorage.clear()
       this.router.navigate(['/app/auth-form']);
     });
   }
 
-  public checkPassword(password: string): boolean{
-    fetch(API_URL + `PasswordsMatching?userId=${parseInt(localStorage.getItem("userId")!)}&password=${password}`, {
-      method: "GET",
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      localStorage.setItem("DoesMatch", JSON.parse(JSON.stringify(data)));
-    });
-    return JSON.parse(localStorage.getItem("DoesMatch")!);
+  public async checkPasswordAsync(password: string): Promise<boolean> {
+   try {
+      const response = await fetch(API_URL + `PasswordsMatching?userId=${parseInt(localStorage.getItem("userId")!)}&password=${password}`);
+      const data = await response.json();
+      return data;
+   }
+   catch (error) {
+      console.error("Error in checkPasswordAsync:", error);
+      return false;
+    }
   }
 
   public RegisterSocialUser(): void{
     this.socialAuthService.authState.subscribe((user) => {
       localStorage.setItem("Login", user.name);
       localStorage.setItem("SocialUser", "true");
+      localStorage.setItem("userPhoto", user.photoUrl);
       this.AddSocialUser(user.name, user.firstName, user.email, localStorage.getItem("Role")!, user.provider);
-      this.GetUserInfo(user.name);
+      this.GetUserInfoByUsername(user.name);
       Swal.fire("You registered successfully!");
       this.router.navigate(['/app/player-options-form']);
     });
   }
 
   private async AddSocialUser(username: string, name: string, email: string, role: string, provider: string): Promise<void>{
-    let socialUser: SocialUser = {userName: username, name: name, email: email, role: role, provider: provider}
+    try {
+      let socialUser: SocialUser = {userName: username, name: name, email: email, role: role, provider: provider}
 
-    await fetch(API_URL + "AddSocialUser", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(socialUser)
-    });
+      await fetch(API_URL + "AddSocialUser", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(socialUser)
+      });
+    }
+    catch (error) {
+        console.error("Error in addSocialUserAsync:", error);
+    }
   }
 
-  public async GetUserInfo(username: string): Promise<void>{
-    await fetch(API_URL2 + `GetUserInfoByUsernameAsync?username=${username}`, {
-      method: "GET"
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      let userid = JSON.parse(JSON.stringify(data));
-      localStorage.setItem("userId", JSON.stringify(Object.values(userid)[0]));
-      localStorage.setItem("userMail", JSON.stringify(Object.values(userid)[8]));
-      localStorage.setItem("Role", JSON.stringify(Object.values(userid)[13]));
-    });
+  public async GetUserInfoByUsername(username: string): Promise<void> {
+    try {
+      const response = await fetch(`${API_URL2}GetUserInfoByUsername?username=${username}`, {
+        method: "GET"
+      });
+
+      if (!response.ok) {
+        console.error(`Error: ${response.statusText}`);
+        return;
+      }
+
+      if (response.status === 204) {
+        console.log("No content returned. Username might not be found.");
+        return;
+      }
+
+      const data = await response.json();
+
+      console.log(data);
+
+      localStorage.setItem("userId", data.id);
+      localStorage.setItem("userMail", data.email);
+      localStorage.setItem("Role", data.role);
+      localStorage.setItem("userLevel", data.level);
+      localStorage.setItem("coins", data.coins);
+      localStorage.setItem("points", data.points);
+      localStorage.setItem("overallPoints", data.overallPoints);
+    } catch (error) {
+      console.error("Error in GetUserInfo:", error);
+    }
   }
 
-  public async SentConfirmationMail(email: string, userId: number): Promise<void>
-  {
+  public async getUserInfoAsync(): Promise<any> {
+    try {
+      const userId = parseInt(localStorage.getItem("userId")!);
+
+      const response = await fetch(`${API_URL2}GetUserInfo?id=${userId}`, {
+        method: "GET",
+      });
+      return await response.json();
+    } catch (error) {
+      console.error("An error occurred while fetching user info:", error);
+    }
+  }
+
+  public async SentConfirmationMail(email: string, userId: number): Promise<void> {
     await fetch(API_URL3+ `ConfirmEmail?email=${email}&userId=${userId}`, {
       method: "POST",
       headers: {

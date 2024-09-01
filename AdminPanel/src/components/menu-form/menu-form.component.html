@@ -1,29 +1,15 @@
 <app-navbar-form></app-navbar-form>
 <app-theme-toggle></app-theme-toggle>
 
-<div class="container">
+<div id="allthethings">
   <div class="fields" (click)="onUsersListsClick()"><p>{{'Users' | translate}}</p></div>
   <div class="fields" (click)="onQuizzesListClick()"><p>{{'Quizzes' | translate}}</p></div>
   <div class="fields" (click)="onSendNewsClick()"><p>{{'SendNews' | translate}}</p></div>
   <div class="fields" (click)="onMessagesClick()"><p>{{'Messages' | translate}}</p></div>
-  <div class="fields" (click)="backAuth()"><p>{{'Exit' | translate}}</p></div>
+  <div class="fields" (click)="onMyKahootStoreClick()"><p>{{'MyKahootStore' | translate}}</p></div>
 </div>
 
-<!--<div class="wrapper">-->
-<!--  <header>-->
-<!--    <i class="bx bx-cookie"></i>-->
-<!--    <h2>{{'CookiesConsent' | translate}}</h2>-->
-<!--  </header>-->
-<!--  <div class="data">-->
-<!--    <p>{{'CookiesDescription' | translate}}-->
-<!--      <a (click)="onReadMoreClick()"> {{'ReadMore' | translate}}</a>-->
-<!--    </p>-->
-<!--  </div>-->
-<!--  <div class="buttons">-->
-<!--    <button class="button" id="acceptBtn" (click)="acceptCookiesClick()">{{'Accept' | translate}}</button>-->
-<!--    <button class="button" id="declineBtn" (click)="declineCookiesClick()">{{'Decline' | translate}}</button>-->
-<!--  </div>-->
-<!--</div>-->
+<div id="exit" (click)="backAuth()"><p>{{'Exit' | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

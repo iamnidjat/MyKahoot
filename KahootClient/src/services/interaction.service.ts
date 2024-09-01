@@ -112,9 +112,15 @@ export class InteractionService {
     })
   }
 
-  public async removeCommentAsync(authorId: number): Promise<void> {
-    await fetch(API_URL + `RemoveComment?authorId=${authorId}`, {
+  public async removeCommentAsync(commentId: number): Promise<void> {
+    await fetch(API_URL + `RemoveComment?commentId=${commentId}`, {
       method: "DELETE",
+    })
+  }
+
+  public async updateCommentAsync(commentContent: string, commentId: number): Promise<void> {
+    await fetch(API_URL + `UpdateComment?commentContent=${commentContent}&commentId=${commentId}`, {
+      method: "PATCH",
     })
   }
 

@@ -15,7 +15,7 @@ namespace KahootWebApi.Services.Implementations
             _logger = logger;
         }
 
-        public async Task<bool> DoesUserExist(string username)
+        public async Task<bool> DoesUserExistAsync(string username)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<bool> IsEmailUsed(string mail)
+        public async Task<bool> IsEmailUsedAsync(string mail)
         {
             try
             {
@@ -55,9 +55,8 @@ namespace KahootWebApi.Services.Implementations
         {
             try
             {
-                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
-
-                return result!;
+                var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
+                return user;
             }
             catch (ArgumentNullException ex)
             {
@@ -81,23 +80,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<int> GetNextDeadlineForChangingName(int id)
-        {
-            try
-            {
-                var result = await _context.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
-
-                return 90 - (DateTime.Now.Subtract((DateTime)result.DateOfChangingUsername).Days);
-                
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogError(ex, "An error occurred in the GetNextDeadlineForChangingName method.");
-                return -1;
-            }
-        }
-
-        public async Task<bool> IsUsernameChanged(int id)
+        public async Task<bool> IsUsernameChangedAsync(int id)
         {
             try
             {                             
@@ -120,7 +103,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<bool> IsEmailChanged(int id)
+        public async Task<bool> IsEmailChangedAsync(int id)
         {
             try
             {                
@@ -143,7 +126,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<bool> IsEmailConfirmed(string mail)
+        public async Task<bool> IsEmailConfirmedAsync(string mail)
         {
             try
             {

@@ -1,29 +1,36 @@
-<app-navbar-form></app-navbar-form>
+<div class="app-container">
+  <app-navbar-form></app-navbar-form>
+  <app-theme-toggle></app-theme-toggle>
+  <main class="content">
+    <div class="main-container">
+      <h1 style="text-align: center; margin-bottom: 30px;">{{'Leaderboard' | translate}}</h1>
+      <div class="table-div">
+        <table class="zigzag">
+          <thead>
+          <tr>
+            <th class="header" style="width: 100px;">&#8470;</th>
+            <th class="header" style="width: 150px;">{{'Username' | translate}}</th>
+            <th class="header" style="width: 150px;">{{'Role' | translate}}</th>
+            <th class="header" style="width: 150px;">{{'OverallPoints' | translate}}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of leaderBoardUsers;  let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ user.userName }}</td>
+            <td>{{ user.role }}</td>
+            <td [routerLink]="['/app/pointsHistory', user.id]" style="cursor: pointer; text-decoration: underline; color: dodgerblue">{{ user.overallPoints }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-<div class="main-container">
-  <h1 style="text-align: center; margin-bottom: 30px;">{{'Leaderboard' | translate}}</h1>
-    <div class="table-div">
+    <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
-      <table class="zigzag">
-        <thead>
-        <tr>
-          <th class="header" style="width: 100px;">&#8470;</th>
-          <th class="header" style="width: 150px;">{{'Username' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'Role' | translate}}</th>
-          <th class="header" style="width: 150px;">{{'OverallPoints' | translate}}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let user of leaderBoardUsers;  let i = index">
-          <td>{{ i + 1 }}</td>
-          <td>{{ user.userName }}</td>
-          <td>{{ user.role }}</td>
-          <td [routerLink]="['/app/pointsHistory', user.userName]" style="cursor: pointer; text-decoration: underline; color: dodgerblue">{{ user.overallPoints }}</td>
-        </tr>
-        </tbody>
-      </table>
-  </div>
+  </main>
+  <app-scroll-to-top-form></app-scroll-to-top-form>
+  <app-footer-form></app-footer-form>
 </div>
 
-<app-scroll-to-top-form></app-scroll-to-top-form>
-<app-footer-form></app-footer-form>
+

@@ -20,16 +20,16 @@ export class StatsFormComponent implements OnInit, OnDestroy{
 
   constructor(private router: Router, private checkData: CheckDataService) {}
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> { //
     this.catType = localStorage.getItem("categoryName")!;
     this.quizType = localStorage.getItem("QuizType")!;
     this.level = localStorage.getItem("SLevel")!
-    this.mode = this.checkData.GetQuizMode(this.catType, this.quizType) ? 'private' : 'public';
-    this.downloadResultsAsync();
+    this.mode = await this.checkData.GetQuizMode(this.catType, this.quizType) ? 'private' : 'public';
+    await this.downloadResultsAsync();
   }
 
   public async downloadResultsAsync(): Promise<void>{
-    await fetch(API_URL + `DownloadResult/${parseInt(localStorage.getItem("userId")!)}?userId=${parseInt(localStorage.getItem("userId")!)}&catType=${this.catType}&quizType=${this.quizType}&level=${this.level}`, {
+    await fetch(API_URL + `DownloadResult/${parseInt(localStorage.getItem("userId")!)}?catType=${this.catType}&quizType=${this.quizType}&level=${this.level}`, {
       method: "GET"
     }).then(text => text.json()).then(data => {
       console.log("data", data);
@@ -54,6 +54,10 @@ export class StatsFormComponent implements OnInit, OnDestroy{
     };
 
     this.router.navigate(['/app/quizHistory'], navigationExtras);
+  }
+
+  public backOptions(): void{
+    this.router.navigate(['/app/profile-form']);
   }
 
   ngOnDestroy(): void {

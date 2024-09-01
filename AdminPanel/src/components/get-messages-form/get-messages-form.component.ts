@@ -8,6 +8,7 @@ import {FooterFormComponent} from "../footer-form/footer-form.component";
 import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
 import {TranslateModule} from "@ngx-translate/core";
 import {MessagePopupFormComponent} from "../message-popup-form/message-popup-form.component";
+import {ThemeToggleComponent} from "../theme-toggle/theme-toggle.component";
 
 const API_URL: string = "https://localhost:7176/api/v1/Message/";
 
@@ -22,7 +23,8 @@ const API_URL: string = "https://localhost:7176/api/v1/Message/";
     FooterFormComponent,
     NavbarFormComponent,
     TranslateModule,
-    MessagePopupFormComponent
+    MessagePopupFormComponent,
+    ThemeToggleComponent
   ],
   templateUrl: './get-messages-form.component.html',
   styleUrls: ['./get-messages-form.component.css']
@@ -69,7 +71,7 @@ export class GetMessagesFormComponent implements OnInit{
   }
 
   public backOptions(): void {
-      this.router.navigate(['/app/my-profile-form']);
+    this.router.navigate(['app/messages-menu-page']);
   }
 
   public openMessage(messageId: number): void {

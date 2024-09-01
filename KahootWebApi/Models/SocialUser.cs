@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace KahootWebApi.Models
 {
@@ -20,5 +19,10 @@ namespace KahootWebApi.Models
         public string? Role { get; set; }
 
         public string? Provider { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }

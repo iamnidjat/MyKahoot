@@ -5,17 +5,21 @@
   left: 0;
   top: 0;
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: var(--modal-background);
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  background-color: var(--modal-content-background);
+  margin: 15% auto;
   padding: 20px;
-  border: 1px solid #888;
-  width: 30%; /* Could be more or less, depending on screen size */
+  border: 1px solid var(--modal-border-color);
+  border-radius: 10px;
+  width: 30%;
+  max-width: 500px;
+  color: var(--modal-text-color);
+  position: relative;
+  font-family: 'Roboto', sans-serif;
 }
 
 /* The Close Button */
@@ -27,7 +31,35 @@
 
 .close:hover,
 .close:focus {
-  color: black;
+  color: var(--close-button-hover-color);
   text-decoration: none;
   cursor: pointer;
 }
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  color: var(--close-button-color);
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+button {
+  background-color: var(--button-background);
+  color: var(--button-color);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover-background);
+}
+

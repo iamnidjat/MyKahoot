@@ -48,6 +48,10 @@ export class MenuFormComponent implements OnInit{
     this.router.navigate(['/app/messages-menu-page']);
   }
 
+  public onMyKahootStoreClick(): void {
+    this.router.navigate(['/app/mykahoot-store']);
+  }
+
   public backAuth(): void {
     this.authService.logout();
   }

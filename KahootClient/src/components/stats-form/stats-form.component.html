@@ -1,4 +1,5 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div class="main-container">
   <h1>{{'Your latest results' | translate}}</h1>
@@ -6,10 +7,10 @@
     <div class="barchart-div" (click)="toBarchartForm()">{{"You can watch your stats in the barchart form" | translate}}</div>
 
     <div class="table-div">
-      <div>{{"Category" | translate}}: {{catType}}</div>
-      <div>{{"Quiz" | translate}}: {{quizType}}</div>
-      <div>{{"Level" | translate}}: {{level}}</div>
-      <div>{{"Test Mode" | translate}}: {{mode}}</div>
+      <div class="subtitle">{{"Category" | translate}}: {{catType}}</div>
+      <div class="subtitle">{{"Quiz" | translate}}: {{quizType}}</div>
+      <div class="subtitle">{{"Level" | translate}}: {{level}}</div>
+      <div class="subtitle">{{"Test Mode" | translate}}: {{mode}}</div>
 
       <table class="zigzag">
         <thead>
@@ -32,7 +33,7 @@
           <td>{{ entity.wrongAnswersCount }}</td>
           <td>{{ entity.skippedQuestionsCount }}</td>
           <td>{{ entity.averageResponseTime }}</td>
-          <td (click)="toQuizHistory()">Your answers</td>
+          <td (click)="toQuizHistory()">{{"Your answers" | translate}}</td>
         </tr>
         </tbody>
       </table>
@@ -40,9 +41,11 @@
   </div>
 
   <div *ngIf="info && info.length === 0">
-    <p>There is no data to display</p>
+    <p>{{"There is no data to display" | translate}}</p>
   </div>
 </div>
+
+<div id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

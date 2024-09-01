@@ -1,52 +1,54 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<div class="wrapper">
 <div class="container mt-5" style="width: 1000px !important;">
   <div class="card">
     <div class="d-flex justify-content-between p-3">
       <div class="quiz-header">
-        <h4 style="font-family: cursive;">Creating a(n) "{{testType}}" Quiz!</h4>
-        <span style="font-style: italic;">Welcome {{name}}!</span>
+        <h4 style="font-family: cursive;">{{"Creating a(n)" | translate}} "{{testType}}" {{"Quiz" | translate}}!</h4>
+        <span style="font-style: italic;">{{"Welcome" | translate}} {{name}}!</span>
       </div>
     </div>
 
     <ng-container *ngIf="!isQuizCompleted">
       <div class="d-flex justify-content-around py-3">
         <div class="question-remain">
-          <span style="font-style: italic;">Question {{currentQuestion + 1}} of 50</span>
+          <span style="font-style: italic;">{{"Question" | translate}} {{currentQuestion + 1}} of 50</span>
         </div>
       </div>
       <div class="time-points" style="display: flex; flex-direction: row; justify-content: space-between">
         <div class="points" style="display: flex; flex-direction: row">
-          <label>Points: </label>
+          <label>{{"Points" | translate}}: </label>
           <input type="number" min="5" max="50" value="5" #Points />
-          <label> (min: 5 points, max: 50 points)</label>
+          <label> {{"min: 5 points, max: 50 points" | translate}}</label>
         </div>
         <div class="time" style="display: flex; flex-direction: row">
-          <label>Time (seconds): </label>
+          <label>{{"Time(seconds)" | translate}}: </label>
           <input type="number" min="15" max="180" value="60" #Time />
-          <label> (min: 15 seconds, max: 180 seconds)</label>
+          <label> {{"min: 15 seconds, max: 180 seconds" | translate}}</label>
         </div>
       </div>
       <div class="quiz-type">
         <div class="sub-quiz-type">
           <label>2 answers</label>
-          <input type="radio" #TestFormatRadioOption1 value="true-false-answers" name="quizTypeAnswer" [checked]="isTrueFalseAnswersChecked" (change)="choosingTestFormat($event)"/>
+          <input type="radio" value="true-false-answers" name="quizTypeAnswer" (change)="choosingTestFormat($event)"/>
         </div>
         <div class="sub-quiz-type">
           <label>3 answers</label>
-          <input type="radio" #TestFormatRadioOption2 value="three-answers" name="quizTypeAnswer" [checked]="isThreeAnswersChecked" (change)="choosingTestFormat($event)"/>
+          <input type="radio" value="three-answers" name="quizTypeAnswer" (change)="choosingTestFormat($event)"/>
         </div>
         <div class="sub-quiz-type">
           <label>4 answers</label>
-          <input type="radio" #TestFormatRadioOption3 value="four-answers" name="quizTypeAnswer" [checked]="isFourAnswersChecked" (change)="choosingTestFormat($event)"/>
+          <input type="radio" value="four-answers" name="quizTypeAnswer" [checked]="true" (change)="choosingTestFormat($event)"/>
         </div>
       </div>
       <div class="question">
         <div class="card" style="text-align: center; margin: 5px">
-          <input type="text" #Question placeholder="Enter your question here..."/>
+          <input type="text" #Question placeholder="{{'Enter your question here...' | translate}}"/>
         </div>
       </div>
       <div class="media">
@@ -59,25 +61,25 @@
           <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
             <li style="cursor: pointer;">
               <div style="display: flex">
-                <input type="text" #Answer1 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                <input type="text" #Answer1 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                 <input type="radio" #RadioOption1 value="1" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
-              <input type="text" #Answer2 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+              <input type="text" #Answer2 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
               <input type="radio" #RadioOption2 value="2" name="radAnswer" (change)="onChange($event)">
             </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
-                <input type="text" #Answer3 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                <input type="text" #Answer3 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                 <input type="radio" #RadioOption3 value="3" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
-                <input type="text" #Answer4 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                <input type="text" #Answer4 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                 <input type="radio" #RadioOption4 value="4" name="radAnswer" (change)="onChange($event)"/>
               </div>
             </li>
@@ -89,19 +91,19 @@
             <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
               <li style="cursor: pointer;">
                 <div style="display: flex">
-                  <input type="text" #Answer11 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                  <input type="text" #Answer11 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                   <input type="radio" #RadioOption11 value="1" name="radAnswer" (change)="onChange($event)">
                 </div>
               </li>
               <li style="cursor: pointer;">
                 <div style="display: flex">
-                <input type="text" #Answer21 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                <input type="text" #Answer21 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                 <input type="radio" #RadioOption21 value="2" name="radAnswer" (change)="onChange($event)">
               </div>
               </li>
               <li style="cursor: pointer;">
                 <div style="display: flex">
-                  <input type="text" #Answer31 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="Enter your answer here...">
+                  <input type="text" #Answer31 style="display: inline-block; cursor: pointer; padding: 5px; margin: 5px; width: 100%" placeholder="{{'Enter your answer here...' | translate}}">
                   <input type="radio" #RadioOption31 value="3" name="radAnswer" (change)="onChange($event)">
                 </div>
               </li>
@@ -113,18 +115,18 @@
           <ol style="list-style: none;  margin-right: 4%; margin-top: 2%">
             <li style="cursor: pointer;">
               <div style="display: flex">
-                <input type="text" #Answer12 value="TRUE" [readonly]="true"  style="display: inline-block; background-color: deepskyblue; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
+                <input type="text" #Answer12 value="{{'TRUE' | translate}}" [readonly]="true"  style="display: inline-block; background-color: deepskyblue; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
                 <input type="radio" #RadioOption12 value="1" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
             <li style="cursor: pointer;">
               <div style="display: flex">
-                <input type="text" #Answer22 value="FALSE" [readonly]="true" style="display: inline-block; background-color: red; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
+                <input type="text" #Answer22 value="{{'FALSE' | translate}}" [readonly]="true" style="display: inline-block; background-color: red; cursor: pointer; padding: 5px; margin: 5px; width: 100%">
                 <input type="radio" #RadioOption22 value="2" name="radAnswer" (change)="onChange($event)">
               </div>
             </li>
           </ol>
-          <button class="btn" (click)="ShuffleAnswers()" style="background-color: #03cae4">Shuffle</button>
+          <button class="btn" (click)="ShuffleAnswers()" style="background-color: #03cae4">{{"Shuffle" | translate}}</button>
         </div>
         </ng-container>
       <div class="d-flex justify-content-between">
@@ -139,9 +141,9 @@
       <div class="row d-flex justify-content-between">
         <img style="width: 50%;" class="img-fluid col-sm-12 mx-auto" src="https://icon-library.com/images/celebration-icon-png/celebration-icon-png-7.jpg" alt="">
         <div class="result text-center col-md-6 col-sm-12">
-          <h3>Congratulations! You created your own quiz!</h3>
+          <h3>{{"Congratulations! You created your own quiz" | translate}}!</h3>
           <div class="buttons">
-            <input type="button" class="backToMenuButton" name="backToMenuButton" value="Menu" (click)="ToMenu()"/>
+            <input type="button" class="backToMenuButton" name="backToMenuButton" value="{{'Menu' | translate}}" (click)="ToMenu()"/>
           </div>
         </div>
       </div>
@@ -149,8 +151,9 @@
 
   </div>
 </div>
+</div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
-<!--<app-footer-form></app-footer-form>-->
+<app-footer-form></app-footer-form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>

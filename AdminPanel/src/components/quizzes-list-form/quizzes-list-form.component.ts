@@ -8,10 +8,11 @@ import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {FooterFormComponent} from "../footer-form/footer-form.component";
 import {FormsModule} from "@angular/forms";
 import {NavbarFormComponent} from "../navbar-form/navbar-form.component";
-import {NgForOf, NgIf} from "@angular/common";
+import {Location, NgForOf, NgIf} from "@angular/common";
 import {NgxPaginationModule} from "ngx-pagination";
 import {ScrollToTopFormComponent} from "../scroll-to-top-form/scroll-to-top-form.component";
 import {TranslateModule} from "@ngx-translate/core";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-quizzes-list-form',
@@ -36,7 +37,7 @@ export class QuizzesListFormComponent implements OnInit{
   public p: number = 1;
   public paginationId: string = 'unique-pagination-id';
   constructor(private gettingDataService: GettingDataService, private manipulatingDataService: ManipulatingDataService,
-              private filteringDataService: FilteringDataService, private router: Router) {}
+              private filteringDataService: FilteringDataService, private router: Router, private location: Location) {}
 
   public async GetQuizzesAsync(): Promise<void> {
     this.quizzes = await this.gettingDataService.GetQuizzesAsync();
@@ -51,12 +52,44 @@ export class QuizzesListFormComponent implements OnInit{
     return this.filteringDataService.filterQuizzes(this.quizzes, this.searchText);
   }
 
-  public async deleteQuiz(quizId: number): Promise<void> {
+  public confirmDelete(quizId: number, quizName: string): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete the quiz "${quizName}"`,
+      icon: 'warning',
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, keep it'
+    }).then(async (result: any) => {
+      if (result.isConfirmed) {
+        await this.deleteQuizAsync(quizId);
+        Swal.fire(
+          'Deleted',
+          `You deleted the "${quizName}" quiz`,
+          'info'
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelled',
+          'Your quiz is safe :)',
+          'info'
+        );
+      }
+    });
+  }
+
+  private async deleteQuizAsync(quizId: number): Promise<void> {
     await this.manipulatingDataService.deleteQuizAsync(quizId);
+    this.quizzes = this.quizzes.filter((quiz) => quiz.id !== quizId);
   }
 
   public onWatchQuizClick(catType: string, quizName: string): void {
     this.router.navigate([`/app/watching-quiz/${catType}/${quizName}`]);
+  }
+
+  public backOptions(): void {
+    this.location.back();
   }
 
   ngOnInit(): void {

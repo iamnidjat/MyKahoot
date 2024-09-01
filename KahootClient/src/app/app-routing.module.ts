@@ -47,6 +47,9 @@ import {LeadeboardFormComponent} from "../components/leadeboard-form/leadeboard-
 import {PointsHistoryFormComponent} from "../components/points-history-form/points-history-form.component";
 import {WelcomePageComponent} from "../components/welcome-page/welcome-page.component";
 import {MykahootStoreFormComponent} from "../components/mykahoot-store-form/mykahoot-store-form.component";
+import {MyItemsFormComponent} from "../components/my-items-form/my-items-form.component";
+import {GetRemindersFormComponent} from "../components/get-reminders-form/get-reminders-form.component";
+import {FaqPageComponent} from "../components/faq-page/faq-page.component";
 
 export const routes: Route[] = [
   {
@@ -65,7 +68,7 @@ export const routes: Route[] = [
   {
     path: 'app/player-options-form',
     component: PlayerOptionsFormComponent,
-      canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'app/player-survey-choosing-form',
@@ -90,7 +93,6 @@ export const routes: Route[] = [
     canDeactivate: [exitTestProcessGuard]
   },
   {
-    // path: 'app/rules-form/:action/:mode/:categoryName/:testName/:level',
     path: 'app/rules-form',
     component: RulesFormComponent,
     canActivate: [Specialguard, Novisitguard]
@@ -127,7 +129,7 @@ export const routes: Route[] = [
   {
     path: 'app/creating-quiz-option-form',
     component: CreatingQuizOptionFormComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, StudentProhibitionGuard]
   },
   {
     path: 'app/choose-field-form',
@@ -154,7 +156,7 @@ export const routes: Route[] = [
   {
     path: 'app/my-quizzes-form',
     component: YourQuizzesFormComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, StudentProhibitionGuard]
   },
   {
     path: 'app/404-page-form',
@@ -185,31 +187,30 @@ export const routes: Route[] = [
     canActivate: [AuthGuard]
   },
   {
-    // path: 'app/choose-level-form/:action/:mode/:categoryName/:testName',
     path: 'app/choose-level-form',
     component: ChooseLevelFormComponent,
-    canActivate: [Specialguard]
+    canActivate: [Specialguard, Novisitguard]
   },
   {
     path: 'app/watch-quiz-form',
     component: WatchQuizFormComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard, StudentProhibitionGuard]
   },
   {
     path: 'app/update-quiz-form',
     component: UpdateQuizFormComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard, StudentProhibitionGuard],
     canDeactivate: [exitTestProcessGuard]
   },
   {
     path: 'app/tests-list-form',
     component: AvailableTestsListsFormComponent,
-    canActivate: [Specialguard]
+    canActivate: [Specialguard, Novisitguard]
   },
   {
     path: 'app/tests-list-stats-form',
     component: AvailableTestsStatsFormComponent,
-    canActivate: [Specialguard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'app/choose-field-level-form',
@@ -229,32 +230,47 @@ export const routes: Route[] = [
   {
     path: 'app/quizHistory',
     component: QuizHistoryFormComponent,
-   // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'app/sendMessage/:receiver',
     component: SendMessageFormComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    canDeactivate: [exitTestProcessGuard]
   },
   {
     path: 'app/getMessages',
     component: GetMessagesFormComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/getReminders',
+    component: GetRemindersFormComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'app/leaderboard',
     component: LeadeboardFormComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
-    path: 'app/pointsHistory/:user',
+    path: 'app/pointsHistory/:userId',
     component: PointsHistoryFormComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'app/mykahoot-store',
     component: MykahootStoreFormComponent,
-    // canActivate: [AuthGuard]
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/my-purchases/:id',
+    component: MyItemsFormComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'app/faq-page',
+    component: FaqPageComponent,
   },
   { path: '**', component: NotFoundFormComponent }
 ];

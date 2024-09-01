@@ -1,25 +1,48 @@
-<div class="container">
-  <div style="display: flex; flex-direction: column">
-    <label>{{userName}}:</label>
-    <textarea #Comment placeholder="Write your comment here..."></textarea>
-    <button (click)="addCommentAsync(Comment.value)">Publish</button>
-  </div>
-  <div class="mt-4">
-    <h4>Comments</h4>
-    <div *ngIf="comments.length === 0" class="text-muted">No comments yet.</div>
-    <div *ngFor="let comment of comments" class="card mb-2">
-      <div class="card-body">
-        <p class="card-text">{{ comment.content }}</p>
-        <p class="card-subtitle text-muted">Posted by {{ comment.authorName }} on {{ comment.date | date: 'medium' }}</p>
+<div class="app-container">
+  <app-navbar-form></app-navbar-form>
+  <app-theme-toggle></app-theme-toggle>
+  <main class="content">
+    <div class="container">
+      <div style="display: flex; flex-direction: column">
+        <label>{{userName}}:</label>
+        <textarea #Comment placeholder="{{'Write your comment here...' | translate}}"></textarea>
+        <button (click)="addCommentAsync(Comment.value)">{{"Publish" | translate}}</button>
+      </div>
+      <div class="mt-4">
+        <h4>{{"Comments" | translate}}</h4>
+        <div *ngIf="comments.length === 0" class="text-muted">{{"No comments yet" | translate}}.</div>
+        <div *ngFor="let comment of comments" class="card mb-2">
+          <div class="card-body">
+            <p class="card-text">{{ comment.content }}</p>
+            <p class="card-subtitle text-muted">{{"Posted by" | translate}} {{ comment.authorName }} {{"on" | translate}} {{ comment.date | date: 'medium' }}</p>
+          </div>
+        </div>
+        <hr>
+        <h4>{{"Your Comments" | translate}}</h4>
+        <div *ngFor="let comment of myComments" class="card mb-2">
+          <div class="card-body">
+            <div>
+              <p class="card-text" *ngIf="!editMode[comment.id!]">{{ comment.content }}</p>
+              <textarea *ngIf="editMode[comment.id!]" [(ngModel)]="comment.content"></textarea>
+            </div>
+            <p class="card-subtitle text-muted">{{"Posted on" | translate}} {{ comment.date | date: 'medium' }}</p>
+            <div class="comment-actions">
+              <div>
+                <button *ngIf="editMode[comment.id!]" (click)="updateCommentAsync(comment.content, comment.id!)" class="btn btn-warning btn-sm">
+                  <i class="fas fa-edit"></i> {{'Save' | translate}}
+                </button>
+                <input *ngIf="!editMode[comment.id!]" type="button" value="{{'Edit' | translate}}" (click)="toggleEditMode(comment.id!)"/>
+              </div>
+              <button (click)="removeCommentAsync(comment.id!)" class="btn btn-danger btn-sm">
+                <i class="fas fa-trash"></i> {{'Delete' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-    <hr>
-    <h4>Your Comments</h4>
-    <div *ngFor="let comment of myComments" class="card mb-2">
-      <div class="card-body">
-        <p class="card-text">{{ comment.content }}</p>
-        <p class="card-subtitle text-muted">Posted on {{ comment.date | date: 'medium' }}</p>
-      </div>
-    </div>
-  </div>
+  </main>
+  <app-scroll-to-top-form></app-scroll-to-top-form>
+<!--  <app-footer-form></app-footer-form>-->
 </div>
+

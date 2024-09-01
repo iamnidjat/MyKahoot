@@ -3,6 +3,7 @@ import {GetMessagesFormComponent} from "../get-messages-form/get-messages-form.c
 import {Router, RouterLink} from "@angular/router";
 import {Message} from "../../models/Message";
 import {DatePipe, NgIf} from "@angular/common";
+import {TranslateModule} from "@ngx-translate/core";
 
 @Component({
   selector: 'app-message-popup-form',
@@ -10,7 +11,8 @@ import {DatePipe, NgIf} from "@angular/common";
   imports: [
     RouterLink,
     NgIf,
-    DatePipe
+    DatePipe,
+    TranslateModule
   ],
   templateUrl: './message-popup-form.component.html',
   styleUrls: ['./message-popup-form.component.css']

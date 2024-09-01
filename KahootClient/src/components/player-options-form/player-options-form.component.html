@@ -3,12 +3,12 @@
 
 <div id="allthethings">
   <ng-container *ngIf="role === 'Teacher'">
-    <div class="fields" (click)="onCreateQuizClick()"><p>{{'CreateAQuiz' | translate}}</p></div>
+    <div class="fields" (click)="onCreateQuizClick()" [ngClass]="{disabledDiv: isDisabled}"><p>{{'CreateAQuiz' | translate}}</p></div>
   </ng-container>
-    <div class="fields" (click)="onSubjectsClick()"><p>{{'Play/Watch' | translate}}</p></div>
+    <div class="fields" (click)="onSubjectsClick()" [ngClass]="{disabledDiv: isDisabled}"><p>{{'Play/Watch' | translate}}</p></div>
     <div class="fields" (click)="onProfileClick()"><p>{{'Profile' | translate}}</p></div>
     <div class="fields" (click)="backAuth($event)"><p>{{'Exit' | translate}}</p></div>
-    <button class="store-button" (click)="onStoreClick()">MyKahoot Store</button>
+    <button class="store-button" (click)="onStoreClick()">{{'MyKahoot Store' | translate}}</button>
 </div>
 
 <div class="wrapper">

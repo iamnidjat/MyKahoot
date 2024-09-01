@@ -1,0 +1,108 @@
+.theme-switch-button {
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border: none;
+  border-radius: 25px;
+  padding: 5px;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: fixed;
+  top: 10%;
+  right: 0;
+  width: 100px;
+  height: 40px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.theme-switch-button i {
+  font-size: 18px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.theme-switch-button .fa-sun {
+  left: 10px;
+  color: #f39c12;
+}
+
+.theme-switch-button .fa-moon {
+  right: 10px;
+  color: #2c3e50;
+}
+
+.theme-switch-button .toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px; /* Adjust size as needed */
+  height: 30px; /* Adjust size as needed */
+  border-radius: 50%;
+  background-color: #fff;
+  transition: left 0.3s, background-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.theme-switch-button.light-theme .toggle {
+  left: calc(100% - 40px); /* Adjust based on size */
+  background-color: #f0f0f0; /* Background color for light theme toggle */
+}
+
+.theme-switch-button.dark-theme .toggle {
+  left: 10px; /* Adjust based on size */
+  background-color: #333; /* Background color for dark theme toggle */
+}
+
+.theme-switch-button:hover {
+  background-color: #444; /* Darker background on hover */
+}
+
+.theme-switch-button:focus {
+  outline: none;
+}
+
+
+/*.theme-switch-button {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  background-color: #f0f0f0;*/
+/*  border: none;*/
+/*  border-radius: 25px;*/
+/*  padding: 10px 20px;*/
+/*  cursor: pointer;*/
+/*  transition: background-color 0.3s, color 0.3s;*/
+/*  position: absolute;*/
+/*  top: 50%;*/
+/*  left: 0;*/
+/*  margin: 10px;*/
+/*  font-family: 'Roboto', sans-serif;*/
+/*  font-size: 0.9em;*/
+/*  font-weight: 500;*/
+/*}*/
+
+/*.theme-switch-button i {*/
+/*  font-size: 18px;*/
+/*  margin-right: 10px;*/
+/*}*/
+
+/*.theme-switch-button span {*/
+/*  font-size: 14px;*/
+/*}*/
+
+/*.theme-switch-button:hover {*/
+/*  background-color: #ddd;*/
+/*}*/
+
+/*.theme-switch-button:focus {*/
+/*  outline: none;*/
+/*}*/
+
+/*.theme-switch-button .fa-sun {*/
+/*  color: #f39c12;*/
+/*}*/
+
+/*.theme-switch-button .fa-moon {*/
+/*  color: #2c3e50;*/
+/*}*/

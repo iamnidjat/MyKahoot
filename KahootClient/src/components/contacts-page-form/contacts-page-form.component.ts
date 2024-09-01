@@ -1,5 +1,6 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import Swal from "sweetalert2";
+import {Router} from "@angular/router";
 
 const API_URL: string = "https://localhost:7176/api/v1/Feedback/";
 
@@ -14,6 +15,9 @@ export class ContactsPageFormComponent {
   @ViewChild('Email') email!: ElementRef;
   @ViewChild('PhoneNumber') phoneNumber!: ElementRef;
   @ViewChild('Message') message!: ElementRef;
+
+  constructor(private router: Router) {
+  }
 
   public sendMessage(e: any, firstName: string, lastName: string, email: string, phoneNumber: string, message: string): any {
     e.preventDefault();
@@ -47,5 +51,9 @@ export class ContactsPageFormComponent {
     this.email.nativeElement.value = '';
     this.phoneNumber.nativeElement.value = '';
     this.message.nativeElement.value = '';
+  }
+
+  public backOptions(): void {
+    this.router.navigate(['/app/player-options-form']);
   }
 }

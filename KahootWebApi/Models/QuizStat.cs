@@ -17,7 +17,7 @@ namespace KahootWebApi.Models
         public int Score { get; set; }
 
         [Required]
-        public string? UserName { get; set; }
+        public string? UserName { get; set; } // !
 
         [Required]
         public DateTime PassedDate { get; set; }
@@ -38,8 +38,6 @@ namespace KahootWebApi.Models
 
         [Required]
         public int SkippedQuestionsCount { get; set; }
-
-        public bool Flag { get; set; } = false;
 
         [Required]
         public int UserId { get; set; }

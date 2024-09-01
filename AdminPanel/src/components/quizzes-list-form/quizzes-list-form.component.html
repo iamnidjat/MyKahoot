@@ -8,25 +8,27 @@
         <thead>
         <tr>
           <th>ID</th>
-          <th>Quiz name</th>
-          <th>Category name</th>
-          <th>Created by</th>
-          <th>Is Private</th>
-          <th>Quiz code</th>
-          <th>Times passed</th>
-          <th>Average feedback score</th>
+          <th>{{"Quiz name" | translate}}</th>
+          <th>{{"Category name" | translate}}</th>
+          <th>{{"Created by" | translate}}</th>
+          <th>{{"Is Private" | translate}}</th>
+          <th>{{"Quiz code" | translate}}</th>
+          <th>{{"Times passed" | translate}}</th>
+          <th>{{"Average feedback score" | translate}}</th>
+          <th>{{"ACTIONS" | translate}}</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let quiz of filterQuizzes(); let i = index">
           <td>{{i + 1}}</td>
-          <td (click)="onWatchQuizClick(quiz.categoryName, quiz.quizName)">{{quiz.quizName}}</td>
+          <td style="cursor: pointer; color: #1a73e8; text-decoration: underline" (click)="onWatchQuizClick(quiz.categoryName, quiz.quizName)">{{quiz.quizName}}</td>
           <td>{{quiz.categoryName}}</td>
           <td>{{quiz.userName}}</td>
           <td>{{quiz.isPrivate}}</td>
           <td>{{quiz.quizCode}}</td>
           <td>{{quiz.timesPassed}}</td>
           <td>{{quiz.averageFeedbackScore}}</td>
+          <td (click)="confirmDelete(quiz.id!, quiz.quizName)" style="cursor: pointer; color: red">Delete</td>
         </tr>
         </tbody>
         <pagination-controls (pageChange)="p = $event" [id]="paginationId"></pagination-controls>
@@ -35,9 +37,11 @@
   </ng-container>
 
   <ng-container *ngIf="flag">
-    <div>There is no quiz yet!</div>
+    <div>{{"There is no quiz yet" | translate}}!</div>
   </ng-container>
 </div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

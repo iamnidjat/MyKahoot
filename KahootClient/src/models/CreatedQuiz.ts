@@ -5,6 +5,8 @@ export type CreatedQuiz = {
   userName: string;
   isPrivate: boolean;
   quizCode: string;
+  isVIP?: boolean;
+  allowedToDownload?: boolean;
   timesPassed?: number;
   averageFeedbackScore?: number;
   likesCount?: number;

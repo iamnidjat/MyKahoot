@@ -15,16 +15,12 @@ export class BarchartFormComponent implements OnInit, OnDestroy{
   private dates: string[] = [];
 
   ngOnDestroy(): void {
-    localStorage.removeItem("SLevel"); // Don't need anymore
-    localStorage.removeItem("categoryName"); // Don't need anymore
-    localStorage.removeItem("QuizType"); // Don't need anymore
     localStorage.removeItem("results"); // Don't need anymore
     localStorage.removeItem("dates"); // Don't need anymore
   }
 
   private async downloadResults(): Promise<void>{
-    await fetch(API_URL + `DownloadResult?catType=${localStorage.getItem("categoryName")}
-    &quizType=${localStorage.getItem("QuizType")}&level=${localStorage.getItem("SLevel")}`, {
+    await fetch(API_URL + `DownloadResult?catType=${localStorage.getItem("categoryName")}&quizType=${localStorage.getItem("QuizType")}&level=${localStorage.getItem("SLevel")}`, {
       method: "GET",
     }).then((response) => {
       return response.json();

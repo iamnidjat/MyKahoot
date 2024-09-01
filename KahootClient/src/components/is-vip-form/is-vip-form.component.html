@@ -1,0 +1,10 @@
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="inscription">{{"Choose your action" | translate}}:</div>
+    <div class="buttonsDiv">
+      <input type="button" class="actionButton" value="{{'VIP' | translate}}" (click)="ToCreatingTestProcess($event)"/>
+      <input type="button" class="actionButton" value="{{'Not VIP' | translate}}" (click)="ToCreatingTestProcess($event)">
+    </div>
+  </div>
+</div>

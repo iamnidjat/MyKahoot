@@ -7,16 +7,8 @@ const API_URL: string = "https://localhost:7176/api/v1/UserInfo/";
 })
 export class CheckCredentialsService {
   public async IsEmailUsed(mail: string): Promise<boolean> {
-    fetch(API_URL + `IsEmailUsed?mail=${mail}`, {
-      method: "GET"
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      console.log(data);
-      localStorage.setItem("IsEmailUsed", JSON.parse(JSON.stringify(data)));
-    });
-   // alert(mail);
-   // alert(localStorage.getItem("IsEmailUsed"));
-    return JSON.parse(localStorage.getItem("IsEmailUsed")!);
+    const response = await fetch(API_URL + `IsEmailUsed?mail=${mail}`);
+    const data = await response.json();
+    return data;
   }
 }

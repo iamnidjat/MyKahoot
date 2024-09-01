@@ -1,12 +1,12 @@
-<div  class="modal" style="display: block">
+<div  class="modal" *ngIf="isVisible">
   <div class="modal-content">
-    <span class="close" (click)="ClosePopUp()">&times;</span>
+    <span class="close" (click)="closeModal()">&times;</span>
     <input type="text" class="inputBox" placeholder="{{'EnterQuizType' | translate}}" #TestName>
     <div [hidden]="!isQuizNameUsed" class="alert">
-      This quiz name is already in use!
+      {{"This quiz name is already in use!" | translate}}
     </div>
     <input type="button" class="createButton" value="{{'CreateCatType' | translate}}" (click)="CreateNewTest()">
   </div>
 </div>
 
-<app-public-private-type-popup-form *ngIf="chooseQuizTypeFlag"></app-public-private-type-popup-form>
+<app-allow-to-download-popup-form [isVisible]="flag" (close)="flag = false"></app-allow-to-download-popup-form>

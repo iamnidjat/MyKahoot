@@ -4,7 +4,7 @@
     <input type="text" class="inputBox" placeholder="{{'EnterCode' | translate}}" #Code>
     <div>{{'It is not case sensitive' | translate}}</div>
     <div [hidden]="codesMatch" class="alert">
-      Codes do not match!
+      {{"Codes do not match!" | translate}}
     </div>
     <input type="button" class="createButton" value="{{'Confirm' | translate }}" (click)="CheckCode()">
   </div>

@@ -1,9 +1,15 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
 <div class="container">
-  <div>Category: {{catName}}</div>
-  <div>Quiz: {{quizName}}</div>
-  <div>Average feedback score: {{averageFeedbackScore}}</div>
-  <div>{{timesPassed}} times passed</div>
-  <div>Likes count: {{likesCount}}</div>
-  <div>Dislikes count: {{dislikesCount}}</div>
-  <div><a [routerLink]="['/app/comments/', categoryId, catName, quizName]">Comments</a> count: {{commentsCount}}</div>
+  <div>{{"Category" | translate}}: {{catName}}</div>
+  <div>{{"Quiz" | translate}}: {{quizName}}</div>
+  <div>{{"Average feedback score" | translate}}: {{averageFeedbackScore}}</div>
+  <div>{{timesPassed}} {{"times passed" | translate}}</div>
+  <div>{{"Likes count" | translate}}: {{likesCount}}</div>
+  <div>{{"Dislikes count" | translate}}: {{dislikesCount}}</div>
+  <div><a [routerLink]="['/app/comments/', categoryId, catName, quizName]">{{"Comments" | translate}}</a> {{"count" | translate}}: {{commentsCount}}</div>
 </div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

@@ -1,0 +1,17 @@
+@import "../add-new-category-popup-form/add-new-category-popup-form.component.css";
+
+label {
+  color: var(--dt-text-color);
+  font-weight: bold;
+  display: block;
+  margin: 10px 0 5px 0;
+}
+
+input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--dt-input-background-color);
+  color: var(--input-text-color);
+  border: 1px solid var(--dt-border-color);
+  border-radius: 5px;
+}

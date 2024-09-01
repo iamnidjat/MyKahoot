@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {NavigationExtras, Router} from "@angular/router";
 import {FilterCollectionsService} from "../../services/filter-collections.service";
@@ -12,18 +12,52 @@ const API_URL: string = "https://localhost:7176/api/v1/Quiz/";
   templateUrl: './available-tests-lists-form.component.html',
   styleUrls: ['./available-tests-lists-form.component.css']
 })
-export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit{
+export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit, OnDestroy{
   @Input() public flagForCodeChecking: boolean = false;
   public quizzes: CreatedQuiz[] = [];
   public testType: string = "";
+  public testMode: string = ""; // for reminder
   public flag: boolean = false;
+  public flagForReminder: boolean = false;
   public searchText: string = '';
+  public reminderName: string = "";
+  public catName: string = ""; // for reminder
+  public isGuest: boolean = localStorage.getItem("Guest") === "Guest";
+
+  // Pagination variables
+  public currentPage: number = 1;
+  public pageSize: number = 2;
+  public totalPages: number = 0;
 
   constructor(private router: Router, private filter: FilterCollectionsService,
               private checkData: CheckDataService, private interactionService: InteractionService) {}
 
   ngAfterViewInit(): void {
-    this.downloadQuizzesAsync();
+    this.loadCategories();
+  }
+
+  public async loadCategories(mode: string = "public"): Promise<void> {
+    mode === 'public' ? await this.downloadQuizzesAsync() : await this.downloadPrivateQuizzesAsync();
+    this.totalPages = Math.ceil(this.quizzes.length / this.pageSize) + 1; // Update totalPages here
+    if (this.quizzes.length % this.pageSize == 0) this.totalPages += 1;
+  }
+
+  // Pagination methods
+  public getCurrentPageItems(): CreatedQuiz[] {
+    const filteredQuizzes = this.filterQuizzes();
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, filteredQuizzes.length);
+    return filteredQuizzes.slice(startIndex, endIndex);
+  }
+
+  public setPage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+    }
+  }
+
+  public getPageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   public async downloadQuizzesAsync(): Promise<void> {
@@ -90,27 +124,30 @@ export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit{
     }
   }
 
-  public BackOptions(): void{
-    if (localStorage.getItem("Guest") !== null)
-    {
-      this.router.navigate(['/app/auth-form']);
-      localStorage.removeItem("Guest");
-    }
-    else
-    {
-      this.router.navigate(['/app/player-survey-choosing-form']);
-    }
+  public BackOptions(): void {
+    this.router.navigate(['/app/player-survey-choosing-form']);
   }
 
-  public toRulesForm(elemRef: any): void{
-    localStorage.setItem("TestName", elemRef.id);
+  public async toRulesForm(category: CreatedQuiz): Promise<void>{
+    localStorage.setItem("TestName", category.quizName);
+    localStorage.setItem("QuizCreator", category.userName);
+    localStorage.setItem("QuizId", category.id ? category.id.toString() : "0");
+    localStorage.setItem("IsVIP", category.isVIP!.toString());
+
+    if (category.categoryName !== 'Mixed Test' && category.categoryName !== 'Programming' &&
+      category.categoryName !== 'Math' && category.categoryName !== 'Logics') {
+      localStorage.setItem("AnotherTest", category.quizName);
+      // to know (in test-process.component.ts) whether the app must get questions from back or not
+    }
 
     if (!this.flag) {
-      this.setModeMethod("public");
+      this.testMode = "public";
+      this.setModeMethod(this.testMode);
     }
-    else if (this.flag && this.checkData.CheckOwnerOfPrivateTest(localStorage.getItem("categoryName")!,
+    else if (this.flag && await this.checkData.CheckOwnerOfPrivateTest(localStorage.getItem("categoryName")!,
       localStorage.getItem("TestName")!, localStorage.getItem("Login")!)) {
-      this.setModeMethod("private");
+      this.testMode = "private";
+      this.setModeMethod(this.testMode);
     }
     else {
       this.flagForCodeChecking = true;
@@ -181,8 +218,6 @@ export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit{
     }
   }
 
-
-
   private setModeMethod(mode: string): void {
     localStorage.setItem("mode", mode);
     if (localStorage.getItem("action") === "play") {
@@ -195,7 +230,6 @@ export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit{
       this.router.navigate([`/app/choose-level-form`], navigationExtras);
     }
     else {
-      localStorage.setItem("surveyGuard", "guard");
       const navigationExtras: NavigationExtras = {
         queryParams: { 'action': 'watch',
           "mode": localStorage.getItem("mode"),
@@ -206,7 +240,23 @@ export class AvailableTestsListsFormComponent implements OnInit, AfterViewInit{
     }
   }
 
+  public setReminder(e: any, catName: string, testName: string): void {
+    e.stopPropagation();
+    this.catName = catName; // Update the reminder category name
+    this.reminderName = testName; // Update the reminderName (test name)
+    this.flag ?  this.testMode = "public" : this.testMode = "private"; // Update the reminder test mode
+    this.flagForReminder = true;
+  }
+
+  public handleReminderClose(): void {
+    this.flagForReminder = false;
+  }
+
   ngOnInit(): void {
     this.testType = localStorage.getItem("categoryName")!;
+  }
+
+  ngOnDestroy(): void {
+    localStorage.removeItem("mode"); // Don't need anymore
   }
 }

@@ -16,7 +16,7 @@ namespace KahootWebApi.Services.Implementations
             _logger = logger;
         }
         
-        public async Task<IActionResult> VerifyCaptcha(string token)
+        public async Task<IActionResult> VerifyCaptchaAsync(string token)
         {
             var result = await _recaptchaService.Validate(token);
             if (!result.success)

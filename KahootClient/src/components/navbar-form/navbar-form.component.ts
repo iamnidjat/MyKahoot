@@ -9,18 +9,23 @@ import {SwitchLanguageService} from "../../services/switch-language.service";
   templateUrl: './navbar-form.component.html',
   styleUrls: ['./navbar-form.component.css']
 })
-export class NavbarFormComponent{
-  public username: string = localStorage.getItem("Login")!;
-  public userLevel: number = parseInt(localStorage.getItem("userLevel")!);
-  public points: number = parseInt(localStorage.getItem("points")!);
-  public overallPoints: number = parseInt(localStorage.getItem("overallPoints")!);
-  public coins: number = parseInt(localStorage.getItem("coins")!);
+export class NavbarFormComponent implements OnInit{
+  public username: string = "";
+  public userLevel: number = 1;
+  public points: number = 0;
+  public overallPoints: number = 0;
+  public coins: number = 0;
   public flag: boolean = false;
   public imageURL: string = "/assets/images/user.png";
   @ViewChild('SearchRequest') SearchRequest!: ElementRef;
+  public isMenuOpen = false;
 
   constructor(private router: Router, private switchLanguage: SwitchLanguageService,
               private el: ElementRef, private sharedService: SharedService) {}
+
+  public toggleMenuOpen() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   public Search(request: string): void {
     // Define mappings of destination URLs to arrays of terms
@@ -28,17 +33,23 @@ export class NavbarFormComponent{
       'player-options-form': ['home', 'menu', 'main', 'меню', 'главное', 'menü', 'əsas'],
       'creating-quiz-option-form': ['create', 'creating', 'quiz', 'создать', 'создание', 'викторину', 'викторины', 'viktorina', 'yaratmaq'],
       'player-survey-choosing-form': ['play', 'играть', 'oyna'],
-      'profile-form': ['profile', 'профиль', 'profil'],
-      'about-form': ['about', 'про', 'нас', 'bizim', 'haqqında'],
-      'contacts-form': ['contact', 'связь', 'əlaqə', 'help', 'support', 'помощь', 'поддержка', 'kömək', 'dəstək'],
-      'contact-list-form': ['contact list', 'data', 'данные', 'informasiya'],
-      'stats-form': ['stat', 'stats', 'статистика', 'statistika'],
-      'choose-field-form': ['top', 'топ', '10', 'rating', 'reytinq', 'рейтинг'],
-      'my-quizzes-form': ['quizzes', 'my', 'мои', 'mənim'],
-      'my-profile-form': ['edit', 'редакт', 'redakt'],
-      'delete-acc-form': ['delete', 'удалить', 'silmək'],
-      'settings-choice-form': ['settings', 'настройки', 'ayarlar'],
-      //'settings-choice-form': ['change', 'изменить', 'dəyiş'] // Note: This should navigate somewhere else, check and update
+      'profile-form': ['profile', 'профиль', 'profil', 'аккаунт', 'hesab'],
+      'about-form': ['about', 'про', 'нас', 'bizim', 'haqqında', 'info', 'məlumat'],
+      'contacts-form': ['contact', 'связь', 'əlaqə', 'help', 'support', 'помощь', 'поддержка', 'kömək', 'dəstək', 'assistance', 'yardım'],
+      'contact-list-form': ['contact list', 'data', 'данные', 'informasiya', 'information', 'contacts'],
+      'stats-form': ['stat', 'stats', 'статистика', 'statistika', 'analytics', 'анализ'],
+      'choose-field-form': ['top', 'топ', '10', 'rating', 'reytinq', 'рейтинг', 'best', 'ən yaxşı'],
+      'my-quizzes-form': ['quizzes', 'my', 'мои', 'mənim', 'tests', 'testlər'],
+      'my-profile-form': ['edit', 'редакт', 'redakt', 'update', 'yeniləmə'],
+      'delete-acc-form': ['delete', 'удалить', 'silmək', 'remove', 'требовать удаление'],
+      'settings-choice-form': ['settings', 'настройки', 'ayarlar', 'preferences', 'seçimlər'],
+      'settings-form': ['change', 'изменить', 'dəyiş', 'adjust', 'тюнинг', 'password', "пароль", "parol"],
+      'birthday-settings-form': ['change', 'изменить', 'dəyiş', 'birthday', 'день рождения'],
+      'getMessages': ['messages', 'сообщения', 'mesajlar', 'inbox', 'входящие'],
+      'getReminders': ['reminders', 'напоминания', 'xatırlatmalar', 'alerts', 'уведомления'],
+      'leaderboard': ['leaderboard', 'рейтинги', 'liderlər', 'top list', 'список лидеров'],
+      'mykahoot-store': ['store', 'магазин', 'mağaza', 'products', 'товары'],
+      'faq-page': ['faq', 'вопросы', 'suallar', 'help', 'помощь']
     };
 
     // Convert the search request to lowercase for case-insensitive matching
@@ -59,38 +70,56 @@ export class NavbarFormComponent{
     this.SearchRequest.nativeElement.value = ''; // Clear the input value
   }
 
-  switchLang(lang: string): void {
+  public switchLang(lang: string): void {
     this.switchLanguage.switchLang(lang);
   }
 
-  toggleMenu(): void{
+  public toggleMenu(): void{
     let subMenu = this.el.nativeElement.querySelector(".sub-menu-wrap");
 
     if (subMenu.style.display == "none") subMenu.style.display = "block";
     else subMenu.style.display = "none";
   }
 
-  ToProfile(): void{
+  public ToProfile(): void{
     this.router.navigate(['/app/my-profile-form']);
   }
 
-  ToSendFeedback(): void{
+  public ToSendFeedback(): void{
     this.router.navigate(['/app/contacts-form']);
   }
 
-  ToSettings(): void{
+  public ToSettings(): void{
     this.router.navigate(['/app/settings-choice-form']);
   }
 
-  ToDeleteAcc(): void{
+  public ToDeleteAcc(): void{
     this.router.navigate(['/app/delete-acc-form']);
   }
 
-  OpenPhotoModalWindow(): void{
+  public OpenPhotoModalWindow(): void{
     this.flag = true;
   }
 
-  Logout(e: any): void{
+  public Logout(e: any): void{
     this.sharedService.backAuth(e);
+  }
+
+  ngOnInit(): void {
+    setTimeout(async () => {
+      this.username = localStorage.getItem("Login")!;
+      const userPhoto = localStorage.getItem("userPhoto");
+      if (userPhoto && userPhoto !== 'null' && !localStorage.getItem("SocialUser")) {
+        this.imageURL = `https://localhost:7176${userPhoto}`;
+      }
+      else if (userPhoto && userPhoto !== 'null' && localStorage.getItem("SocialUser")) {
+        this.imageURL = userPhoto;
+      }
+
+      this.userLevel = parseInt(localStorage.getItem("userLevel")!);
+      this.points = parseInt(localStorage.getItem("points")!);
+      this.overallPoints = parseInt(localStorage.getItem("overallPoints")!);
+      this.coins = parseInt(localStorage.getItem("coins")!);
+    }, 200);
   }
 }

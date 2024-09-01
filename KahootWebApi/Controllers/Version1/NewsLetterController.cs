@@ -16,10 +16,7 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("SendingNews")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> SendingNews(string news)
+        public async Task<IActionResult> SendingNewsAsync([FromQuery] string news)
         {
             return await _manager.SendingNewsAsync(news);
         }

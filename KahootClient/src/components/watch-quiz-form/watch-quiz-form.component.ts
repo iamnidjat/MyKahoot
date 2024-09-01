@@ -14,6 +14,7 @@ export class WatchQuizFormComponent implements OnInit, OnDestroy{
   public questions: any = [];
   public currentQuestion: number = 0;
   public testFormat: string = "";
+  public api: string = "https://localhost:7176";
 
   public async GetTestData(): Promise<void> {
     await fetch(API_URL + `GetTestData?catName=${this.catType}&quizName=${this.testType}&questionNumber=${this.currentQuestion + 1}`, {

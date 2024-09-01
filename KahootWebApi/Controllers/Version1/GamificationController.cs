@@ -15,26 +15,20 @@ namespace KahootWebApi.Controllers.Version1
             _gamificationService = gamificationService;
         }
 
-        [HttpGet("GetBadgesList")]
-        public async Task<IEnumerable<UserBadge>> GetBadgesListAsync()
-        {
-            return await _gamificationService.GetBadgesListAsync();
-        }
-
         [HttpGet("GetGamificationStats")]
-        public async Task<int[]> GetGamificationStatsAsync(int userId)
+        public async Task<int[]> GetGamificationStatsAsync([FromQuery] int userId)
         {
             return await _gamificationService.GetGamificationStatsAsync(userId);
         }
 
         [HttpPost("UpgradeLevel")]
-        public async Task<bool> UpgradeLevelAsync(int userId)
+        public async Task<bool> UpgradeLevelAsync([FromQuery] int userId)
         {
             return await _gamificationService.UpgradeLevelAsync(userId);       
         }
 
         [HttpPost("SubtractPoints")]
-        public async Task SubtractPointsAsync(int userId, int points)
+        public async Task SubtractPointsAsync([FromQuery] int userId, [FromQuery] int points)
         {
             await _gamificationService.SubtractPointsAsync(userId, points);
         }

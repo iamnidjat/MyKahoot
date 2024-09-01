@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {SharedService} from "../../services/shared.service";
 
@@ -19,6 +19,7 @@ export class ChooseAccountTypeFormComponent implements OnInit{
   public toRegisterProcess(elemRef: any): void {
     if (localStorage.getItem("SocialUserFlag") !== null) {
       localStorage.setItem("Role", this.capitalizeFirstLetter(elemRef.id));
+      alert(localStorage.getItem("Role"))
       this.sharedService.RegisterSocialUser();
       this.router.navigate(['/app/player-options-form']);
     }
@@ -30,8 +31,7 @@ export class ChooseAccountTypeFormComponent implements OnInit{
     localStorage.removeItem("SocialUserFlag"); // Don't need anymore
   }
 
-  public toLoginForm(): void
-  {
+  public toLoginForm(): void {
     this.router.navigate(['/app/auth-form']);
   }
 

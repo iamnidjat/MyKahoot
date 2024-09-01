@@ -1,7 +1,8 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
-<div class="chart-container" style="margin: 0 auto;">
-  <div style="color: red; font-size: 30px; margin-bottom: 30px;">Your latest 5 results in the barchart form!</div>
+<div class="chart-container">
+  <div style="color: red; font-size: 30px; margin-bottom: 30px;">{{"Your latest 5 results in the barchart form" | translate}}!</div>
   <canvas id="MyChart">{{chart}}</canvas>
 </div>
 

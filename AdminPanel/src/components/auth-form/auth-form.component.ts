@@ -1,19 +1,23 @@
-import {Component, ElementRef, ViewChild, ViewRef} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild, ViewRef} from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import {NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
+import {TranslateModule} from "@ngx-translate/core";
+import {NgxSpinnerComponent} from "ngx-spinner";
 
 @Component({
   selector: 'app-auth-form',
   standalone: true,
   imports: [
-    NgIf
+    NgIf,
+    TranslateModule,
+    NgxSpinnerComponent,
   ],
   templateUrl: './auth-form.component.html',
   styleUrl: './auth-form.component.css'
 })
-export class AuthFormComponent {
+export class AuthFormComponent implements OnInit{
   @ViewChild("Password") password!: ElementRef;
   @ViewChild("Mail") mail!: ElementRef;
   public flag: boolean = false;
@@ -33,6 +37,7 @@ export class AuthFormComponent {
 
   public auth(password: string): void {
     if (password === localStorage.getItem("password")) {
+      localStorage.setItem("auth", "auth");
       this.router.navigate(['/app/menu-page']);
     }
     else {
@@ -48,5 +53,11 @@ export class AuthFormComponent {
   private isValidEmail(email: string): boolean {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
+  }
+
+  ngOnInit(): void {
+    localStorage.removeItem("password");
+    localStorage.removeItem("email");
+    localStorage.removeItem("auth");
   }
 }

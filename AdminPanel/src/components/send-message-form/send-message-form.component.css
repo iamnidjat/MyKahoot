@@ -1,42 +1,96 @@
 .message-container {
-  background: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background: var(--sm-bg-color);
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px var(--sm-box-shadow-color);
   width: 100%;
   max-width: 600px;
+  margin: 0 auto;
 }
+
 .message-container h2 {
   margin-top: 0;
+  color: var(--sm-text-color);
+  font-weight: 600;
+  text-align: center;
 }
+
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
+
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--sm-label-color);
 }
+
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 12px;
+  border: 1px solid var(--sm-input-border-color);
   border-radius: 5px;
   font-size: 16px;
+  color: var(--sm-text-color);
+  background-color: var(--sm-input-bg-color);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--sm-input-focus-border-color);
+  box-shadow: 0 0 5px var(--sm-input-focus-shadow-color);
+  outline: none;
+}
+
 .form-group textarea {
   resize: vertical;
   height: 150px;
 }
+
 .form-group button {
-  background-color: #5cb85c;
-  color: white;
-  padding: 10px 20px;
+  background-color: var(--sm-button-bg-color);
+  color: var(--sm-text-color);
+  padding: 12px 25px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
   cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
 }
+
 .form-group button:hover {
-  background-color: #4cae4c;
+  background-color: var(--sm-button-hover-bg-color);
+  transform: translateY(-2px);
+}
+
+.form-group button:active {
+  background-color: var(--sm-button-active-bg-color);
+  transform: translateY(0);
+}
+
+.dropdown-list {
+  margin-top: 5px;
+  border: 1px solid var(--sm-input-border-color);
+  border-radius: 5px;
+  background-color: var(--sm-dropdown-bg-color);
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.dropdown-list li {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid var(--sm-input-border-color);
+}
+
+.dropdown-list li:last-child {
+  border-bottom: none;
+}
+
+.dropdown-list li:hover {
+  background-color: var(--sm-dropdown-hover-bg-color);
 }

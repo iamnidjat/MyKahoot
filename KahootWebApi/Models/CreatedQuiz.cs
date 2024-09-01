@@ -18,19 +18,17 @@ namespace KahootWebApi.Models
         public string? UserName { get; set; }
 
         [Required]
-        public bool IsPrivate { get; set; } 
+        public bool IsPrivate { get; set; }
+
+        [Required]
+        public bool IsVIP { get; set; } = false;    
+
+        public bool AllowedToDownload { get; set; } = false;
 
         public string? QuizCode { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
-
-        public User? User { get; set; }
-
-       // [Required]
         public int TimesPassed { get; set; } = 0;
 
-       // [Required]
         public double AverageFeedbackScore { get; set; } = 0;
 
         public ICollection<Like>? Likes { get; set; } = new ObservableCollection<Like>();
@@ -39,6 +37,9 @@ namespace KahootWebApi.Models
 
         public ICollection<Comment>? Comments { get; set; } = new ObservableCollection<Comment>();
 
-        //public CreatedQuizStats? CreatedQuizStats { get; set; }
+        [Required]
+        public int UserId { get; set; }
+
+        public User? User { get; set; }
     }
 }

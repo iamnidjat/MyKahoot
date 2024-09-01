@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -15,10 +16,6 @@ namespace KahootWebApi.Models
         public string? Username { get; set; }
 
         public bool IsUsernameChanged { get; set; } = false;
-
-        public DateTime? DateOfChangingUsername { get; set; }
-
-        public int DeadlineForChangingName { get; set; }
 
         public string? Name { get; set; } = "";
 
@@ -37,12 +34,12 @@ namespace KahootWebApi.Models
 
         public DateTime Birthday { get; set; }
 
+        public string? Photo { get; set; }
+
         [Required]
         public string? Role { get; set; }
 
         public string? Provider { get; set; }
-
-        public string? PhotoURL { get; set; }
 
         public bool IsFrozen { get; set; } = false;
 
@@ -50,9 +47,9 @@ namespace KahootWebApi.Models
 
         public bool IsBanned { get; set; } = false;
 
-        public int OverallPoints { get; set; }
+        public DateTime? BannedDate { get; set; }
 
-        //public int Badges { get; set; }
+        public int OverallPoints { get; set; }
 
         [Range(1, 100)]
         public int Level { get; set; } = 1;
@@ -60,6 +57,8 @@ namespace KahootWebApi.Models
         public int Points { get; set; } // for level
 
         public int Coins { get; set; }
+
+        public SocialUser? SocialUser { get; set; }
 
         public ICollection<QuizStat> Quizzes { get; set; } = new ObservableCollection<QuizStat>();
 
@@ -73,11 +72,7 @@ namespace KahootWebApi.Models
 
         public ICollection<MyQuizAnswers> MyQuizAnswers { get; set; } = new ObservableCollection<MyQuizAnswers>();
 
-        public ICollection<UserBadge> UserBadges { get; set; } = new ObservableCollection<UserBadge>();
-
         public ICollection<Reminder> Reminders { get; set; } = new ObservableCollection<Reminder>();
-
-        public ICollection<UserVirtualClassroom> UserVirtualClassrooms { get; set; } = new ObservableCollection<UserVirtualClassroom>();
 
         public ICollection<UserItem> UserItems { get; set; } = new ObservableCollection<UserItem>();
     }

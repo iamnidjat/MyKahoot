@@ -1,0 +1,25 @@
+.chart-container {
+  background-color: var(--b-background-color);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.chart-container div {
+  color: var(--b-highlight-color);
+  font-size: var(--b-font-size-large);
+  margin-bottom: var(--b-margin-bottom);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+canvas#MyChart {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+  background-color: var(--b-background-color);
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}

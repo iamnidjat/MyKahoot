@@ -1,4 +1,5 @@
 ﻿using KahootWebApi.Models;
+using KahootWebApi.Models.DTOs;
 using KahootWebApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +12,16 @@ namespace KahootWebApi.Services.Implementations
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
         private readonly ILogger<AdminManager> _logger;
+        private readonly IWebHostEnvironment _environment;
 
         public AdminManager(KahootDbContext context, IAccountManager manager,
-            ILogger<AdminManager> logger)
+            ILogger<AdminManager> logger, IWebHostEnvironment environment)
         {
             _context = context;
             _manager = manager;
             _logger = logger;
+            _environment = environment;
+
         }
 
         public async Task<string> SendCredentialsAsync(string email)
@@ -105,25 +109,6 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task DeleteUserAsync(int userId)
-        {
-            try
-            {
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-                if (user != null)
-                {
-                    _context.Users.Remove(user);
-                }
-
-                await _context.SaveChangesAsync();
-            }
-            catch (ArgumentNullException ex)
-            {
-                _logger.LogError(ex, "An error occurred in the DeleteUser method.");
-            }
-        }
-
         public async Task BanUserAsync(int userId)
         {
             try
@@ -133,6 +118,7 @@ namespace KahootWebApi.Services.Implementations
                 if (user != null)
                 {
                     user.IsBanned = true;
+                    user.BannedDate = DateTime.Now;
                 }
 
                 await _context.SaveChangesAsync();
@@ -142,20 +128,13 @@ namespace KahootWebApi.Services.Implementations
                 _logger.LogError(ex, "An error occurred in the BanUserAsync method.");
             }
         }
-
 
         public async Task<bool> IsUserBannedAsync(int userId)
         {
             try
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-                if (user != null)
-                {
-                    return user.IsBanned;
-                }
-
-                return false;
+                return user?.IsBanned ?? false;
             }
             catch (ArgumentNullException ex)
             {
@@ -164,7 +143,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task UnbanUserAsync(int userId)
+        public async Task<ResultModel> UnbanUserAsync(int userId)
         {
             try
             {
@@ -172,14 +151,41 @@ namespace KahootWebApi.Services.Implementations
 
                 if (user != null)
                 {
-                    user.IsBanned = false; 
-                }
+                    if (DateTime.Now - user.BannedDate.Value >= TimeSpan.FromDays(2))
+                    {
+                        user.IsBanned = false;
+                        user.BannedDate = null;
 
-                await _context.SaveChangesAsync();
+                        await _context.SaveChangesAsync();
+
+                        return new ResultModel { 
+                            Success = true
+                        };
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"2 days have not yet expired for the user with the {userId} userId");
+                        return new ResultModel
+                        {
+                            Success = false,
+                            Reason = "not_expired"
+                        };
+                    }
+                }
+                return new ResultModel
+                {
+                    Success = false,
+                    Reason = "user_not_found"
+                };
             }
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, "An error occurred in the UnbanUserAsync method.");
+                return new ResultModel
+                {
+                    Success = false,
+                    Reason = "server_error"
+                };
             }
         }
 
@@ -211,21 +217,14 @@ namespace KahootWebApi.Services.Implementations
 
         private static string RandomPasswordGenerator(int length)
         {
-            //try
-            //{
-                byte[] result = new byte[length];
+            byte[] result = new byte[length];
 
-                for (int index = 0; index < length; index++)
-                {
-                    result[index] = (byte)new Random().Next(33, 126);
-                }
+            for (int index = 0; index < length; index++)
+            {
+                result[index] = (byte)new Random().Next(33, 126);
+            }
 
-                return System.Text.Encoding.ASCII.GetString(result);
-            //}
-            //catch (Exception ex) when (ex is ArgumentException or ArgumentNullException or ArgumentOutOfRangeException)
-            //{
-            //    throw new Exception(ex.Message, ex);
-            //}
+            return System.Text.Encoding.ASCII.GetString(result);
         }
 
         public async Task<IActionResult> SendMessageToEmailAsync(string email, string title, string body)
@@ -270,10 +269,36 @@ namespace KahootWebApi.Services.Implementations
             return new StatusCodeResult(400);
         }
 
-        public async Task AddItemToStoreAsync(ItemToBuy item)
+        public async Task AddItemToStoreAsync(ItemToBuyDto itemDto)
         {
+            var uploadPath = Path.Combine(_environment.ContentRootPath, "itemPhotos");
+
+            // Ensure the upload directory exists
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
             try
             {
+                var item = new ItemToBuy
+                {
+                    Name = itemDto.Name,
+                    Description = itemDto.Description,
+                    Quantity = itemDto.Quantity,
+                    Price = itemDto.Price,
+                };
+
+                if (itemDto.Photo != null)
+                {
+                    var uniqueFileName = $"{Guid.NewGuid()}_{itemDto.Photo.FileName}";
+                    var photoPath = Path.Combine(_environment.ContentRootPath, "itemPhotos", uniqueFileName);
+                    using (var stream = new FileStream(photoPath, FileMode.Create))
+                    {
+                        await itemDto.Photo.CopyToAsync(stream);
+                    }
+                    item.Photo = $"/itemPhotos/{uniqueFileName}";
+                }
+
                 await _context.ItemToBuys.AddAsync(item);
                 await _context.SaveChangesAsync();
             }
@@ -303,6 +328,6 @@ namespace KahootWebApi.Services.Implementations
             {
                 _logger.LogError(ex, "An error occurred in the RemoveItemFromStoreAsync method.");
             }
-        }
+        }     
     }
 }

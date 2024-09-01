@@ -1,0 +1,12 @@
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="inscription">{{"Allow users to download?" | translate}}:</div>
+    <div class="buttonsDiv">
+      <input type="button" class="actionButton" value="{{'Yes' | translate}}" (click)="chooseAction($event)"/>
+      <input type="button" class="actionButton" value="{{'No' | translate}}" (click)="chooseAction($event)">
+    </div>
+  </div>
+</div>
+
+<app-public-private-type-popup-form [isVisible]="flag" (close)="flag = false"></app-public-private-type-popup-form>

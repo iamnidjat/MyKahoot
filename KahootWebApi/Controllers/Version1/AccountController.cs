@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BCrypt.Net;
 using BC = BCrypt.Net.BCrypt;
 using KahootWebApi.Services.Interfaces;
+using KahootWebApi.Models.DTOs;
 
 namespace KahootWebApi.Controllers.v1
 {
@@ -18,33 +19,31 @@ namespace KahootWebApi.Controllers.v1
     {
         private readonly KahootDbContext _context;
         private readonly IAccountManager _manager;
-        private readonly IBadgeManager _badgeManager;
         private readonly ILogger<AccountController> _logger;
 
         public AccountController(IAccountManager manager,KahootDbContext context, 
-            ILogger<AccountController> logger, IBadgeManager badgeManager)
+            ILogger<AccountController> logger)
         {
             _context = context;
             _manager = manager;
             _logger = logger;
-            _badgeManager = badgeManager;
 
         }
 
         [HttpPost("AddSocialUser")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task AddSocialUser(SocialUser socialUser)
+        public async Task AddSocialUserAsync([FromBody] SocialUser socialUser)
         {
-            await _manager.AddSocialUser(socialUser);
+            await _manager.AddSocialUserAsync(socialUser);
+        }
+
+        [HttpPost("AddUserPhoto")]
+        public async Task AddUserPhotoAsync([FromForm] UserPhotoDto userPhotoDto, [FromQuery] int userId)
+        {
+            await _manager.AddUserPhotoAsync(userPhotoDto, userId);
         }
 
         [HttpPost("Login")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginModel model)
         {
             User? user;
 
@@ -63,18 +62,25 @@ namespace KahootWebApi.Controllers.v1
             }
             catch (Exception ex) 
             {
-                _logger.LogError(ex, "An error occurred in the Post method.");
+                _logger.LogError(ex, "An error occurred in the Login method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(user);
+            return Ok(new User
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Role = user.Role,
+                Level = user.Level,
+                OverallPoints = user.OverallPoints,
+                Points = user.Points,
+                Coins = user.Coins,
+                Photo = user.Photo
+            });
         }
 
         [HttpPost("Register")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterModel model)
         {
             User? newUser;
             try
@@ -97,8 +103,6 @@ namespace KahootWebApi.Controllers.v1
                     await AuthenticateAsync(model.UserName!);
 
                     newUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.UserName);
-
-                    await _badgeManager.AssignBadgeAsync(newUser!.Id, 10);
                 }
                 else
                 {
@@ -107,17 +111,25 @@ namespace KahootWebApi.Controllers.v1
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the Post method.");
+                _logger.LogError(ex, "An error occurred in the Register method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
-            return Ok(newUser); // !
+            return Ok(new User
+            {
+                Id = newUser.Id,
+                Email = newUser.Email,
+                Role = newUser.Role,
+                Level = newUser.Level,
+                OverallPoints = newUser.OverallPoints,
+                Points = newUser.Points,
+                Coins = newUser.Coins,
+                Photo = newUser.Photo
+            });
         }
 
         [HttpGet("Logout")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutAsync()
         {
             try
             {
@@ -126,97 +138,64 @@ namespace KahootWebApi.Controllers.v1
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred in the Get method.");
+                _logger.LogError(ex, "An error occurred in the Logout method.");
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPost("ResetPassword")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ResetPassword(string email)
+        public async Task<IActionResult> ResetPasswordAsync([FromQuery] string email)
         {
             return await _manager.ResetPasswordAsync(email);
         }
 
         [HttpPatch("ChangePassword")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ChangePassword(string login, string oldPassword, string newPassword)
+        public async Task<IActionResult> ChangePasswordAsync([FromQuery] string login, [FromQuery] string oldPassword, [FromQuery] string newPassword)
         {
             return await _manager.ChangePasswordAsync(login, oldPassword, newPassword);
         }
 
         [HttpPatch("ChangeBirthday")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> ChangeBirthday(string login, DateTime newBirthday)
+        public async Task<IActionResult> ChangeBirthdayAsync([FromQuery] string login, [FromQuery] DateTime newBirthday)
         {
             return await _manager.ChangeBirthdayAsync(login, newBirthday);
         }
 
         [HttpGet("GetRandomLogin")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public string GetRandomLogin()
         {
             return _manager.RandomLoginGenerator();
         }
 
-        [HttpPost("DeleteAcc")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteAcc(int userId, DeletedAccount deletedAccount)
+        [HttpDelete("DeleteAcc")]
+        public async Task DeleteAccAsync([FromQuery] int userId, [FromBody] DeletedAccount deletedAccount)
         {
             await _manager.DeleteAccAsync(userId, deletedAccount);
         }
 
         [HttpPost("FreezeAcc")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task FreezeAcc(int userId, string reason)
+        public async Task FreezeAccAsync([FromQuery] int userId, [FromQuery] string reason)
         {
             await _manager.FreezeAccAsync(userId, reason);
         }
 
         [HttpPost("UnfreezeAcc")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task UnfreezeAcc(int userId)
+        public async Task UnfreezeAccAsync([FromQuery] int userId)
         {
             await _manager.UnfreezeAccAsync(userId);
         }
 
         [HttpGet("CheckStatusOfAcc")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> CheckStatusOfAcc(int userId)
+        public async Task<bool> CheckStatusOfAccAsync([FromQuery] int userId)
         {
             return await _manager.CheckStatusOfAccAsync(userId);
         }
 
         [HttpGet("PasswordsMatching")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> PasswordsMatching(int userId, string password)
+        public async Task<bool> PasswordsMatchingAsync([FromQuery] int userId, [FromQuery] string password)
         {
-            return await _manager.PasswordsMatching(userId, password);
+            return await _manager.PasswordsMatchingAsync(userId, password);
         }
-
-        //[HttpPost("SendingNotification")]
-        //public async Task SendingNotification(string username, string email)
-        //{
-        //    await _manager.SendingNotificationAsync(username, email);
-        //}
 
         private async Task AuthenticateAsync(string userName)
         {

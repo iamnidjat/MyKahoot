@@ -20,9 +20,6 @@ namespace KahootWebApi.Services.Implementations
         {
             try
             {
-                //var authorName = await _context.Users.Where(u => u.Id == quizId).ToListAsync();
-                //var comments = await _context.Comments.Where(c => c.CreatedQuizId == quizId).ToListAsync();
-                //return comments;
                 var comments = await _context.Comments
                    .Where(c => c.CreatedQuizId == quizId)
                    .Join(_context.Users,
@@ -73,7 +70,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task UpdateCommentAsync(Comment comment, int commentId)
+        public async Task UpdateCommentAsync(string commentContent, int commentId)
         {
             try
             {
@@ -81,8 +78,8 @@ namespace KahootWebApi.Services.Implementations
                 
                 if (updateComment != null)
                 {
-                    updateComment.Content = comment.Content;
-                    updateComment.Date = comment.Date;
+                    updateComment.Content = commentContent;
+                    updateComment.Date = DateTime.UtcNow;
                     await _context.SaveChangesAsync();
                 }
                 else
@@ -150,11 +147,11 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task RemoveCommentAsync(int authorId, int quizId)
+        public async Task RemoveCommentAsync(int commentId)
         {
             try
             {
-                var comment = await _context.Comments.FirstOrDefaultAsync(d => d.AuthorId == authorId && d.CreatedQuizId == quizId);
+                var comment = await _context.Comments.FirstOrDefaultAsync(d => d.Id == commentId);
                 _context.Comments.Remove(comment);
                 await _context.SaveChangesAsync();
             }

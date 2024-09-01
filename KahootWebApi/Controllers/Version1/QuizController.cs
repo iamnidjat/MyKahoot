@@ -17,226 +17,198 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpGet("GenerateCode")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public string GenerateCode()
         {
             return _manager.GenerateCode();
         }
 
         [HttpGet("GetGeneratedCode")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<string> GetGeneratedCode(string catName, string quizname)
+        public async Task<string> GetGeneratedCodeAsync([FromQuery] string catName, [FromQuery] string quizname)
         {
             return await _manager.GetGeneratedCodeAsync(catName, quizname);
         }
 
         [HttpGet("CheckCode")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> CheckCode(string catName, string quizname, string userCode)
+        public async Task<bool> CheckCodeAsync([FromQuery] string catName, [FromQuery] string quizname, [FromQuery] string userCode)
         {
             return await _manager.CheckCodeAsync(catName, quizname, userCode);
         }
 
         [HttpGet("CheckOwnerOfPrivateTest")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> CheckOwnerOfPrivateTest(string catName, string quizname, string userName)
+        public async Task<bool> CheckOwnerOfPrivateTestAsync([FromQuery] string catName, [FromQuery] string quizname, [FromQuery] string userName)
         {
             return await _manager.CheckOwnerOfPrivateTestAsync(catName, quizname, userName);
         }
 
         [HttpGet("IsCatNameUsed")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> IsCategoryNameUsed(string catName)
+        public async Task<bool> IsCategoryNameUsedAsync([FromQuery] string catName)
         {
-            return await _manager.IsCategoryNameUsed(catName);
+            return await _manager.IsCategoryNameUsedAsync(catName);
         }
 
         [HttpGet("IsQuizNameUsed")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> IsQuizNameUsed(string catName, string quizName)
+        public async Task<bool> IsQuizNameUsedAsync([FromQuery] string catName, [FromQuery] string quizName)
         {
-            return await _manager.IsQuizNameUsed(catName, quizName);
+            return await _manager.IsQuizNameUsedAsync(catName, quizName);
         }
 
         [HttpGet("GetQuizMode")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<bool> GetQuizMode(string catName, string quizName)
+        public async Task<bool> GetQuizModeAsync([FromQuery] string catName, [FromQuery] string quizName)
         {
             return await _manager.GetQuizModeAsync(catName, quizName);
         }
 
         [HttpGet("ReadQuestions")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<Quiz>> ReadQuestions(string catName, string quizName)
+        public async Task<IEnumerable<Quiz>> ReadQuestionsAsync([FromQuery] string catName, [FromQuery] string quizName)
         {
             return await _manager.ReadQuestionsAsync(catName, quizName);
         }
 
         [HttpPost("AddQuestion")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task AddQuestion([FromForm] QuizUploadDto quizDto)
+        public async Task AddQuestionAsync([FromForm] QuizUploadDto quizDto)
         {
             await _manager.AddQuestionAsync(quizDto);
         }
 
         [HttpDelete("RemoveQuestions")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task RemoveQuestions(string catName, string quizname)
+        public async Task RemoveQuestionsAsync([FromQuery] string catName, [FromQuery] string quizname)
         {
             await _manager.RemoveQuestionsAsync(catName, quizname);
         }
 
         [HttpDelete("RemoveQuestion")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task RemoveQuestion(string catName, string quizName, int questionNumber)
+        public async Task RemoveQuestionAsync([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber)
         {
             await _manager.RemoveQuestionAsync(catName, quizName, questionNumber);
         }
 
         [HttpPatch("UpdateQuestion")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task UpdateQuestion([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber, [FromBody] Quiz quiz)
+        [HttpPut("UpdateQuestion")]
+        public async Task UpdateQuestion([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber, [FromForm] QuizUploadDto quizDto)
         {
-            await _manager.UpdateQuestionAsync(catName, quizName, questionNumber, quiz);
+            await _manager.UpdateQuestionAsync(catName, quizName, questionNumber, quizDto);
         }
 
         [HttpDelete("DeleteQuiz")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task DeleteQuiz(string categoryName, string testName)
+        public async Task DeleteQuiz([FromQuery] string categoryName, [FromQuery] string testName)
         {
             await _manager.DeleteQuizAsync(categoryName, testName);
         }
 
         [HttpGet("GetTestsList")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<CreatedQuiz>> GetTestsList(string categoryName)
+        public async Task<IEnumerable<CreatedQuiz>> GetTestsListAsync([FromQuery] string categoryName)
         {
             return await _manager.GetTestsListAsync(categoryName);
         }
 
         [HttpGet("GetPrivateTestsList")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<CreatedQuiz>> GetPrivateTestsList(string categoryName)
+        public async Task<IEnumerable<CreatedQuiz>> GetPrivateTestsListAsync([FromQuery] string categoryName)
         {
             return await _manager.GetPrivateTestsListAsync(categoryName);
         }
 
         [HttpGet("GetPassedTestsList")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<QuizStat>> GetPassedTestsList(string categoryName, int userId)
+        public async Task<IEnumerable<QuizStat>> GetPassedTestsListAsync([FromQuery] string categoryName, [FromQuery] int userId)
         {
             return await _manager.GetPassedTestsListAsync(categoryName, userId);
         }
 
         [HttpGet("DownloadMyQuizzes")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<CreatedQuiz>> DownloadCategory(int userId)
+        public async Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync([FromQuery] int userId)
         {
             return await _manager.DownloadCategoryAsync(userId);
         }
 
         [HttpGet("DownloadCategory")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IEnumerable<CreatedQuiz>> DownloadCategory()
+        public async Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync()
         {
             return await _manager.DownloadCategoryAsync();
         }
 
         [HttpPost("SaveCategory")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task SaveCategory(CreatedQuiz quiz)
+        public async Task SaveCategoryAsync([FromBody] CreatedQuiz quiz)
         {
             await _manager.SaveCategoryAsync(quiz);
-        } 
+        }
+
+        [HttpPost("CanUserPassVIPQuiz")]
+        public async Task<IActionResult> CanUserPassVIPQuizAsync([FromQuery] int userId)
+        {
+            var result = await _manager.CanUserPassVIPQuizAsync(userId);
+
+            if (result.Success)
+            {
+                return Ok(new { success = true });
+            }
+            else if (result.Reason == "insufficient_coins")
+            {
+                return BadRequest(new { success = false, reason = "insufficient_coins" });
+            }
+            else
+            {
+                return StatusCode(500, new { success = false, reason = "server_error" });
+            }
+        }
+
+        [HttpPost("CanUserCreateVIPQuiz")]
+        public async Task<IActionResult> CanUserCreateVIPQuizAsync([FromQuery] int userId)
+        {
+            var result = await _manager.CanUserCreateVIPQuizAsync(userId);
+
+            if (result.Success)
+            {
+                return Ok(new { success = true });
+            }
+            else if (result.Reason == "insufficient_coins")
+            {
+                return BadRequest(new { success = false, reason = "insufficient_coins" });
+            }
+            else
+            {
+                return StatusCode(500, new { success = false, reason = "server_error" });
+            }
+        }
 
         [HttpGet("GetTestData")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<Quiz> GetTestData(string catName, string quizName, int questionNumber)
+        public async Task<Quiz> GetTestDataAsync([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber)
         {
             return await _manager.GetTestDataAsync(catName, quizName, questionNumber);
         }
 
         [HttpGet("GetCorrectAnswer")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<int> GetCorrectAnswer(string catName, string quizName, int questionNumber)
+        public async Task<int> GetCorrectAnswerAsync([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber)
         {
-            return await _manager.GetCorrectAnswer(catName, quizName, questionNumber);
+            return await _manager.GetCorrectAnswerAsync(catName, quizName, questionNumber);
         }
 
         [HttpPost("AddQuizHistory")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task AddQuizHistoryAsync(MyQuizAnswers myQuizAnswers)
+        public async Task AddQuizHistoryAsync([FromBody] MyQuizAnswers myQuizAnswers)
         {
             await _manager.AddQuizHistoryAsync(myQuizAnswers);
         }
 
         [HttpDelete("RemoveUserAnswer")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task RemoveUserAnswerAsync(string catName, string quizName, int questionNumber)
+        public async Task RemoveUserAnswerAsync([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber)
         {
             await _manager.RemoveUserAnswerAsync(catName, quizName, questionNumber);
         }
 
         [HttpDelete("RemoveUserAnswers")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task RemoveUserAnswersAsync(string catName, string quizName)
+        public async Task RemoveUserAnswersAsync([FromQuery] string catName, [FromQuery] string quizName)
         {
             await _manager.RemoveUserAnswersAsync(catName, quizName);
         }
 
         [HttpGet("GetQuizHistory")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<MyQuizAnswers> GetQuizHistoryAsync(string catName, string quizName, int questionNumber, int userId)
+        public async Task<MyQuizAnswers> GetQuizHistoryAsync([FromQuery] string catName, [FromQuery] string quizName, [FromQuery] int questionNumber, [FromQuery] int userId)
         {
             return await _manager.GetQuizHistoryAsync(catName, quizName, questionNumber, userId);
+        }
+
+        [HttpGet("IsAllowedUsersToDownload")]
+        public async Task<bool> IsAllowedUsersToDownloadAsync(string catName, string quizName)
+        {
+            return await _manager.IsAllowedUsersToDownloadAsync(catName, quizName);
         }
     }
 }

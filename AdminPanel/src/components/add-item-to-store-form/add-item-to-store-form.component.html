@@ -1,0 +1,19 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
+<div class="form-container">
+  <div class="item-form">
+    <input #photoInput  type="file" (change)="onPhotoFileSelected($event)" />
+    <input type="text" class="item-title" [(ngModel)]="name" placeholder="{{'Name...' | translate}}" />
+    <textarea class="item-description" [(ngModel)]="description" placeholder="{{'Description...' | translate}}"></textarea>
+    <input type="number" min="1" class="item-quantity" [(ngModel)]="quantity" placeholder="{{'Quantity...' | translate}}" />
+    <input type="number" min="1" class="item-price" [(ngModel)]="price" placeholder="{{'Price..' | translate}}." />
+    <button class="add-button" (click)="addItemAsync()">{{"Add item" | translate}}</button>
+  </div>
+</div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>
+

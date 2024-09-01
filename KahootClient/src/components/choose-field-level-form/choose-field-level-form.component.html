@@ -1,14 +1,15 @@
 <app-navbar-form></app-navbar-form>
 
 <div id="allthethings">
-  <nav>
+  <div class="main-container">
     <div class="statement">{{'ChooseALevel' | translate}}</div>
     <div class="fields" id="easy" #div (click)="ChooseLevel(div)"><p>{{'Easy' | translate}}</p></div>
     <div class="fields" id="medium" #div2 (click)="ChooseLevel(div2)"><p>{{'Medium' | translate}}</p></div>
     <div class="fields" id="hard" #div3 (click)="ChooseLevel(div3)"><p>{{'Hard' | translate}}</p></div>
-    <div class="fields" (click)="Exit()"><p>{{'Back' | translate}}</p></div>
-  </nav>
+  </div>
 </div>
+
+<div id="exit" (click)="Exit()"><p>{{'Back' | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

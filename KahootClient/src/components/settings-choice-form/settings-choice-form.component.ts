@@ -7,8 +7,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./settings-choice-form.component.css']
 })
 export class SettingsChoiceFormComponent {
-  constructor(private router: Router) {
-  }
+  constructor(private router: Router) {}
 
   public toPasswordChanging(): void{
     this.router.navigate(['/app/settings-form']);

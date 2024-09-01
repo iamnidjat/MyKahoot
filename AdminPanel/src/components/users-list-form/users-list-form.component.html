@@ -1,4 +1,5 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div class="main-container">
   <ng-container *ngIf="!flag">
@@ -8,12 +9,21 @@
         <thead>
         <tr>
           <th>ID</th>
-          <th>Username</th>
-          <th>Name</th>
-          <th>Surname</th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th>{{"Username" | translate}}</th>
+          <th>{{"Name" | translate}}</th>
+          <th>{{"Surname" | translate}}</th>
+          <th>{{"Email" | translate}}</th>
+          <th>{{"Backup email" | translate}}</th>
+          <th>{{"Birthday" | translate}}</th>
+          <th>{{"Role" | translate}}</th>
+          <th>{{"Provider" | translate}}</th>
+          <th>{{"Is banned" | translate}}</th>
+          <th>{{"Level" | translate}}</th>
+          <th>{{"Coins" | translate}}</th>
+          <th>{{"Points" | translate}}</th>
+          <th>{{"Overall points" | translate}}</th>
+          <th>{{"Profile photo" | translate}}</th>
+          <th>{{"ACTIONS" | translate}}</th>
         </tr>
         </thead>
         <tbody>
@@ -22,8 +32,19 @@
           <td>{{user.username}}</td>
           <td>{{user.name}}</td>
           <td>{{user.surname}}</td>
+          <td>{{user.email}}</td>
+          <td>{{user.backUpEmail}}</td>
+          <td>{{user.birthday | date}}</td>
+          <td>{{user.role}}</td>
+          <td>{{user.provider}}</td>
+          <td>{{user.isBanned}}</td>
+          <td>{{user.level}}</td>
+          <td>{{user.coins}}</td>
+          <td>{{user.points}}</td>
+          <td>{{user.overallPoints}}</td>
+          <td><img [src]="url + user.photoURL" alt="no photo" style="width: 30px; height: 30px;" /></td>
           <div style="display: flex; flex-direction: row">
-            <td (click)="confirmDelete(user.id, user.username!)" style="cursor: pointer; color: blue">{{"Delete" | translate}}</td>
+            <td (click)="confirmDelete(user.id, user.username!, user.email!)" style="cursor: pointer; color: blue">{{"Delete" | translate}}</td>
             <td (click)="confirmBan(user.id, user.username!)" style="cursor: pointer; color: red">{{"Ban" | translate}}</td>
             <td (click)="messageUser(user.username!)" style="cursor: pointer; color: green">{{"Message" | translate}}</td>
           </div>
@@ -35,9 +56,11 @@
   </ng-container>
 
   <ng-container *ngIf="flag">
-    <div>There is no user yet!</div>
+    <div>{{"There is no user yet" | translate}}!</div>
   </ng-container>
 </div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

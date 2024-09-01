@@ -22,26 +22,40 @@ namespace KahootWebApi.Services.Implementations
             _environment = environment;
         }
 
-        public async Task AddSocialUser(SocialUser socialUser)
+        public async Task AddSocialUserAsync(SocialUser socialUser)
         {
             try
             {
-                User? user = await _context.Users.FirstOrDefaultAsync(u => u.Username == socialUser.Username);
+                // Check if the user already exists
+                User? existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == socialUser.Username && u.Email == socialUser.Email);
 
-                if (user == null)
+                if (existingUser == null)
                 {
-                    await _context.SocialUsers.AddAsync(socialUser);
-
-                    await _context.Users.AddAsync(new User
+                    // Create and save the new User
+                    var newUser = new User
                     {
                         Username = socialUser.Username,
                         Name = socialUser.Name,
                         Email = socialUser.Email,
                         Role = socialUser.Role,
                         Provider = socialUser.Provider
-                    });
+                    };
 
+                    await _context.Users.AddAsync(newUser);
                     await _context.SaveChangesAsync();
+
+                    // Set the UserId in the SocialUser entity
+                    socialUser.UserId = newUser.Id;
+
+                    // Add the new SocialUser
+                    await _context.SocialUsers.AddAsync(socialUser);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                {
+                    // Optionally handle the case where the user already exists
+                    _logger.LogInformation("User already exists.");
                 }
             }
             catch (Exception ex) when (ex is OperationCanceledException or ArgumentNullException)
@@ -50,7 +64,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task<bool> PasswordsMatching(int userId, string password)
+        public async Task<bool> PasswordsMatchingAsync(int userId, string password)
         {
             try
             {
@@ -70,78 +84,11 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        //public async Task SendingNotificationAsync(string username, string email)
-        //{
-        //    var user = await GetFrozenAccAsync(username);
-
-        //    if (user != null)
-        //    {
-        //        if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days == 1)
-        //        {
-        //            NotifyingAboutDeletingAsync(email);
-        //        }
-        //    }
-        //} 
-
-        //public async Task<IActionResult> NotifyingAboutDeletingAsync(string email) // !
-        //{
-        //    using var smtpClient = new MailKit.Net.Smtp.SmtpClient();
-
-        //    if (Validators.IsEmailValid(email))
-        //    {
-        //        try
-        //        {
-        //            smtpClient.Connect("smtp.gmail.com", 465, MailKit.Security.SecureSocketOptions.Auto);
-        //            smtpClient.Authenticate(ApplicationDatas.FirstMail, ApplicationDatas.Password);
-
-        //            var message = new MimeMessage();
-
-        //            message.From.Add(new MailboxAddress("MyKahoot", ApplicationDatas.FirstMail));
-        //            message.To.Add(new MailboxAddress("You", email));
-
-        //            message.Subject = "Notification about account";
-
-        //            var part = new TextPart("plain")
-        //            {
-        //                Text = $"Only 1 day left before your account will be deleted"
-        //            };
-
-        //            message.Body = part;
-
-        //            smtpClient.Send(message);
-        //        }
-        //        catch (Exception ex) when (ex is InvalidOperationException or ArgumentNullException or InvalidCastException)
-        //        {
-        //            return new StatusCodeResult(400);
-        //        }
-        //        finally
-        //        {
-        //            smtpClient.Disconnect(true);
-        //        }
-
-        //        return new StatusCodeResult(200);
-        //    }
-
-        //    return new StatusCodeResult(400);
-        //}
-
         public async Task<bool> CheckStatusOfAccAsync(int userId)
         {
             try
             {
-                var user = await GetFrozenAccAsync(userId);
-
-                if (user == null)
-                {
-                    return false;
-                }
-
-                //if (DateTime.Now.Subtract((DateTime)user.DateOfFreezing).Days > user.FreezingDeadline)
-                //{
-                //    return true;
-                //}
-
-                return true;
+                return await GetFrozenAccAsync(userId) != null;
             }
             catch (Exception ex)
             {
@@ -212,13 +159,20 @@ namespace KahootWebApi.Services.Implementations
 
                 var stats = await GetQuizStatsByIdAsync(userId);
 
+                var sUser = await _context.SocialUsers.SingleOrDefaultAsync(x => x.UserId == userId);
+
                 if (user != null) // && stats != null
                 {
-                    _context.Users.Remove(user!);
+                    _context.Users.Remove(user);
 
-                    _context.Quizzes.RemoveRange(stats!);
+                    _context.Quizzes.RemoveRange(stats);
 
                     await _context.DeletedAccounts.AddAsync(deletedAccount);
+
+                    if (sUser != null)
+                    {
+                        _context.SocialUsers.Remove(sUser);
+                    }
 
                     await _context.SaveChangesAsync();
                 }
@@ -471,7 +425,7 @@ namespace KahootWebApi.Services.Implementations
             }
         }
 
-        public async Task AddUserPhotoAsync(UserPhotoDto userPhoto) //
+        public async Task AddUserPhotoAsync(UserPhotoDto userPhotoDto, int userId)
         {
             var uploadPath = Path.Combine(_environment.ContentRootPath, "userPhotos");
 
@@ -482,17 +436,17 @@ namespace KahootWebApi.Services.Implementations
             }
 
             try
-            { 
-                var user = new User();
-
-                if (userPhoto.Photo != null)
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+                if (userPhotoDto.Photo != null)
                 {
-                    var photoPath = Path.Combine(_environment.ContentRootPath, "userPhotos", user.PhotoURL);
+                    var uniqueFileName = $"{Guid.NewGuid()}_{userPhotoDto.Photo.FileName}";
+                    var photoPath = Path.Combine(_environment.ContentRootPath, "userPhotos", uniqueFileName);
                     using (var stream = new FileStream(photoPath, FileMode.Create))
                     {
-                        await userPhoto.Photo.CopyToAsync(stream);
+                        await userPhotoDto.Photo.CopyToAsync(stream);
                     }
-                    user.PhotoURL = $"/userPhotos/{userPhoto.Photo.FileName}";
+                    user.Photo = $"/userPhotos/{uniqueFileName}";
                 }
 
                 await _context.SaveChangesAsync();

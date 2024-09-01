@@ -1,9 +1,10 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div class="main-container">
   <h1 style="text-align: center; margin-bottom: 30px;">{{'Points History' | translate}}</h1>
   <div class="table-div">
-    <div>Note: Missing points were obtained from creating quizzes.</div>
+    <div>{{"Note: Missing points were obtained from creating quizzes" | translate}}.</div>
     <table class="zigzag">
       <thead>
       <tr>
@@ -40,6 +41,8 @@
     </table>
   </div>
 </div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

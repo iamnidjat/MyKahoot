@@ -1,0 +1,45 @@
+<div class="modal" style="display: block">
+  <div class="modal-content">
+    <span class="close" (click)="ClosePopUp()">&times;</span>
+    <div *ngIf="item">
+      <h3>{{'Buy' | translate}} {{ item.name }}</h3>
+      <input type="text" class="inputBox" [(ngModel)]="address" placeholder="{{'EnterAddress' | translate}}">
+      <div>
+        <input
+          type="text"
+          [(ngModel)]="city"
+          (input)="filterCities()"
+          placeholder="Enter your city"
+        />
+        <ul *ngIf="filteredCities.length > 0">
+          <li
+            *ngFor="let city of filteredCities"
+            (click)="selectCity(city)"
+            style="cursor: pointer"
+          >
+            {{ city }}
+          </li>
+        </ul>
+      </div>
+      <div>
+        <input
+          type="text"
+          [(ngModel)]="country"
+          (input)="filterCountries()"
+          placeholder="Enter your country"
+        />
+        <ul *ngIf="filteredCountries.length > 0">
+          <li
+            *ngFor="let country of filteredCountries"
+            (click)="selectCountry(country)"
+            style="cursor: pointer"
+          >
+            {{ country }}
+          </li>
+        </ul>
+      </div>
+      <input type="number" min="1" class="inputBox" [(ngModel)]="quantity" placeholder="{{'EnterQuantity' | translate}}">
+      <input type="button" class="buyButton" value="{{'Buy' | translate}}" (click)="buyItemAsync()">
+    </div>
+  </div>
+</div>

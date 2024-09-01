@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding: var(--padding);
 }
 
 /* Heading */
@@ -11,7 +11,24 @@
   text-align: center;
   margin-bottom: 30px;
   font-size: 32px;
-  color: #333;
+  color: var(--heading-text-color);
+}
+
+/* Subtitle Styles */
+.main-container .subtitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: var(--subtitle-color);
+}
+
+/* Bar Chart Link */
+.barchart-div {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: var(--link-color);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 /* Table Container */
@@ -19,10 +36,10 @@
   width: 100%;
   max-width: 800px;
   overflow-x: auto;
-  background-color: #ffffff;
-  padding: 20px;
+  background-color: var(--main-bg-color);
+  padding: var(--padding);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
 
 /* Table Styles */
@@ -32,14 +49,14 @@ table.zigzag {
 }
 
 table.zigzag th, table.zigzag td {
-  padding: 12px 15px;
-  border: 1px solid #ddd;
+  padding: var(--table-padding);
+  border: 1px solid var(--table-border-color);
   text-align: left;
 }
 
 table.zigzag thead {
-  background-color: #007bff;
-  color: #ffffff;
+  background-color: var(--table-header-bg-color);
+  color: var(--table-header-text-color);
 }
 
 table.zigzag th.header {
@@ -48,30 +65,30 @@ table.zigzag th.header {
 }
 
 table.zigzag tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--table-bg-color);
 }
 
 table.zigzag tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: var(--table-hover-bg-color);
 }
 
 table.zigzag td {
   cursor: pointer;
-  color: #007bff;
+  color: var(--table-text-color);
   text-decoration: underline;
 }
 
 table.zigzag td:hover {
-  color: #0056b3;
+  color: var(--table-text-hover-color);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
   .table-div {
-    padding: 10px;
+    padding: var(--responsive-padding);
   }
 
   table.zigzag th, table.zigzag td {
-    padding: 8px 10px;
+    padding: var(--responsive-table-padding);
   }
 }

@@ -7,7 +7,17 @@ const API_URL: string = "https://localhost:7176/api/v1/Admin/";
 })
 export class AuthService {
 
-  constructor(private router: Router) { }
+  private readonly REDIRECT_ROUTE: string = 'app/404-page-form';
+
+  constructor(private router: Router) {}
+
+  public checkAuth(): boolean {
+    const isAuthenticated: boolean = !!localStorage.getItem('auth');
+    if (!isAuthenticated) {
+      this.router.navigate([this.REDIRECT_ROUTE]);
+    }
+    return isAuthenticated;
+  }
 
   public async sendCredsToEmail(email: string): Promise<void> {
     localStorage.setItem("email", email);
@@ -17,7 +27,6 @@ export class AuthService {
         "Content-Type": "application/json"
       }
     }).then((response) => {
-      console.log("response", response);
       return response.text();
     }).then((data) => {
       console.log("creds: ", data);
@@ -28,8 +37,9 @@ export class AuthService {
   }
 
   public logout(): void {
-    localStorage.removeItem("login");
     localStorage.removeItem("password");
+    localStorage.removeItem("email");
+    localStorage.removeItem("auth");
     this.router.navigate(['/']);
   }
 }

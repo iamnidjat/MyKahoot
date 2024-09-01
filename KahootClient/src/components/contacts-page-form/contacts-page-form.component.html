@@ -1,51 +1,25 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
-<div id="page-container">
-  <div class="new_home_web">
-    <div class="responsive-container-block big-container">
-      <div class="responsive-container-block textContainer">
-        <div class="topHead">
-          <p class="text-blk heading">
-            {{"GetIn" | translate}}
-            <span class="orangeText">
-              {{"Touch" | translate}}
-            </span>
-          </p>
-          <div style="width: 200px" class="orangeLine" id="w-c-s-bgc_p-2-dm-id">
-          </div>
-        </div>
-      </div>
-      <div class="responsive-container-block container">
-        <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-7 wk-ipadp-10 line" id="i69b">
-          <form class="form-box">
-            <div class="container-block form-wrapper">
-              <div class="responsive-container-block">
-                <div class="left4">
-                  <div class="responsive-cell-block wk-ipadp-6 wk-tab-12 wk-mobile-12 wk-desk-6" id="i10mt-2">
-                    <input class="input" #FirstName id="ijowk-2" name="FirstName" placeholder="{{'FirstNameP' | translate}}">
-                  </div>
-                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                    <input class="input" #LastName id="indfi-2" name="LastName" placeholder="{{'LastNameP' | translate}}">
-                  </div>
-                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12">
-                    <input class="input" #Email id="ipmgh-2" name="Email" placeholder="{{'EmailP' | translate}}">
-                  </div>
-                  <div class="responsive-cell-block wk-desk-6 wk-ipadp-6 wk-tab-12 wk-mobile-12 lastPhone">
-                    <input class="input" #PhoneNumber id="imgis-2" name="PhoneNumber" placeholder="{{'PhoneP' | translate}}">
-                  </div>
-                </div>
-                <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-12 wk-ipadp-12" id="i634i-2">
-                  <textarea class="textinput" #Message id="i5vyy-2" placeholder="{{'MessageP' | translate}}"></textarea>
-                </div>
-              </div>
-              <input type="button" class="send" (click)="sendMessage($event, FirstName.value, LastName.value, Email.value, PhoneNumber.value, Message.value)"  id="w-c-s-bgc_p-1-dm-id" value="{{'Send' | translate}}">
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="form-container">
+  <h1 class="heading">
+    {{"Get In Touch" | translate}}
+  </h1>
+
+  <form class="contact-form">
+    <input class="input-field" #FirstName placeholder="{{'First Name' | translate}}">
+    <input class="input-field" #LastName placeholder="{{'Last Name' | translate}}">
+    <input class="input-field" #Email type="email" placeholder="{{'Email' | translate}}">
+    <input class="input-field" #PhoneNumber type="tel" placeholder="{{'Phone Number' | translate}}">
+    <textarea class="message-field" #Message placeholder="{{'Your Message' | translate}}"></textarea>
+    <button type="button" class="submit-btn" (click)="sendMessage($event, FirstName.value, LastName.value, Email.value, PhoneNumber.value, Message.value)">
+      {{"Send" | translate}}
+    </button>
+  </form>
 </div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-footer-form></app-footer-form>
 <app-scroll-to-top-form></app-scroll-to-top-form>
+

@@ -1,102 +1,81 @@
+/* Base styles */
+body {
+  font-family: 'Nunito', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+}
 
-.container{
-  display: -webkit-box;
-  display: -ms-flexbox;
+.container {
   display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-}
-
-.form-container{
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
+  height: 100vh;
+  padding: 20px;
 }
 
-.form{
-  margin: 50px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 0 30px rgba(0, 0, 0, .1);
-  box-shadow: 0 0 30px rgba(0, 0, 0, .1);
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  cursor: pointer;
+h1 {
+  font-size: 36px;
+  color: #444;
+  margin-bottom: 20px;
 }
 
-.form:hover{
-  -webkit-transition: all 0.15s ease-in-out 0s;
-  -o-transition: all 0.15s ease-in-out 0s;
-  transition: all 0.15s ease-in-out 0s;
+.form-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
-.image{
-  height: 225px;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 200px;
-  background-color: #e21b3c;
-}
-
-.image > img{
   height: 200px;
-  width: 200px;
-}
-
-.title{
-  height: 75px;
-  width: 200px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   background-color: #fff;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  font-family: Montserrat, "Noto Sans Arabic", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 1rem;
-  font-weight: bold;
-  line-height: 1.5;
-  letter-spacing: 0.2px;
-  word-break: break-word;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.title:hover{
-  background-color: #e21b3c;
-  color: #fff;
+.form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-.form:nth-child(2) > .title:hover{
-  background-color: blue;
-  color: #fff;
+.image img {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 10px;
 }
 
-.form:nth-child(2) > .image{
-  background-color: blue;
+.title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
 }
 
-#login:hover{
-  opacity: .66;
+.toLogin {
+  margin-top: 20px;
+  text-align: center;
 }
 
-@media screen and (max-width: 600px)
-{
-  .form{
-    width: 150px;
-  }
+.toLogin span {
+  font-size: 16px;
 }
 
+.toLogin #login {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.toLogin #login:hover {
+  color: #0056b3;
+}

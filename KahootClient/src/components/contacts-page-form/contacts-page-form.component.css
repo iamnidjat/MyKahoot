@@ -1,104 +1,58 @@
-/* Container Styles */
-#page-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f4f4f9;
-  padding: 20px;
-}
-
-.new_home_web {
-  width: 100%;
-}
-
-.big-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-/* Heading Styles */
-.textContainer {
-  text-align: center;
-}
-
-.topHead .heading {
-  font-size: 2rem;
-  font-weight: bold;
-  margin: 0;
-  color: #333;
-}
-
-.orangeText {
-  color: #ff6600;
-}
-
-.orangeLine {
-  height: 4px;
-  background-color: #ff6600;
-  margin: 10px auto;
-}
-
-/* Form Styles */
-.form-box {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  width: 100%;
+.form-container {
   max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--contacts-page-form-bg-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-wrapper {
+.heading {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: var(--contacts-page-heading-color);
+}
+
+.contact-form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.input, .textinput {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.input-field,
+.message-field {
+  width: 400px;
+  padding: 12px;
+  border: 1px solid var(--contacts-page-input-border-color);
+  border-radius: 4px;
   font-size: 16px;
-  box-sizing: border-box;
+  background-color: var(--contacts-page-input-bg-color);
 }
 
-.textinput {
-  min-height: 100px;
+.input-field:focus,
+.message-field:focus {
+  border-color: var(--contacts-page-input-focus-border-color);
+  outline: none;
+}
+
+.message-field {
+  height: 120px;
   resize: vertical;
 }
 
-/* Button Styles */
-.send {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  background-color: #28a745;
-  color: #fff;
+.submit-btn {
+  padding: 12px 20px;
   font-size: 16px;
+  color: var(--contacts-page-submit-text-color);
+  background-color: var(--contacts-page-submit-bg-color);
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s;
 }
 
-.send:hover {
-  background-color: #218838;
-  transform: scale(1.05);
-}
-
-.send:active {
-  transform: scale(1);
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .form-box {
-    padding: 15px;
-  }
-
-  .topHead .heading {
-    font-size: 1.5rem;
-  }
+.submit-btn:hover {
+  background-color: var(--contacts-page-submit-hover-bg-color);
 }

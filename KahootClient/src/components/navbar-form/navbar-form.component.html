@@ -1,4 +1,4 @@
-<ng-container *ngIf="username !== ''">
+<ng-container *ngIf="username != null">
   <nav>
     <div class="languages" >
       <img #en (click)="switchLang(en.alt)" src="https://cdn-icons-png.flaticon.com/128/555/555417.png" class="lang" alt="en">
@@ -6,43 +6,40 @@
       <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="lang" alt="az">
     </div>
 
-<!--    <div class="menu-icon">-->
-<!--      <span class="fas fa-bars"></span>-->
-<!--    </div>-->
-
     <div class="logo" routerLink="/app/player-options-form" style="cursor: pointer">MyKahoot</div>
 
     <div class="nav-items">
       <li><a routerLink="/app/player-options-form">{{'Home' | translate}}</a></li>
       <li><a routerLink="/app/about-form">{{'About' | translate}}</a></li>
       <li><a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a></li>
+      <li><a routerLink="/app/faq-page">{{'FAQ' | translate}}</a></li>
     </div>
 
-    <form>
+    <form class="search-form">
       <input type="search" #SearchRequest class="search-data" placeholder="{{'Search' | translate}}" required>
       <button type="submit" class="fas fa-search" (click)="Search(SearchRequest.value)"></button>
     </form>
 
     <div class="user-info-container">
       <div class="user-stats">
-        <span class="user-level"><i class="fas fa-level-up-alt"></i> {{userLevel}}</span>
-        <span class="user-points"><i class="fas fa-star"></i> {{points}} / {{overallPoints}}</span>
-        <span class="user-coins"><i class="fas fa-coins"></i> {{coins}}</span>
+        <span class="user-level" title="level"><i class="fas fa-level-up-alt"></i> {{userLevel}}</span>
+        <span class="user-points" title="points / overall points"><i class="fas fa-star"></i> {{points}} / {{overallPoints}}</span>
+        <span class="user-coins" title="myKahoot coins"><i class="fas fa-coins"></i> {{coins}}</span>
       </div>
-      <img [src]="'assets/images/user.png'" class="user-pic" (click)="toggleMenu()">
+      <img [src]="imageURL" class="user-pic" (click)="toggleMenu()">
     </div>
 
     <div class="sub-menu-wrap" id="subMenu">
       <div class="sub-menu">
         <div class="user-info">
-          <img [src]=imageURL (click)="OpenPhotoModalWindow()">
+          <img [src]="imageURL" alt="profilePhoto" (click)="OpenPhotoModalWindow()">
           <h3> {{username}} </h3>
         </div>
 
         <hr>
 
         <a class="sub-menu-link" (click)="ToProfile()">
-          <img [src]="'assets/images/profile.png'" height="50" width="50" alt="">
+          <img src="assets/images/user.png" height="50" width="50" alt="profilePhoto">
           <p>{{"EditProfile" | translate}}</p>
           <span> > </span>
         </a>
@@ -78,6 +75,33 @@
         </a>
       </div>
     </div>
+
+    <div class="menu-icon" (click)="toggleMenuOpen()">
+      <span class="fas fa-bars"></span>
+    </div>
+    <div class="mobile-menu" [ngClass]="{ 'active': isMenuOpen }">
+      <div class="mobile-menu-items">
+        <a routerLink="/app/player-options-form">{{'Home' | translate}}</a>
+        <a routerLink="/app/about-form">{{'About' | translate}}</a>
+        <a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a>
+        <a routerLink="/app/faq-page">{{'FAQ' | translate}}</a>
+        <a *ngIf="username" (click)="ToProfile()">{{"EditProfile" | translate}}</a>
+        <a *ngIf="username" (click)="ToSettings()">{{"S&P" | translate}}</a>
+        <a *ngIf="username" (click)="ToSendFeedback()">{{"H&S" | translate}}</a>
+        <a *ngIf="username" (click)="OpenPhotoModalWindow()">{{"UpdateProfilePhoto" | translate}}</a>
+        <a *ngIf="username" (click)="ToDeleteAcc()">{{"DeleteAcc" | translate}}</a>
+        <a *ngIf="username" (click)="Logout($event)">{{"Logout" | translate}}</a>
+<!--        <div class="user-info-container">-->
+<!--          <div class="user-stats">-->
+<!--            <span class="user-level"><i class="fas fa-level-up-alt"></i> {{userLevel}}</span>-->
+<!--            <span class="user-points"><i class="fas fa-star"></i> {{points}} / {{overallPoints}}</span>-->
+<!--            <span class="user-coins"><i class="fas fa-coins"></i> {{coins}}</span>-->
+<!--          </div>-->
+<!--          <img [src]="imageURL" class="user-pic">-->
+<!--        </div>-->
+      </div>
+    </div>
+
   </nav>
 </ng-container>
 
@@ -89,18 +113,15 @@
       <img #az (click)="switchLang(az.alt)" src="https://cdn-icons-png.flaticon.com/128/330/330544.png" class="lang" alt="az">
     </div>
 
-    <div class="menu-icon">
-      <span class="fas fa-bars"></span>
-    </div>
-
     <div class="logo">MyKahoot</div>
 
     <div class="nav-items" style="padding-left: 10%">
       <li><a routerLink="/app/auth-form">{{'Auth' | translate}}</a></li>
       <li><a routerLink="/app/about-form">{{'About' | translate}}</a></li>
       <li><a routerLink="/app/contact-list-form">{{'Contact' | translate}}</a></li>
+      <li><a routerLink="/app/faq-page">{{'FAQ' | translate}}</a></li>
     </div>
   </nav>
 </ng-container>
 
-<app-add-photo-popup-form *ngIf="flag"></app-add-photo-popup-form>
+<app-add-user-photo-popup-form [isVisible]="flag" (close)="flag = false"></app-add-user-photo-popup-form>

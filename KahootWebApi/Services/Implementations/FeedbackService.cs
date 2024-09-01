@@ -42,7 +42,8 @@ namespace KahootWebApi.Services.Implementations
                     .ToListAsync();
 
                 // Calculating the average of feedback scores and times passed 
-                double averageFeedbackScore = feedbackScores.Any() ? feedbackScores.Average() : 0;
+                var nonZeroFeedbackScores = feedbackScores.Where(score => score > 0).ToList();
+                double averageFeedbackScore = nonZeroFeedbackScores.Any() ? nonZeroFeedbackScores.Average() : 0;
                 int timesPassed = feedbackScores.Any() ? feedbackScores.Count() : 0;
 
                 var updateCreatedQuizFields = await _context.CreatedQuizzes.FirstOrDefaultAsync(cq => cq.CategoryName == categoryName && cq.QuizName == quizName);
@@ -54,7 +55,7 @@ namespace KahootWebApi.Services.Implementations
                 }
                 else
                 {
-                    _logger.LogError($"There is no created quiz with the {categoryName} category name and {quizName} quiz name");
+                    _logger.LogError($"There is no created q                                                                                                                                uiz with the {categoryName} category name and {quizName} quiz name.");
                 }
             }
             catch (Exception ex) when (ex is ArgumentNullException or OverflowException)

@@ -1,4 +1,5 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div id="allthethings">
   <div style="display: flex; flex-direction: column;">
@@ -6,23 +7,32 @@
     <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Quiz' | translate}}" />
   </div>
   <div class="main-container">
-    <ng-container *ngIf="flag">
-      <div *ngFor="let quiz of filterPassedQuizzes()">
+      <div *ngFor="let quiz of getCurrentPageItems()">
+        <ng-container *ngIf="getCurrentPageItems().length > 0; else NoItems">
         <div class="fields" id="{{quiz.quizName}}" #div (click)="ToLevelsForm(div)">
           <p>{{quiz.quizName}}</p>
         </div>
+        </ng-container>
+        <ng-template #NoItems>
+          <ng-container *ngIf="flag">
+            <div>There are no passed quizzes yet.</div>
+          </ng-container>
+          <ng-container *ngIf="!flag">
+            <div>There are no quizzes yet.</div>
+          </ng-container>
+        </ng-template>
       </div>
-    </ng-container>
-    <ng-container *ngIf="!flag">
-      <div *ngFor="let quiz of filterQuizzes()">
-        <div class="fields" id="{{quiz.quizName}}" #div (click)="ToLevelsForm(div)">
-          <p>{{quiz.quizName}}</p>
-        </div>
-      </div>
-    </ng-container>
   </div>
+</div>
 
-    <div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+<div class="fields" id="exit" (click)="BackOptions()"><p>{{"Back" | translate}}</p></div>
+
+<div class="pagination-controls">
+  <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">{{"Previous" | translate}}</button>
+  <span *ngFor="let page of getPageNumbers()">
+    <button (click)="setPage(page)" [class.active]="currentPage === page">{{page}}</button>
+  </span>
+  <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">{{"Next" | translate}}</button>
 </div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>

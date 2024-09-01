@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {CreatedQuiz} from "../../models/CreatedQuiz";
 import {NavigationExtras, Router} from "@angular/router";
 import {FilterCollectionsService} from "../../services/filter-collections.service";
@@ -20,6 +20,11 @@ export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
   public searchText: string = '';
   public flag: boolean = false;
 
+  // Pagination variables
+  public currentPage: number = 1;
+  public pageSize: number = 3;
+  public totalPages: number = 0;
+
   constructor(private router: Router, private filter: FilterCollectionsService) {}
 
   ngOnInit(): void {
@@ -27,14 +32,38 @@ export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.loadCategories();
+  }
+
+  private async loadCategories(): Promise<void> {
     if (localStorage.getItem("ToStats") !== null) {
       this.flag = true;
-      this.downloadPassedQuizzes();
+      await this.downloadPassedQuizzes();
     }
     else {
       this.flag = false;
-      this.downloadQuizzes();
+      await this.downloadQuizzes();
     }
+    this.totalPages = Math.ceil(this.quizzes.length / this.pageSize) + 1; // Update totalPages here
+    if (this.quizzes.length % this.pageSize == 0) this.totalPages += 1;
+  }
+
+  // Pagination methods
+  public getCurrentPageItems(): CreatedQuiz[] {
+    const filteredQuizzes = this.flag ?  this.filterPassedQuizzes() : this.filterQuizzes();
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = Math.min(startIndex + this.pageSize, filteredQuizzes.length);
+    return filteredQuizzes.slice(startIndex, endIndex);
+  }
+
+  public setPage(pageNumber: number): void {
+    if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+      this.currentPage = pageNumber;
+    }
+  }
+
+  public getPageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
   private downloadPassedQuizzes(): void{
@@ -43,6 +72,7 @@ export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
     }).then((response) => {
       return response.json();
     }).then((data) => {
+      console.log("passed quizzes",data);
       this.quizzes.length = 0;
       Object.keys(data).forEach((key) =>
       {
@@ -69,7 +99,7 @@ export class AvailableTestsStatsFormComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/app/choose-field-form']);
   }
 
-  public ToLevelsForm(elemRef: any): void{
+  public ToLevelsForm(elemRef: HTMLElement): void{
     localStorage.setItem("QuizType", elemRef.id);
 
     const navigationExtras: NavigationExtras = {

@@ -1,0 +1,25 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
+<div id="allthethings">
+  <div style="display: flex; flex-direction: column;">
+    <div class="statement">{{"Your reminders" | translate}}</div>
+    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Name' | translate}}" />
+  </div>
+  <div class="main-container">
+    <div *ngIf="reminders.length === 0" class="text-muted">{{"No reminders yet" | translate}}.</div>
+    <div *ngFor="let reminder of filterReminders()">
+      <div class="fields" (click)="openQuiz(reminder.catName, reminder.name, reminder.testMode)">
+        <p>{{reminder.name}} : {{reminder.whenToPass}}</p>
+      </div>
+      <button class="delete-button" (click)="deleteReminderAsync(reminder.id!)">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

@@ -1,0 +1,11 @@
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="modal-title">{{flag ? 'Are you sure you want to go to the previous question?'
+      : 'Are you sure you want to start over the quiz?' | translate }}</div>
+    <div class="buttonsDiv">
+      <input type="button" class="actionButton" value="{{'No' | translate}}" (click)="emitDataToParent(false)"/>
+      <input type="button" class="actionButton" value="{{'Yes' | translate}}" (click)="emitDataToParent(true)">
+    </div>
+  </div>
+</div>

@@ -1,6 +1,4 @@
-import {Component, ElementRef, EventEmitter, Output} from '@angular/core';
-import {PlayerSurveyChoosingFormComponent} from "../player-survey-choosing-form/player-survey-choosing-form.component";
-import {NavigationExtras, Router} from "@angular/router";
+import {Component, ElementRef, EventEmitter, Input, Output} from '@angular/core';
 
 @Component({
   selector: 'app-choose-action-popup-form',
@@ -8,18 +6,14 @@ import {NavigationExtras, Router} from "@angular/router";
   styleUrls: ['./choose-action-popup-form.component.css']
 })
 export class ChooseActionPopupFormComponent {
-  @Output() closePopup = new EventEmitter<void>();
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
   @Output() actionChosen = new EventEmitter<string>();
-  constructor(private el: ElementRef, private childComponent: PlayerSurveyChoosingFormComponent,
-              private router: Router) {}
+  constructor(private el: ElementRef) {}
 
 
-  public ClosePopUp(): void{
-    let modal = this.el.nativeElement.querySelector(".modal");
-
-    modal.style.display = "none";
-
-    this.closePopup.emit();
+  public closeModal(): void{
+    this.close.emit();
   }
 
   public toPreview(): void {

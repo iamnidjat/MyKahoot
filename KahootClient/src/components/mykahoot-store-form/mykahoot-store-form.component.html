@@ -1,5 +1,24 @@
-<app-navbar-form></app-navbar-form>
-<app-theme-toggle></app-theme-toggle>
+<div class="app-container">
+  <app-navbar-form></app-navbar-form>
+  <app-theme-toggle></app-theme-toggle>
+  <main class="content">
+    <div class="store-container">
+      <div class="card" *ngFor="let item of items">
+        <img class="card-image" [ngSrc]="api + item.photo" width="150" height="150" alt="{{item.name}}">
+        <div class="card-content">
+          <h3 class="card-title">{{'Name' | translate}}: {{ item.name }}</h3>
+          <p class="card-description">{{'Description' | translate}}: {{ item.description }}</p>
+          <p class="card-quantity">{{'Quantity' | translate}}: {{ item.quantity }}</p>
+          <p class="card-price">{{'Price' | translate}}: ${{ item.price }}</p>
+          <button class="buy-button" [disabled]="item.isDisabled" (click)="buyAnItemAsync(item)">{{'Buy' | translate}}</button>
+          <p *ngIf="item.isDisabled">{{"This item currently is unavailable" | translate}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+  </main>
+  <app-scroll-to-top-form></app-scroll-to-top-form>
+  <app-footer-form></app-footer-form>
+</div>
 
-<app-scroll-to-top-form></app-scroll-to-top-form>
-<app-footer-form></app-footer-form>
+<app-buy-item-modal-form *ngIf="flag" [item]="selectedItem" (close)="flag = false">></app-buy-item-modal-form>

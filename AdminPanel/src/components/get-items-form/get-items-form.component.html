@@ -1,0 +1,45 @@
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
+<div class="store-container">
+  <div class="card" *ngFor="let item of items">
+    <div class="images">
+      <div class="image-wrapper">
+        <img *ngIf="!editMode[item.id!]" [ngSrc]="api + item.photo" width="150" height="150" alt="{{item.name}}">
+        <!-- Centered input type=file in the middle of the image -->
+        <input *ngIf="editMode[item.id!]" type="file" class="file-input-overlay" (change)="onFileChange($event, item.id!)">
+      </div>
+    </div>
+    <div class="card-content">
+      <h3 class="card-title">{{"Name" | translate}}:
+        <span *ngIf="!editMode[item.id!]">{{ item.name }}</span>
+        <input *ngIf="editMode[item.id!]" [(ngModel)]="item.name" />
+      </h3>
+      <p class="card-description">{{"Description" | translate}}:
+        <span *ngIf="!editMode[item.id!]">{{ item.description }}</span>
+        <input *ngIf="editMode[item.id!]" [(ngModel)]="item.description" />
+      </p>
+      <p class="card-quantity">{{"Quantity" | translate}}:
+        <span *ngIf="!editMode[item.id!]">{{ item.quantity }}</span>
+        <input *ngIf="editMode[item.id!]" [(ngModel)]="item.quantity" />
+      </p>
+      <p class="card-price">{{"Price" | translate}}: $
+        <span *ngIf="!editMode[item.id!]">{{ item.price }}</span>
+        <input *ngIf="editMode[item.id!]" [(ngModel)]="item.price" />
+      </p>
+    </div>
+    <input type="button" class="remove-button" value="{{item.isDisabled ? 'Enable' : 'Disable' | translate}}" (click)="manipulateItemAsync(item.id!, item.isDisabled)"/>
+    <input type="button" class="remove-button" value="{{'Remove' | translate}}" (click)="confirmDelete(item.id!, item.name)"/>
+    <input *ngIf="!editMode[item.id!]" type="button" value="{{'Edit' | translate}}" (click)="toggleEditMode(item.id!)"/>
+    <div class="buttons">
+      <input *ngIf="editMode[item.id!]" type="button" value="{{'Cancel' | translate}}" (click)="cancelEditMode(item.id!)"/>
+      <input *ngIf="editMode[item.id!]" type="button" value="{{'Save' | translate}}" (click)="saveItemChangesAsync(item.id!, item)"/>
+    </div>
+  </div>
+</div>
+
+<div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+<button class="store-button" (click)="onAddItemClick()">Add item</button>
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

@@ -1,23 +1,36 @@
-<app-navbar-form></app-navbar-form>
+<div class="app-container">
+  <app-navbar-form></app-navbar-form>
+  <app-theme-toggle></app-theme-toggle>
+  <main class="content">
 
-<div id="allthethings">
-  <div style="display: flex; flex-direction: column;">
-    <div class="statement">{{"Choose a field to create a quiz" | translate}}</div>
-    <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category' | translate}}" />
-  </div>
-  <div class="main-container">
-    <div class="fields" id="newCategory" (click)="openModalWindow()"><p>{{"NewCategory" | translate}}</p></div>
+    <div id="allthethings">
+      <div style="display: flex; flex-direction: column;">
+        <div class="statement">{{"Choose a field to create a quiz" | translate}}</div>
+        <input class="search-input" [(ngModel)]="searchText" placeholder="{{'Search by Category' | translate}}" />
+      </div>
+      <div class="main-container">
+        <div class="fields" id="newCategory" (click)="openModalWindow()"><p>{{"NewCategory" | translate}}</p></div>
 
-    <div *ngFor="let category of filterCategories()">
-      <div class="fields" id="{{category.categoryName}}" #div (click)="toCreatingQuizForm(div)"><p>{{category.categoryName}}</p></div>
+        <div *ngFor="let category of getCurrentPageItems()">
+          <div class="fields" id="{{category.categoryName}}" #div (click)="toCreatingQuizForm(div)"><p>{{category.categoryName}}</p></div>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+    <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
+
+    <div class="pagination-controls">
+      <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">{{"Previous" | translate}}</button>
+      <span *ngFor="let page of getPageNumbers()">
+    <button (click)="setPage(page)" [class.active]="currentPage === page">{{page}}</button>
+  </span>
+      <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">{{"Next" | translate}}</button>
+    </div>
+
+  </main>
+  <app-scroll-to-top-form></app-scroll-to-top-form>
+  <app-footer-form></app-footer-form>
 </div>
 
-<app-scroll-to-top-form></app-scroll-to-top-form>
-<app-footer-form></app-footer-form>
-
-<app-add-new-category-popup-form *ngIf="flagOfCustomCategory"></app-add-new-category-popup-form>
-<app-choose-type-of-quiz-form *ngIf="flagOfExistingCategory"></app-choose-type-of-quiz-form>
+<app-add-new-category-popup-form [isVisible]="flagOfCustomCategory" (close)="flagOfCustomCategory = false"></app-add-new-category-popup-form>
+<app-specify-name-of-test [isVisible]="flagOfExistingCategory" (close)="flagOfExistingCategory = false"></app-specify-name-of-test>

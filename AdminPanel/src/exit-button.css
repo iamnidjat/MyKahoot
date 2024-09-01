@@ -1,0 +1,44 @@
+:root {
+  --exit-bg-color: #ffffff;
+  --exit-border-color: #ff4d4d;
+  --exit-text-color: #ff4d4d;
+  --exit-hover-bg-color: #ff4d4d;
+  --exit-hover-text-color: #ffffff;
+}
+
+[data-theme='dark'] {
+  --exit-bg-color: #2c2c2c; /* Darker background for dark mode */
+  --exit-border-color: #ff6b6b; /* Slightly brighter red for better contrast */
+  --exit-text-color: #ff6b6b; /* Matching the border color */
+  --exit-hover-bg-color: #ff6b6b; /* Bright hover background */
+  --exit-hover-text-color: #2c2c2c; /* Text color matching the dark background */
+}
+
+#exit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 10%;
+  left: 1%;
+  padding: 10px 20px;
+  background-color: var(--exit-bg-color);
+  border: 2px solid var(--exit-border-color);
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--exit-text-color);
+}
+
+#exit:hover {
+  background-color: var(--exit-hover-bg-color);
+  color: var(--exit-hover-text-color);
+}
+
+#exit p {
+  margin: 0;
+}

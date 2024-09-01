@@ -1,12 +1,13 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div class="main-container">
   <h1 style="text-align: center; margin-bottom: 30px;">{{'Top10' | translate}}</h1>
   <div *ngIf="info && info.length > 0">
     <div class="table-div">
-      <div>{{"Category" | translate}}: {{catType}}</div>
-      <div>{{"Quiz" | translate}}: {{quizType}}</div>
-      <div>{{"Level" | translate}}: {{level}}</div>
+      <div class="subtitle">{{"Category" | translate}}: {{catType}}</div>
+      <div class="subtitle">{{"Quiz" | translate}}: {{quizType}}</div>
+      <div class="subtitle">{{"Level" | translate}}: {{level}}</div>
 
       <table class="zigzag">
         <thead>
@@ -31,6 +32,8 @@
     <p>There is no data to display</p>
   </div>
 </div>
+
+<div id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>

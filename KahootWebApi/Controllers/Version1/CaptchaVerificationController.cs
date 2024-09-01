@@ -15,12 +15,9 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("verify-captcha")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> VerifyCaptcha(string token)
+        public async Task<IActionResult> VerifyCaptchaAsync([FromQuery] string token)
         {
-            return await _captchaVerificationService.VerifyCaptcha(token);
+            return await _captchaVerificationService.VerifyCaptchaAsync(token);
         }
     }
 }

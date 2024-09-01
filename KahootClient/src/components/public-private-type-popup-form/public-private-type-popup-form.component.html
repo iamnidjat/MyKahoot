@@ -1,9 +1,13 @@
-<div  class="modal" style="display: block">
+<div  class="modal" *ngIf="isVisible">
   <div class="modal-content">
-    <span class="close" (click)="ClosePopUp()">&times;</span>
-    <div class="state">{{"ChooseATypeOfYourQuiz" | translate}}</div>
-    <input type="button" #id1 id="public" (click)="ToCreatingTestProcess(id1)" class="createButton" value="{{'public' | translate}}">
-    <input type="button" #id2 id="private" (click)="ToCreatingTestProcess(id2)"  class="createButton" value="{{'private' | translate}}">
+    <span class="close" (click)="closeModal()">&times;</span>
+    <div class="inscription">{{"ChooseATypeOfYourQuiz" | translate}}</div>
+    <div class="buttonsDiv">
+      <input type="button" #id1 id="public" (click)="ToCreatingTestProcess(id1)" class="actionButton" value="{{'public' | translate}}">
+      <input type="button" #id2 id="private" (click)="ToCreatingTestProcess(id2)"  class="actionButton" value="{{'private' | translate}}">
+    </div>
   </div>
 </div>
+
+<app-is-vip-form [isVisible]="creatingTestProcessFlag" (close)="creatingTestProcessFlag = false"></app-is-vip-form>
 

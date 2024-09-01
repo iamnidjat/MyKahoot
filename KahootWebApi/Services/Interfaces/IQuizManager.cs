@@ -5,18 +5,20 @@ namespace KahootWebApi.Services.Interfaces
 {
     public interface IQuizManager
     {
-        Task<bool> IsCategoryNameUsed(string catName);
-        Task<bool> IsQuizNameUsed(string catName, string quizName);
+        Task<bool> IsCategoryNameUsedAsync(string catName);
+        Task<bool> IsQuizNameUsedAsync(string catName, string quizName);
         Task DeleteQuizAsync(string categoryName, string testName);
         Task AddQuestionAsync(QuizUploadDto quizDto);
         Task<IEnumerable<Quiz>> ReadQuestionsAsync(string catName, string quizName);
         Task RemoveQuestionsAsync(string catName, string quizName);
-        Task UpdateQuestionAsync(string catName, string quizName, int questionNumber, Quiz quiz);
+        Task UpdateQuestionAsync(string catName, string quizName, int questionNumber, QuizUploadDto quizDto);
         Task SaveCategoryAsync(CreatedQuiz createdQuiz);
+        Task<ResultModel> CanUserPassVIPQuizAsync(int userId);
+        Task<ResultModel> CanUserCreateVIPQuizAsync(int userId);
         Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync();
         Task<IEnumerable<CreatedQuiz>> DownloadCategoryAsync(int userId);
         Task<Quiz> GetTestDataAsync(string catName, string quizName, int questionNumber);
-        Task<int> GetCorrectAnswer(string catName, string quizName, int questionNumber);
+        Task<int> GetCorrectAnswerAsync(string catName, string quizName, int questionNumber);
         Task RemoveQuestionAsync(string catName, string quizName, int questionNumber);
         Task<IEnumerable<CreatedQuiz>> GetTestsListAsync(string categoryName);
         Task<IEnumerable<CreatedQuiz>> GetPrivateTestsListAsync(string categoryName);
@@ -30,5 +32,6 @@ namespace KahootWebApi.Services.Interfaces
         Task RemoveUserAnswerAsync(string catName, string quizName, int questionNumber);
         Task RemoveUserAnswersAsync(string catName, string quizName);
         Task<MyQuizAnswers> GetQuizHistoryAsync(string catName, string quizName, int questionNumber, int userId);
+        Task<bool> IsAllowedUsersToDownloadAsync(string catName, string quizName);
     }
 }

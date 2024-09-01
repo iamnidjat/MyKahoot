@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {User} from "../../models/User";
+import {Router} from "@angular/router";
 
 const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 
@@ -11,11 +12,12 @@ const API_URL: string = "https://localhost:7176/api/v1/Statistics/";
 export class LeadeboardFormComponent implements OnInit{
   public leaderBoardUsers: User[] = [];
 
+  constructor(private router: Router) {}
+
   public async DownloadLeaderBoardUsers(): Promise<void>{
     await fetch(API_URL + 'GetLeaderBoardUsers', {
       method: "GET"
     }).then(text => text.json()).then(data => {
-      console.log("leaderboard =>", data);
       this.leaderBoardUsers = data.map((user: any) => ({
         id: user.id,
         userName: user.username,
@@ -23,6 +25,10 @@ export class LeadeboardFormComponent implements OnInit{
         overallPoints: user.overallPoints,
       }));
     });
+  }
+
+  public backOptions(): void{
+    this.router.navigate(['/app/profile-form']);
   }
 
   ngOnInit(): void {

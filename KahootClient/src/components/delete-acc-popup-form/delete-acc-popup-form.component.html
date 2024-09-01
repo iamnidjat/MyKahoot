@@ -1,19 +1,16 @@
-<body class="bg-gray-900">
-  <div class="modal" style="display: block">
-    <div class="mt-20 p-4 rounded bg-white max-w-sm text-center border-t-4 border-red-600 mx-auto text-gray-700 pt-0">
-      <h3 class="font-bold text-2xl text-black mb-2">{{"Are you sure to delete account" | translate}}</h3>
-      <p>{{"You'll permanently lose your" | translate}}</p>
-      <ul class="list-disc inline-block text-left pt-2 ml-2">
-        <li>{{"Profile" | translate}}</li>
-        <li>{{"Stats" | translate}}</li>
-        <li>{{"Data" | translate}}</li>
-      </ul>
-      <div class="flex pt-8">
-        <button (click)="Cancel()" class="w-1/2 mr-1 bg-white border text-gray-600 border-gray-400 hover:bg-gray-300 py-2 px-4 rounded font-medium">{{"Cancel" | translate}}</button>
-        <button (click)="DeleteAcc($event)" class="w-1/2 ml-1 bg-red-600 border border-red-600 text-white border-gray-500 hover:bg-red-700 hover:border-red-700 py-2 px-4 rounded font-medium">
-          {{"DeleteAcc" | translate}}
-        </button>
-      </div>
+<div class="modal" *ngIf="isVisible">
+  <div class="modal-content">
+    <h3>{{"Are you sure to delete account" | translate}}</h3>
+    <p>{{"You'll permanently lose your" | translate}}</p>
+    <ul>
+      <li>{{"Profile" | translate}}</li>
+      <li>{{"Stats" | translate}}</li>
+      <li>{{"Data" | translate}}</li>
+    </ul>
+    <div class="action-container">
+      <button (click)="Cancel()" class="btn-cancel">{{"Cancel" | translate}}</button>
+      <button (click)="DeleteAcc($event)" class="btn-delete">{{"Delete Account" | translate}}</button>
     </div>
   </div>
-</body>
+</div>
+

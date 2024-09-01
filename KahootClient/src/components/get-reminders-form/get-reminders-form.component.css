@@ -1,0 +1,17 @@
+@import "src/components/creating-quiz-option-form/creating-quiz-option-form.component.css";
+
+.delete-button {
+  background-color: transparent;
+  border: none;
+  color: #ff0000;
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+.delete-button:hover {
+  color: #cc0000;
+}
+
+.delete-button i {
+  font-size: 18px;
+}

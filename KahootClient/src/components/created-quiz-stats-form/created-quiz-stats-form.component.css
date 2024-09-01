@@ -1,0 +1,20 @@
+.container {
+  background-color: var(--cqs-container-bg);
+  color: var(--cqs-text-color);
+  padding: 50px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.container div {
+  font-size: 20px;
+}
+
+.container a {
+  color: var(--cqs-link-color);
+  text-decoration: none;
+}
+
+.container a:hover {
+  color: var(--cqs-link-hover-color);
+}

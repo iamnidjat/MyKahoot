@@ -19,4 +19,7 @@ export type User = {
   freezingReason: string | null;
   isBanned: boolean;
   overallPoints: number;
+  points: number;
+  coins: number;
+  level: number;
 }

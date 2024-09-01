@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {CreatingQuizOptionFormComponent} from "../creating-quiz-option-form/creating-quiz-option-form.component";
 import {Router} from "@angular/router";
 import Swal from "sweetalert2";
@@ -10,23 +10,16 @@ import {CheckDataService} from "../../services/check-data.service";
   styleUrls: ['./specify-name-of-test.component.css']
 })
 export class SpecifyNameOfTestComponent {
+  @Input() isVisible: boolean = false;
+  @Output() close = new EventEmitter<void>();
   @ViewChild('TestName') TestName!: ElementRef;
-  @Input() public chooseQuizTypeFlag: boolean = false;
+  public flag: boolean = false;
   public isQuizNameUsed: boolean = false;
 
-  constructor(private el: ElementRef, private router: Router,
-              private childComponent: CreatingQuizOptionFormComponent,
-              private checkService: CheckDataService) {}
+  constructor(private el: ElementRef, private checkService: CheckDataService) {}
 
-  public ClosePopUp(): void{
-    let modal = this.el.nativeElement.querySelector(".modal");
-
-    modal.style.display = "none";
-
-    localStorage.removeItem("MyCategory"); // Don't need anymore
-    localStorage.removeItem("testFormat"); // Don't need anymore
-    this.childComponent.flagOfCustomCategory = false;
-    this.childComponent.flagOfExistingCategory = false;
+  public closeModal(): void {
+    this.close.emit();
   }
 
   public async CreateNewTest(): Promise<void>{
@@ -35,16 +28,12 @@ export class SpecifyNameOfTestComponent {
       if (await this.checkService.IsQuizNameUsed(localStorage.getItem("CategoryType") ||
         localStorage.getItem("ManualCategory")!, this.TestName.nativeElement.value)) {
         this.isQuizNameUsed = true;
-      }
-      else {
-        let modal = this.el.nativeElement.querySelector(".modal");
+      } else {
+        this.closeModal();
 
-        modal.style.display = "none";
-
-        this.chooseQuizTypeFlag = true;
+        this.flag = true;
 
         localStorage.setItem("MyTestName", this.TestName.nativeElement.value);
-        localStorage.removeItem("IsQuizNameUsed"); // Don't need anymore
       }
     }
     else

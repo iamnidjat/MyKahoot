@@ -10,7 +10,7 @@ namespace KahootWebApi.Services.Interfaces
         Task AddCommentAsync(Comment comment);
         Task AddLikeAsync(Like like);
         Task AddDislikeAsync(Dislike dislike);
-        Task RemoveCommentAsync(int authorId, int quizId);
+        Task RemoveCommentAsync(int commentId);
         Task RemoveLikeAsync(int authorId, int quizId);
         Task RemoveDislikeAsync(int authorId, int quizId);
         Task<int> GetLikesCountAsync(int quizId);
@@ -20,5 +20,6 @@ namespace KahootWebApi.Services.Interfaces
         Task<int> GetTimesPassedAsync(int quizId);
         Task<bool> DidUserLikeQuizAsync(int userId, int quizId);
         Task<bool> DidUserDislikeQuizAsync(int userId, int quizId);
+        Task UpdateCommentAsync(string commentContent, int commentId);
     }
 }

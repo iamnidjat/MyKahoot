@@ -1,5 +1,13 @@
-<div class="container">
+<app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
+
+<div id="allthethings">
   <div class="fields" (click)="onGetMessagesClick()"><p>{{'ReceivedMessages' | translate}}</p></div>
   <div class="fields" (click)="onSendMessageClick()"><p>{{'SendMessage' | translate}}</p></div>
-  <div class="fields" routerLink="/app/menu-page"><p>{{'Back' | translate}}</p></div>
 </div>
+
+<div id="exit" routerLink="/app/menu-page"><p>{{'Back' | translate}}</p></div>
+
+
+<app-scroll-to-top-form></app-scroll-to-top-form>
+<app-footer-form></app-footer-form>

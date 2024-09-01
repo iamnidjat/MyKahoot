@@ -77,7 +77,7 @@ namespace KahootWebApi.Services.Implementations
             {
                 var reminderExists = await _context.Reminders
                                                    .AsNoTracking()
-                                                   .AnyAsync(r => r.UserId == userId && r.WhenToPass == DateTime.Now);
+                                                   .AnyAsync(r => r.UserId == userId && r.WhenToPass.Value.Date == DateTime.Today);
 
                 if (!reminderExists)
                 {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {InteractionService} from "../../services/interaction.service";
 import {ActivatedRoute} from "@angular/router";
 import {Comment} from "../../models/userInteraction/Comment";
@@ -12,25 +12,27 @@ export class CommentsFormComponent implements OnInit{
   public comments: Comment[] = [];
   public myComments: Comment[] = [];
   public userName: string = localStorage.getItem("Login")!;
- // @Input() private categoryName: string = "";
- // @Input() private quizName: string = "";
   @Input() public id: number = 0;
+  @ViewChild("Comment") comment!: ElementRef;
+  public editMode: { [key: number]: boolean } = {}; // Track edit mode for each item
 
   constructor(private interactionService: InteractionService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // this.categoryName = this.route.snapshot.params['categoryName'];
-    // this.quizName = this.route.snapshot.params['quizName'];
     this.id = this.route.snapshot.params['id'];
-    console.log("id => ", this.id);
 
     this.getAllCommentsAsync();
     this.getMyCommentsAsync();
   }
 
+  public toggleEditMode(commentId: number): void {
+    this.editMode[commentId] = !this.editMode[commentId];
+  }
   public async addCommentAsync(content: string): Promise<void> {
     await this.interactionService.toCommentAsync(content, new Date(),
       parseInt(localStorage.getItem("userId")!), this.id);
+
+    this.comment.nativeElement.value = "";
 
     await this.getAllCommentsAsync();
     await this.getMyCommentsAsync();
@@ -41,7 +43,19 @@ export class CommentsFormComponent implements OnInit{
   }
 
   public async getMyCommentsAsync(): Promise<void> {
-    alert(this.id);
     await this.interactionService.getCommentAsync(parseInt(localStorage.getItem("userId")!), this.id, this.myComments);
+  }
+
+  public async removeCommentAsync(commentId: number): Promise<void> {
+    await this.interactionService.removeCommentAsync(commentId);
+
+    // Remove the comment from the local list
+    this.comments = this.comments.filter(comment => comment.id !== commentId);
+    this.myComments = this.myComments.filter(comment => comment.id !== commentId);
+  }
+
+  public async updateCommentAsync(commentContent: string, commentId: number): Promise<void> {
+    await this.interactionService.updateCommentAsync(commentContent, commentId);
+    this.editMode[commentId] = false; // Disable edit mode
   }
 }

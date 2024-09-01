@@ -16,9 +16,6 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("downloadAsTxt")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DownloadTxt([FromBody] QuizDownloadRequest request)
         {
             byte[] fileBytes = _downloadQuizService.GenerateFileContentTxt(request.QuizContent);
@@ -26,9 +23,6 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("downloadAsDocx")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DownloadDocx([FromBody] QuizDownloadRequest request)
         {
             byte[] fileBytes = _downloadQuizService.GenerateFileContentDocx(request.QuizContent, request.FileName);
@@ -36,9 +30,6 @@ namespace KahootWebApi.Controllers.Version1
         }
 
         [HttpPost("downloadAsJson")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult DownloadQuiz([FromBody] QuizDownloadRequest request)
         {
             byte[] fileBytes = _downloadQuizService.GenerateFileContentJson(request.QuizContent);

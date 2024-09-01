@@ -1,49 +1,83 @@
+/* Define CSS Variables for Light and Dark Themes */
+:root {
+  --background-color-light: white;
+  --background-color-dark: #121212;
+
+  --text-color-light: black;
+  --text-color-dark: white;
+
+  --heading-color-light: black;
+  --heading-color-dark: #e0e0e0;
+
+  --social-icon-light: #000; /* Darker color for social icons */
+  --social-icon-dark: #fff; /* Lighter color for social icons */
+
+  --card-bg-light: white;
+  --card-bg-dark: #1e1e1e;
+
+  --box-shadow-light: rgb(38, 57, 77) 0 20px 30px -10px;
+  --box-shadow-dark: rgb(0, 0, 0) 0 20px 30px -10px;
+}
+
+/* Apply Light Theme Styles */
+[data-theme="light"] {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+  --heading-color: var(--heading-color-light);
+  --social-icon-color: var(--social-icon-light);
+  --card-bg-color: var(--card-bg-light);
+  --box-shadow: var(--box-shadow-light);
+}
+
+/* Apply Dark Theme Styles */
+[data-theme="dark"] {
+  --background-color: var(--background-color-dark);
+  --text-color: var(--text-color-dark);
+  --heading-color: var(--heading-color-dark);
+  --social-icon-color: var(--social-icon-dark);
+  --card-bg-color: var(--card-bg-dark);
+  --box-shadow: var(--box-shadow-dark);
+}
+
+/* General Styles */
 * {
   font-family: Nunito, sans-serif;
 }
 
-.main{
+.main {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
+  background-color: var(--background-color);
 }
 
 .text-blk {
   margin: 0;
   padding: 0;
   line-height: 25px;
+  color: var(--text-color);
 }
 
 .responsive-container-block {
   min-height: 75px;
   width: 100%;
   padding: 10px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin: 0 auto;
-  -webkit-box-pack: start;
-  -ms-flex-pack: start;
   justify-content: flex-start;
 }
 
 .responsive-container-block.Container {
   max-width: 800px;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   padding: 20px;
   margin: 100px auto;
-  background-color: white;
+  background-color: var(--card-bg-color);
   border-radius: 10px;
-  box-shadow: rgb(38, 57, 77) 0 20px 30px -10px;
+  box-shadow: var(--box-shadow);
 }
 
 .text-blk.heading {
@@ -51,6 +85,7 @@
   line-height: 45px;
   font-weight: 800;
   margin: 0 0 30px;
+  color: var(--heading-color);
 }
 
 .text-blk.subHeading {
@@ -63,29 +98,24 @@
 .socialIcon {
   width: 33px;
   height: 33px;
+  filter: invert(1); /* To ensure icons are visible on dark backgrounds */
 }
 
 .social-icons-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-align: start;
-  -ms-flex-align: start;
   align-items: flex-start;
 }
 
 .social-icon {
-  margin: 0 50px 0 50px;
+  margin: 0 50px;
+  color: var(--social-icon-color);
 }
 
 .social-icon:hover {
   cursor: pointer;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
   .text-blk.heading {
     font-size: 55px;
@@ -102,18 +132,8 @@
     height: 20px;
   }
 
-  .text-blk.subHeading {
-    line-height: 27px;
-  }
-
-  .text-blk.heading {
-    font-size: 32px;
-    line-height: 40px;
-    margin: 0 0 20px;
-  }
-
   .social-icon {
-    margin: 0 25px 0 25px;
+    margin: 0 25px;
   }
 }
 
@@ -135,27 +155,12 @@
   }
 
   .social-icons-container {
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
     align-items: center;
-    -webkit-box-pack: center;
-    -ms-flex-pack: center;
     justify-content: center;
   }
 
-  .text-blk.subHeading {
-    font-size: 16px;
-    line-height: 23px;
-  }
-
-  .text-blk.heading {
-    font-size: 26px;
-    line-height: 30px;
-  }
-
   .social-icon {
-    margin: 0 20px 0 20px;
+    margin: 0 20px;
   }
 }

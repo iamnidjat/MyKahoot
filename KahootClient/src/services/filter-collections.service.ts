@@ -24,7 +24,7 @@ export class FilterCollectionsService {
     if ((defaultTest === 'Mixed Test' || defaultTest === 'Programming' ||
       defaultTest === 'Math' || defaultTest === 'Logics') && !flag) {
       const defaultQuizzes: CreatedQuiz[] = [
-        {categoryName: defaultTest, quizName: 'Default ' + defaultTest, userName: "admin", isPrivate: false, quizCode: "-", userId: 0},
+        {categoryName: defaultTest, quizName: 'Default ' + defaultTest, userName: "admin", isPrivate: false, isVIP: false, quizCode: "-", userId: 0},
       ];
 
       let finalQuizzes: CreatedQuiz[] = defaultQuizzes.concat(quizzes);
@@ -40,8 +40,18 @@ export class FilterCollectionsService {
   }
 
   public filterPassedQuizzes(quizzes: CreatedQuiz[], searchText: string): CreatedQuiz[] {
-    return quizzes.filter(quiz =>
-      quiz.quizName.toLowerCase().includes(searchText.toLowerCase())
-    );
+    const uniqueQuizNames = new Set<string>();
+    return quizzes
+      .filter(quiz =>
+        quiz.quizName.toLowerCase().includes(searchText.toLowerCase())
+      )
+      .filter(quiz => {
+        if (uniqueQuizNames.has(quiz.quizName.toLowerCase())) {
+          return false;
+        } else {
+          uniqueQuizNames.add(quiz.quizName.toLowerCase());
+          return true;
+        }
+      });
   }
 }

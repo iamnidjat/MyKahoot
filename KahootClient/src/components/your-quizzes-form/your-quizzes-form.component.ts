@@ -27,6 +27,10 @@ export class YourQuizzesFormComponent implements OnInit{
     });
   }
 
+  public BackOptions(): void{
+    this.router.navigate(['/app/profile-form']);
+  }
+
   public filterCategories(): CreatedQuiz[] {
     return this.categories.filter(category =>
       category.categoryName.toLowerCase().includes(this.searchText.toLowerCase()) ||
@@ -53,6 +57,10 @@ export class YourQuizzesFormComponent implements OnInit{
       headers: {
         "Content-Type": "application/json"
       }
+    });
+
+    this.categories = this.categories.filter((cat) => {
+      return cat.categoryName !== categoryName && cat.quizName !== testName;
     });
   }
 
@@ -104,9 +112,6 @@ export class YourQuizzesFormComponent implements OnInit{
   }
 
   public ToCreatedQuizStatsForm(categoryId: number, quizName: string, categoryName: string): void{
-    // localStorage.setItem("TestNameForDisplayingStats", quizName);
-    // localStorage.setItem("CatNameForDisplayingStats", categoryName);
-
     const navigationExtras: NavigationExtras = {
       queryParams: { 'id': categoryId, 'categoryName': categoryName, 'quizName': quizName }
     };

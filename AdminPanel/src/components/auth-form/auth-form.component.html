@@ -1,20 +1,22 @@
+<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "pacman" [fullScreen] = "true"><p style="color: white" >Sending a one-time password...</p></ngx-spinner>
+
 <div class="login-container">
   <div class="login-form">
-    <h2>Login</h2>
+    <h2>{{"Login" | translate}}</h2>
     <ng-container *ngIf="!flag; else enterPassword">
       <div class="input-group">
         <input type="email" id="email" #Mail required>
-        <label for="email">Email</label>
+        <label for="email">{{"Email" | translate}}</label>
       </div>
-      <button type="submit" (click)="sendCredsToEmail(Mail.value)">Submit</button>
+      <button type="submit" (click)="sendCredsToEmail(Mail.value)">{{"Submit" | translate}}</button>
     </ng-container>
     <ng-template #enterPassword>
       <div class="input-group">
         <input type="password" id="password" #Password required>
-        <label for="email">Password</label>
+        <label for="email">{{"Password" | translate}}</label>
       </div>
-      <div class="resend" (click)="resendPassword()">Resend password</div>
-      <button type="submit" (click)="auth(Password.value)">Submit</button>
+      <div class="resend" (click)="resendPassword()">{{"Resend password" | translate}}</div>
+      <button type="submit" (click)="auth(Password.value)">{{"Submit" | translate}}</button>
     </ng-template>
   </div>
 </div>

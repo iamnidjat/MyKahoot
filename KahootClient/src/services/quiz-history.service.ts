@@ -29,26 +29,20 @@ export class QuizHistoryService {
   }
 
   public async GetQuizHistoryAsync(catName: string, quizName: string,
-                                   questionNumber: number, userId: number): Promise<void> {
-    await fetch(API_URL + `GetQuizHistory?catName=${catName}&quizName=${quizName}&questionNumber=${questionNumber}&userId=${userId}`, {
-      method: "GET",
-    }).then((response) => {
-      return response.json();
-    }).then((data) => {
-      alert(`Your answer => ${data["myAnswer"]}`);
-      alert(`Correct answer => ${data["correctAnswer"]}`);
-    })
+                                   questionNumber: number, userId: number): Promise<any> {
+      const response = await fetch(API_URL + `GetQuizHistory?catName=${catName}&quizName=${quizName}&questionNumber=${questionNumber}&userId=${userId}`);
+      const data = await response.json();
+      return [data.myAnswer, data.correctAnswer];
   }
 
   public async RemoveUserAnswerAsync(catName: string, quizName: string, questionNumber: number): Promise<void>{
-    await fetch(API_URL + `RemoveUserAnswer?catName=${catName}&quizName=${quizName}&
-                                  questionNumber=${questionNumber}`, {
+    await fetch(API_URL + `RemoveUserAnswer?catName=${catName}&quizName=${quizName}&questionNumber=${questionNumber}`, {
       method: "DELETE",
     })
   }
 
   public async RemoveUserAnswersAsync(catName: string, quizName: string): Promise<void>{
-    await fetch(API_URL + `RemoveUserAnswer?catName=${catName}&quizName=${quizName}`, {
+    await fetch(API_URL + `RemoveUserAnswers?catName=${catName}&quizName=${quizName}`, {
       method: "DELETE",
     })
   }

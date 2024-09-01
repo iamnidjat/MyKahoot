@@ -1,12 +1,12 @@
 <app-navbar-form></app-navbar-form>
+<app-theme-toggle></app-theme-toggle>
 
 <div id="allthethings">
-  <nav>
-    <div class="fields" id="change-password" (click)="toPasswordChanging()"><p>{{"Change the password" | translate}}</p></div>
-    <div class="fields" id="change-birthday" (click)="toBirthdayChanging()"><p>{{"Change the birthday" | translate}}</p></div>
-    <div class="fields" id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
-  </nav>
+    <div class="fields" (click)="toPasswordChanging()"><p>{{"Change the password" | translate}}</p></div>
+    <div class="fields" (click)="toBirthdayChanging()"><p>{{"Change the birthday" | translate}}</p></div>
 </div>
+
+<div id="exit" (click)="backOptions()"><p>{{"Back" | translate}}</p></div>
 
 <app-scroll-to-top-form></app-scroll-to-top-form>
 <app-footer-form></app-footer-form>
